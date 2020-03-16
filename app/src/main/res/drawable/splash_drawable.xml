@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The white background color as one in Amazon, YouTube, or Drive app -->
+    <item android:drawable="@color/colorPrimary"/>
+
+    <!-- App logo -->
+    <item
+        android:width="108dp"
+        android:height="108dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:drawable="@drawable/ic_airline_seat_recline_extra_black_24dp" />
+</layer-list>
