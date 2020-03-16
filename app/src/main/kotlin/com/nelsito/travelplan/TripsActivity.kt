@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity() {
+class TripsActivity : AppCompatActivity() {
 
     companion object {
         private const val RC_SIGN_IN = 4346
