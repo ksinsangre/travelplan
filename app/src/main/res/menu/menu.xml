@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Logout"
+        android:id="@+id/menu_logout"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"/>
+    <item android:title="Profile"
+        android:icon="@drawable/ic_person_outline_black_24dp"
+        android:id="@+id/menu_profile"
+        app:showAsAction="always"/>
+    <item android:title="Filter"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        android:id="@+id/menu_filter"
+        app:showAsAction="always"/>
+    <item android:title="Clear Filters"
+        android:icon="@drawable/ic_do_not_disturb_alt_black_24dp"
+        android:id="@+id/menu_clear_filter"
+        android:visible="false"
+        app:showAsAction="always"/>
+
+</menu>

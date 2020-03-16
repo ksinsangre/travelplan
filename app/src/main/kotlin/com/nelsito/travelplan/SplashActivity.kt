@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                //.setTheme(R.style.LoginAppTheme) // Set theme
+                .setTheme(R.style.LoginAppTheme) // Set theme
                 .build(),
             RC_SIGN_IN
         )
