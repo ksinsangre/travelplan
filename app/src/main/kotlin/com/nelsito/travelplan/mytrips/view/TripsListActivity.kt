@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.trips.view
+package com.nelsito.travelplan.mytrips.view
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -6,29 +6,34 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.trips.domain.Trip
+import com.nelsito.travelplan.addtrip.AddTripActivity
+import com.nelsito.travelplan.mytrips.domain.Trip
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.OnDeleteListener {
+class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
     private lateinit var presenter: TripsListPresenter
 
     companion object {
+        private const val NEW_REQ_CODE = 4343
         private const val RC_SIGN_IN = 4346
     }
     private lateinit var listAdapter: TripsListAdapter
 
-    val activityScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +41,13 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
 
         setupBottomBar()
 
+        fab.setOnClickListener { view ->
+            startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
+        }
+
         presenter = TripsListPresenter(this)
-        activityScope.launch {
+        job = Job()
+        launch {
             presenter.loadTrips()
         }
         listAdapter =
@@ -49,6 +59,12 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        job.cancel()
     }
 
     private fun setupBottomBar() {

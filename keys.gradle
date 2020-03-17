@@ -1,0 +1,3 @@
+ext {
+    places_api_key = "$System.env.PLACES_API_KEY"
+}

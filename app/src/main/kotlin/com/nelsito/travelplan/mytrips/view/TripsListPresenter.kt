@@ -1,7 +1,7 @@
-package com.nelsito.travelplan.trips.view
+package com.nelsito.travelplan.mytrips.view
 
 import com.google.firebase.auth.FirebaseAuth
-import com.nelsito.travelplan.trips.domain.Trip
+import com.nelsito.travelplan.mytrips.domain.Trip
 import kotlinx.coroutines.delay
 
 class TripsListPresenter(private val tripsView: TripsView) {
