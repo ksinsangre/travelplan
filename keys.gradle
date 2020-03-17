@@ -1,3 +1,5 @@
 ext {
     places_api_key = "$System.env.PLACES_API_KEY"
+    //if this doesn't work on your local environment you can run this bash command:
+    //git update-index --assume-unchanged keys.gradle
 }
