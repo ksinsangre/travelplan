@@ -3,11 +3,10 @@ package com.nelsito.travelplan
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.*
+import com.nelsito.travelplan.trips.TripsActivity
 
 class SplashActivity : AppCompatActivity() {
 

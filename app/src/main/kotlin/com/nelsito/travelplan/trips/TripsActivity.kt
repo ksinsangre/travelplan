@@ -1,4 +1,4 @@
-package com.nelsito.travelplan
+package com.nelsito.travelplan.trips
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.activity_trips.*
 
 class TripsActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class TripsActivity : AppCompatActivity() {
         setupBottomBar()
 
         val user = FirebaseAuth.getInstance().currentUser
-        txt_hello.text = "Hello ${user?.displayName}"
+
     }
 
     private fun setupBottomBar() {
@@ -79,7 +80,8 @@ class TripsActivity : AppCompatActivity() {
                 .setAvailableProviders(providers)
                 .setTheme(R.style.LoginAppTheme) // Set theme
                 .build(),
-            RC_SIGN_IN)
+            RC_SIGN_IN
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -92,7 +94,6 @@ class TripsActivity : AppCompatActivity() {
                 if (user != null) {
                     //load()
                     val user = FirebaseAuth.getInstance().currentUser
-                    txt_hello.text = "Hello ${user?.displayName}"
                 }
             } else {
                 // Sign in failed. If response is null the user canceled the
