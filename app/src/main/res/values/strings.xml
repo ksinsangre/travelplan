@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Travel Plan</string>
+    <plurals name="days_to_go">
+        <item quantity="one">%d day to go!</item>
+        <item quantity="other">%d days to go</item>
+    </plurals>
 </resources>

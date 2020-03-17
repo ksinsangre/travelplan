@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.nelsito.travelplan.trips.TripsActivity
+import com.nelsito.travelplan.trips.view.TripsListActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -52,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun openTrips() {
-        val intent = Intent(this@SplashActivity, TripsActivity::class.java)
+        val intent = Intent(this@SplashActivity, TripsListActivity::class.java)
         startActivity(intent)
         finish()
     }

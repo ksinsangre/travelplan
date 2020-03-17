@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.trips
+package com.nelsito.travelplan.trips.view
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -7,14 +7,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.activity_trips.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TripsActivity : AppCompatActivity() {
+class TripsListActivity : AppCompatActivity(), TripsView {
+    private lateinit var presenter: TripsListPresenter
+
     companion object {
         private const val RC_SIGN_IN = 4346
     }
+    private lateinit var listAdapter: TripsListAdapter
+
+    val activityScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +31,15 @@ class TripsActivity : AppCompatActivity() {
 
         setupBottomBar()
 
-        val user = FirebaseAuth.getInstance().currentUser
-
+        presenter = TripsListPresenter(this)
+        activityScope.launch {
+            presenter.loadTrips()
+        }
+        listAdapter =
+            TripsListAdapter(clickListener = {
+                Snackbar.make(trip_list, "Trip selected...", Snackbar.LENGTH_SHORT).show()
+            })
+        trip_list.adapter = listAdapter
     }
 
     private fun setupBottomBar() {
@@ -102,5 +118,9 @@ class TripsActivity : AppCompatActivity() {
                 // ...
             }
         }
+    }
+
+    override fun showTrips(trips: List<TripListItem>) {
+        listAdapter.submitList(trips)
     }
 }
