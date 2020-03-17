@@ -31,6 +31,10 @@ class TripsListPresenter(private val tripsView: TripsView) {
         return listOf(mockTrip1, mockTrip2, mockTrip3)
     }
 
+    fun onDelete(trip: Trip) {
+
+    }
+
 }
 
 interface TripsView {

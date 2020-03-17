@@ -3,19 +3,24 @@ package com.nelsito.travelplan.trips.view
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.trips.domain.Trip
+import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TripsListActivity : AppCompatActivity(), TripsView {
+class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.OnDeleteListener {
     private lateinit var presenter: TripsListPresenter
 
     companion object {
@@ -40,6 +45,10 @@ class TripsListActivity : AppCompatActivity(), TripsView {
                 Snackbar.make(trip_list, "Trip selected...", Snackbar.LENGTH_SHORT).show()
             })
         trip_list.adapter = listAdapter
+        val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
+        itemTouchHelper.attachToRecyclerView(trip_list)
+
     }
 
     private fun setupBottomBar() {
@@ -122,5 +131,9 @@ class TripsListActivity : AppCompatActivity(), TripsView {
 
     override fun showTrips(trips: List<TripListItem>) {
         listAdapter.submitList(trips)
+    }
+
+    override fun onDeleteTrip(trip: Trip) {
+        presenter.onDelete(trip)
     }
 }
