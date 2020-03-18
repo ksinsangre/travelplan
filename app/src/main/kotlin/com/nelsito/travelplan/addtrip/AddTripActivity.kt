@@ -6,24 +6,30 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.Pair
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.android.synthetic.main.content_edit.*
-import java.util.*
 
 
 class AddTripActivity : AppCompatActivity() {
-    private lateinit var picker: MaterialDatePicker<Long>
+    private lateinit var placesClient: PlacesClient
+    private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
     private var dateFromSelected: Long = 0
     private var dateToSelected: Long = 0
     companion object {
@@ -55,8 +61,16 @@ class AddTripActivity : AppCompatActivity() {
             // Start the autocomplete intent.
             val intent = Autocomplete
                 .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .setTypeFilter(TypeFilter.CITIES)
+                .setTypeFilter(TypeFilter.REGIONS)
                 .build(this)
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
+        btn_save.setOnClickListener {
+            //Save to Firestore
+            //Show Detail
+            Snackbar.make(toolbar, "Save...", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -66,6 +80,12 @@ class AddTripActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     val place = Autocomplete.getPlaceFromIntent(data)
+                    txt_destination_title.text = place.name
+
+                    val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS)
+                    val request = FetchPlaceRequest.newInstance(place.id!!, placeFields)
+
+                    //placesClient.f(request).add
                     Log.i("Places", "Place: " + place.name + ", " + place.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -95,19 +115,20 @@ class AddTripActivity : AppCompatActivity() {
         picker.show(supportFragmentManager, picker.toString())
     }
 
-    private fun buildDatePicker(): MaterialDatePicker<Long> {
+    private fun buildDatePicker(): MaterialDatePicker<Pair<Long, Long>> {
         val builder = datePickerBuilder()
         val picker = builder.build()
         picker.addOnPositiveButtonClickListener {
-            txt_date.text = "On ${picker.headerText}"
-            dateFromSelected = it
+            txt_date.text = picker.headerText
+            dateFromSelected = it.first!!
+            dateToSelected = it.second!!
         }
         return picker
     }
 
-    private fun datePickerBuilder(): MaterialDatePicker.Builder<Long> {
-        return MaterialDatePicker.Builder.datePicker()
-            .setSelection(MaterialDatePicker.thisMonthInUtcMilliseconds())
+    private fun datePickerBuilder(): MaterialDatePicker.Builder<Pair<Long, Long>> {
+        return MaterialDatePicker.Builder.dateRangePicker()
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -127,5 +148,7 @@ class AddTripActivity : AppCompatActivity() {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey)
         }
+
+        placesClient = Places.createClient(this)
     }
 }

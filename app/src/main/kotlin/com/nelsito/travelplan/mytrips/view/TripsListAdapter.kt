@@ -42,6 +42,7 @@ class TripsListAdapter(private val clickListener: (TripListItem) -> Unit) : List
         fun bind(tripListItem: TripListItem, clickListener: (TripListItem) -> Unit) {
             itemView.txt_destination_title.text = tripListItem.destination
             itemView.txt_description.text = tripListItem.description
+            itemView.txt_period.text = tripListItem.date
             loadImage(itemView.img_1 as ImageView, tripListItem.images[0])
             loadImage(itemView.img_2 as ImageView, tripListItem.images[1])
             loadImage(itemView.img_3 as ImageView, tripListItem.images[0])

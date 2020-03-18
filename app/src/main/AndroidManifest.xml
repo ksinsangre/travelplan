@@ -10,6 +10,9 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".detail.view.TripDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".addtrip.AddTripActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -4,4 +4,5 @@
         <item quantity="one">%d day to go!</item>
         <item quantity="other">%d days to go</item>
     </plurals>
+    <string name="trip_to_detail_title">Trip to %s</string>
 </resources>

@@ -1,171 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.constraintlayout.widget.ConstraintLayout android:background="@drawable/rounded_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:padding="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_destination_title"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Paris" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_destination_title"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Paris" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_days_to_go"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="4 days to go" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_days_to_go"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="4 days to go" />
+    <com.nelsito.travelplan.ui.LandscapeImageView
+        android:id="@+id/img_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="@+id/txt_destination_title"
+        app:layout_constraintRight_toRightOf="@+id/img_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/txt_destination_title"
+        tools:src="@drawable/paris1" />
 
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintLeft_toLeftOf="@+id/txt_destination_title"
-            app:layout_constraintRight_toRightOf="@+id/img_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/txt_destination_title"
-            tools:src="@drawable/paris1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/img_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/img_guideline"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/img_guideline3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/img_guideline3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
+    <com.nelsito.travelplan.ui.LandscapeImageView
+        android:id="@+id/img_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/img_4"
+        app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
+        app:layout_constraintRight_toRightOf="@id/img_guideline2"
+        app:layout_constraintTop_toTopOf="@id/img_1"
+        tools:src="@drawable/paris2" />
 
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="2dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@id/img_4"
-            app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
-            app:layout_constraintRight_toRightOf="@id/img_guideline2"
-            app:layout_constraintTop_toTopOf="@id/img_1"
-            tools:src="@drawable/paris2" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/img_guideline2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.75"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/img_guideline2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_percent="0.75"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="2dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/img_2"
-            app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_1"
-            tools:src="@drawable/paris3" />
+    <com.nelsito.travelplan.ui.LandscapeImageView
+        android:id="@+id/img_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/img_2"
+        app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_1"
+        tools:src="@drawable/paris3" />
 
 
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_4"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/img_1"
-            app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
-            app:layout_constraintRight_toRightOf="@id/img_guideline2"
-            app:layout_constraintTop_toBottomOf="@id/img_2"
-            tools:src="@drawable/paris4" />
+    <com.nelsito.travelplan.ui.LandscapeImageView
+        android:id="@+id/img_4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/img_1"
+        app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
+        app:layout_constraintRight_toRightOf="@id/img_guideline2"
+        app:layout_constraintTop_toBottomOf="@id/img_2"
+        tools:src="@drawable/paris4" />
 
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_5"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="@id/img_1"
-            app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_3"
-            tools:src="@drawable/paris5" />
+    <com.nelsito.travelplan.ui.LandscapeImageView
+        android:id="@+id/img_5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/img_1"
+        app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_3"
+        tools:src="@drawable/paris5" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_description"
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_1"
-            tools:maxLines="4"
-            tools:text="@tools:sample/lorem/random" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_description"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_1"
+        tools:maxLines="4"
+        tools:text="@tools:sample/lorem/random" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_period"
-            style="@style/TextAppearance.MaterialComponents.Caption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:ellipsize="end"
-            android:textAllCaps="true"
-            android:textStyle="italic"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_description"
-            tools:maxLines="4"
-            tools:text="15 Oct 2020 / 11 Dec 2020" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_period"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:textAllCaps="true"
+        android:textStyle="italic"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_description"
+        tools:maxLines="4"
+        tools:text="15 Oct 2020 / 11 Dec 2020" />
 
-        <View
-            tools:visibility="visible"
-            android:visibility="gone"
-            android:id="@+id/past_overlay"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="#80FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <View
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:id="@+id/past_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.cardview.widget.CardView>
-
+</androidx.constraintlayout.widget.ConstraintLayout>
