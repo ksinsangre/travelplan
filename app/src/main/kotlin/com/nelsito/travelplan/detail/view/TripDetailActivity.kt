@@ -29,7 +29,13 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trip_detail)
-
+        setSupportActionBar(toolbar)
+        title = ""
+        with(supportActionBar!!) {
+            setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -90,5 +96,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val marker = place.latLng ?: LatLng(0.0, 0.0)
         mMap.addMarker(MarkerOptions().position(marker).title("Marker in ${place.name}"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
