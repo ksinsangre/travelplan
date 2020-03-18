@@ -114,15 +114,6 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
                     }
                 }
         }
-
-        private fun loadImage(imageView: ImageView, url: String) {
-            Glide
-                .with(itemView.context)
-                .load(url)
-                .centerCrop()
-                .placeholder(R.drawable.ic_image_black_24dp)
-                .into(imageView)
-        }
     }
 
 }

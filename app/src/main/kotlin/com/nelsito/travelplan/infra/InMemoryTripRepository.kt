@@ -10,10 +10,13 @@ class InMemoryTripRepository : TripRepository {
     private val myTrips = mutableListOf<Trip>()
     override suspend fun add(tripToAdd: TripToAdd) {
         delay(2000)
-        return suspendCoroutine {
-            myTrips.add(
-                Trip(System.currentTimeMillis().toString(), tripToAdd.placeId, tripToAdd.description, tripToAdd.dateFrom, tripToAdd.dateTo)
-            )
-        }
+        myTrips.add(
+            Trip(System.currentTimeMillis().toString(), tripToAdd.place.id ?: "", tripToAdd.place.name ?: "", tripToAdd.description, tripToAdd.dateFrom, tripToAdd.dateTo)
+        )
+    }
+
+    override suspend fun getTrips(): List<Trip> {
+        delay(2000)
+        return myTrips.toList()
     }
 }

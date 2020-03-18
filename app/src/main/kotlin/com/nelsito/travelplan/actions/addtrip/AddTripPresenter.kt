@@ -2,7 +2,6 @@ package com.nelsito.travelplan.actions.addtrip
 
 import androidx.core.util.Pair
 import com.google.android.libraries.places.api.model.Place
-import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import com.nelsito.travelplan.domain.TripToAdd
 
@@ -22,7 +21,7 @@ class AddTripPresenter(private val addTripView: AddTripView, private val tripRep
     }
 
     suspend fun save(description: String) {
-        val tripToAdd = TripToAdd(destination.id ?: "", description, dateFrom, dateTo)
+        val tripToAdd = TripToAdd(destination, description, dateFrom, dateTo)
         tripRepository.add(tripToAdd)
         addTripView.dismiss()
     }

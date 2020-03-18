@@ -13,7 +13,11 @@ class TripsListPresenter(
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
 
-        val trips = mockTrips()
+        val trips = tripRepository.getTrips()
+            .map {
+                val date = "Oct 15, 2020 / Nov 15, 2020"
+                TripListItem(it, it.destination, date, it.description, it.daysToGo())
+            }
 
         tripsView.showTrips(trips)
     }
