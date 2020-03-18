@@ -9,7 +9,7 @@ class FirestoreTripRepository : TripRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTrips(): Trip {
+    override suspend fun getTrips(): List<Trip> {
         TODO("Not yet implemented")
     }
 }
