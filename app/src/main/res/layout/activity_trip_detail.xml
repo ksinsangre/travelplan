@@ -9,98 +9,115 @@
     android:fitsSystemWindows="true"
     tools:context=".detail.view.TripDetailActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.nelsito.travelplan.ui.LandscapeImageView
-            android:id="@+id/img_header"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/paris1" />
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_destination_title"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_header"
-            tools:text="Trip to Parma" />
+            <com.nelsito.travelplan.ui.LandscapeImageView
+                android:id="@+id/img_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/paris1" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_description"
-            style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_destination_title"
-            tools:text="A small description of my trip to Parma on October, with my wife and kids" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_destination_title"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                app:fontFamily="@font/roboto_mono"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_header"
+                tools:text="Trip to Parma" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="#C3C3C3"
-            app:layout_constraintTop_toBottomOf="@+id/txt_description" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_description"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                app:fontFamily="@font/roboto_mono"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_destination_title"
+                tools:text="A small description of my trip to Parma on October, with my wife and kids" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txt_date"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/ic_date_range_black_24dp"
-            android:drawablePadding="8dp"
-            app:fontFamily="@font/roboto_mono"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider"
-            tools:text="Oct 20, 2020 / Nov 16, 2020" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#C3C3C3"
+                app:layout_constraintTop_toBottomOf="@+id/txt_description" />
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="#C3C3C3"
-            app:layout_constraintTop_toBottomOf="@+id/txt_date" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/txt_date"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_date_range_black_24dp"
+                android:drawablePadding="8dp"
+                app:fontFamily="@font/roboto_mono"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                tools:text="Oct 20, 2020 / Nov 16, 2020" />
 
-        <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="142dp"
-            android:elevation="8dp"
-            app:layout_constraintTop_toBottomOf="@id/divider2"
-            map:cameraZoom="13"
-            map:mapType="normal"
-            map:uiCompass="false"
-            map:uiRotateGestures="false"
-            map:uiScrollGestures="false"
-            map:uiTiltGestures="false"
-            map:uiZoomControls="false"
-            map:uiZoomGestures="false"
-            tools:context=".MapsActivity" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#C3C3C3"
+                app:layout_constraintTop_toBottomOf="@+id/txt_date" />
 
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#C3C3C3"
-            app:layout_constraintTop_toBottomOf="@+id/map" />
+            <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="196dp"
+                android:elevation="8dp"
+                app:layout_constraintTop_toBottomOf="@id/divider2"
+                map:cameraZoom="11"
+                map:mapType="normal"
+                map:uiCompass="false"
+                map:uiRotateGestures="false"
+                map:uiScrollGestures="false"
+                map:uiTiltGestures="false"
+                map:uiZoomControls="false"
+                map:uiZoomGestures="false" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#C3C3C3"
+                app:layout_constraintTop_toBottomOf="@+id/map" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/poi_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider3"
+                tools:itemCount="2"
+                tools:listfooter="@layout/poi_add_item"
+                tools:listitem="@layout/poi_list_item" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
