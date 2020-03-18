@@ -6,12 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
+import androidx.fragment.app.FragmentActivity
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -23,15 +23,18 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.detail.view.TripDetailActivity
 import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.android.synthetic.main.content_edit.*
 
 
 class AddTripActivity : AppCompatActivity() {
-    private lateinit var placesClient: PlacesClient
     private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
+
+    private lateinit var placeSelected: Place
     private var dateFromSelected: Long = 0
     private var dateToSelected: Long = 0
+
     companion object {
         private const val AUTOCOMPLETE_REQUEST_CODE = 1
     }
@@ -56,7 +59,7 @@ class AddTripActivity : AppCompatActivity() {
 
         txt_destination_title.setOnClickListener {
             // Set the fields to specify which types of place data to return after the user has made a selection.
-            val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME)
+            val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
 
             // Start the autocomplete intent.
             val intent = Autocomplete
@@ -69,8 +72,16 @@ class AddTripActivity : AppCompatActivity() {
 
         btn_save.setOnClickListener {
             //Save to Firestore
-            //Show Detail
-            Snackbar.make(toolbar, "Save...", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(toolbar, "Saving...", Snackbar.LENGTH_SHORT)
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(snackbar: Snackbar, event: Int) {
+                        val intent = Intent(this@AddTripActivity, TripDetailActivity::class.java)
+                        intent.putExtra("Place", placeSelected)
+                        startActivity(intent)
+                        finish()
+                    }
+                })
+                .show()
         }
     }
 
@@ -79,14 +90,9 @@ class AddTripActivity : AppCompatActivity() {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    val place = Autocomplete.getPlaceFromIntent(data)
-                    txt_destination_title.text = place.name
-
-                    val placeFields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS)
-                    val request = FetchPlaceRequest.newInstance(place.id!!, placeFields)
-
-                    //placesClient.f(request).add
-                    Log.i("Places", "Place: " + place.name + ", " + place.id)
+                    placeSelected = Autocomplete.getPlaceFromIntent(data)
+                    txt_destination_title.text = placeSelected.name
+                    Log.i("Places", "Place: " + placeSelected.name + ", " + placeSelected.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 if (data != null) {
@@ -137,7 +143,7 @@ class AddTripActivity : AppCompatActivity() {
     }
 
     private fun initializePlaces() {
-        val apiKey = getString(R.string.places_api_key)
+        val apiKey = getString(R.string.api_key)
         Log.d("Places", "API KEY $apiKey")
         if (apiKey == "") {
             Toast.makeText(this, "API KEY NOT FOUND", Toast.LENGTH_LONG).show()
@@ -148,7 +154,5 @@ class AddTripActivity : AppCompatActivity() {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey)
         }
-
-        placesClient = Places.createClient(this)
     }
 }
