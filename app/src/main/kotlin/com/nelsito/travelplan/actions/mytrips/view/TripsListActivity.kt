@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.actions.addtrip.AddTripActivity
 import com.nelsito.travelplan.domain.Trip
+import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +50,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
         }
 
-        presenter = TripsListPresenter(this, initializePlaces())
+        presenter = TripsListPresenter(this, InfraProvider.provideTripRepository())
         job = Job()
         launch {
             presenter.loadTrips()

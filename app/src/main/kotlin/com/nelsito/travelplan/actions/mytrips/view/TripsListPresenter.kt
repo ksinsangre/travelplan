@@ -3,11 +3,12 @@ package com.nelsito.travelplan.actions.mytrips.view
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.domain.Trip
+import com.nelsito.travelplan.domain.TripRepository
 import kotlinx.coroutines.delay
 
 class TripsListPresenter(
     private val tripsView: TripsView,
-    val placesClient: PlacesClient
+    val tripRepository: TripRepository
 ) {
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
