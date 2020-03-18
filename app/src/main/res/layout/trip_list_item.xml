@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
+        android:src="@drawable/ic_image_black_24dp"
         android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="@+id/txt_destination_title"
         app:layout_constraintRight_toRightOf="@+id/img_guideline"
@@ -67,6 +68,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
         app:layout_constraintRight_toRightOf="@id/img_guideline2"
         app:layout_constraintTop_toTopOf="@id/img_1"
+        android:src="@drawable/ic_image_black_24dp"
         tools:src="@drawable/paris2" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -89,6 +91,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/img_1"
+        android:src="@drawable/ic_image_black_24dp"
         tools:src="@drawable/paris3" />
 
 
@@ -104,6 +107,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/img_guideline"
         app:layout_constraintRight_toRightOf="@id/img_guideline2"
         app:layout_constraintTop_toBottomOf="@id/img_2"
+        android:src="@drawable/ic_image_black_24dp"
         tools:src="@drawable/paris4" />
 
     <com.nelsito.travelplan.ui.LandscapeImageView
@@ -118,6 +122,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/img_guideline2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_3"
+        android:src="@drawable/ic_image_black_24dp"
         tools:src="@drawable/paris5" />
 
     <com.google.android.material.textview.MaterialTextView

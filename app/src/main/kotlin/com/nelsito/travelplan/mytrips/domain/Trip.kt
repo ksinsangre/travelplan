@@ -1,3 +1,7 @@
 package com.nelsito.travelplan.mytrips.domain
 
-data class Trip(val id: String)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Trip(val id: String, val placeId: String) : Parcelable

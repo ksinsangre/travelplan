@@ -5,9 +5,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -20,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
@@ -45,20 +49,19 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
         }
 
-        presenter = TripsListPresenter(this)
+        presenter = TripsListPresenter(this, initializePlaces())
         job = Job()
         launch {
             presenter.loadTrips()
         }
         listAdapter =
-            TripsListAdapter(clickListener = {
+            TripsListAdapter(initializePlaces(), clickListener = {
                 Snackbar.make(trip_list, "Trip selected...", Snackbar.LENGTH_SHORT).show()
             })
         trip_list.adapter = listAdapter
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
-
     }
 
     override fun onDestroy() {
@@ -142,6 +145,10 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                 // response.getError().getErrorCode() and handle the error.
                 // ...
             }
+        } else if (requestCode == NEW_REQ_CODE) {
+            launch {
+                presenter.loadTrips()
+            }
         }
     }
 
@@ -151,5 +158,21 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     override fun onDeleteTrip(trip: Trip) {
         presenter.onDelete(trip)
+    }
+
+    private fun initializePlaces(): PlacesClient {
+        val apiKey = getString(R.string.api_key)
+        Log.d("Places", "API KEY $apiKey")
+        if (apiKey == "") {
+            throw Exception("API KEY NOT FOUND")
+        }
+
+        // Setup Places Client
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, apiKey)
+        }
+
+        // Create a new Places client instance
+        return Places.createClient(this)
     }
 }

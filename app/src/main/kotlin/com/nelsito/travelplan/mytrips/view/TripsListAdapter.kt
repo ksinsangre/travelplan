@@ -1,5 +1,7 @@
 package com.nelsito.travelplan.mytrips.view
 
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +9,18 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ApiException
+import com.google.android.libraries.places.api.model.PhotoMetadata
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
+import kotlinx.android.synthetic.main.poi_list_item.view.*
 import kotlinx.android.synthetic.main.trip_list_item.view.*
 
-class TripsListAdapter(private val clickListener: (TripListItem) -> Unit) : ListAdapter<TripListItem, RecyclerView.ViewHolder>(TripDiffCallback()) {
+class TripsListAdapter(private var placesClient: PlacesClient, private val clickListener: (TripListItem) -> Unit) : ListAdapter<TripListItem, RecyclerView.ViewHolder>(TripDiffCallback()) {
     private var recentlyDeletedItemPosition: Int = -1
     private lateinit var recentlyDeletedItem: TripListItem
 
@@ -21,7 +31,8 @@ class TripsListAdapter(private val clickListener: (TripListItem) -> Unit) : List
                 R.layout.trip_list_item,
                 parent,
                 false
-            )
+            ),
+            placesClient
         )
     }
 
@@ -38,16 +49,12 @@ class TripsListAdapter(private val clickListener: (TripListItem) -> Unit) : List
         notifyItemRemoved(position)
     }
 
-    class TripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TripViewHolder(itemView: View, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(itemView) {
         fun bind(tripListItem: TripListItem, clickListener: (TripListItem) -> Unit) {
             itemView.txt_destination_title.text = tripListItem.destination
             itemView.txt_description.text = tripListItem.description
             itemView.txt_period.text = tripListItem.date
-            loadImage(itemView.img_1 as ImageView, tripListItem.images[0])
-            loadImage(itemView.img_2 as ImageView, tripListItem.images[1])
-            loadImage(itemView.img_3 as ImageView, tripListItem.images[0])
-            loadImage(itemView.img_4 as ImageView, tripListItem.images[1])
-            loadImage(itemView.img_5 as ImageView, tripListItem.images[0])
+            loadPlacePhotos(tripListItem.trip.placeId)
             itemView.setOnClickListener { clickListener(tripListItem) }
             
             if (tripListItem.daysToGo >= 0) {
@@ -58,6 +65,55 @@ class TripsListAdapter(private val clickListener: (TripListItem) -> Unit) : List
                 itemView.past_overlay.visibility = View.VISIBLE
                 itemView.txt_days_to_go.visibility = View.GONE
             }
+        }
+
+        private fun loadPlacePhotos(placeId: String) {
+
+            // Specify the fields to return.
+            val placeFields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
+
+            // Construct a request object, passing the place ID and fields array.
+            val request = FetchPlaceRequest.builder("ChIJOwg_06VPwokRYv534QaPC8g", placeFields)
+                .build()//.newInstance(placeId, placeFields)
+
+            placesClient.fetchPlace(request)
+                .addOnSuccessListener { response: FetchPlaceResponse ->
+                    val place = response.place
+                    Log.i("Places", "Place found: " + place.name)
+                    if(place.photoMetadatas != null) {
+                        if (place.photoMetadatas!!.size > 0) displayPhotoMetadata(place.photoMetadatas!![0], itemView.img_1)
+                        if (place.photoMetadatas!!.size > 1) displayPhotoMetadata(place.photoMetadatas!![1], itemView.img_2)
+                        if (place.photoMetadatas!!.size > 2) displayPhotoMetadata(place.photoMetadatas!![2], itemView.img_3)
+                        if (place.photoMetadatas!!.size > 3) displayPhotoMetadata(place.photoMetadatas!![3], itemView.img_4)
+                        if (place.photoMetadatas!!.size > 4) displayPhotoMetadata(place.photoMetadatas!![4], itemView.img_5)
+                    }
+                }.addOnFailureListener { exception: Exception ->
+                    if (exception is ApiException) {
+                        val apiException = exception as ApiException
+                        val statusCode = apiException.statusCode
+                        // Handle error with given status code.
+                        Log.e("Places", "Place not found: " + exception.message)
+                    }
+                }
+        }
+
+        private fun displayPhotoMetadata(photoMetadata: PhotoMetadata, imageView: ImageView) {
+            // Get the attribution text.
+            val attributions = photoMetadata.attributions
+
+            // Create a FetchPhotoRequest.
+            val photoRequest = FetchPhotoRequest.builder(photoMetadata).build()
+            placesClient.fetchPhoto(photoRequest)
+                .addOnSuccessListener { fetchPhotoResponse ->
+                    val bitmap: Bitmap = fetchPhotoResponse.bitmap
+                    imageView.setImageBitmap(bitmap)
+                }.addOnFailureListener { exception ->
+                    if (exception is ApiException) {
+                        val statusCode = exception.statusCode
+                        // Handle error with given status code.
+                        Log.e("Places", "Place not found: " + exception.message)
+                    }
+                }
         }
 
         private fun loadImage(imageView: ImageView, url: String) {
