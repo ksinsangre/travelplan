@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.nelsito.travelplan.mytrips.view.TripsListActivity
+import com.nelsito.travelplan.actions.mytrips.view.TripsListActivity
 
 class SplashActivity : AppCompatActivity() {
 

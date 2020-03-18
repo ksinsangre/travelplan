@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingLeft="48dp"
     android:paddingRight="48dp"
-    android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".addtrip.AddTripActivity"
+    tools:context=".actions.addtrip.AddTripActivity"
     tools:showIn="@layout/activity_add_trip">
 
     <com.google.android.material.textview.MaterialTextView
@@ -37,17 +37,27 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/input_description"
-        android:background="@drawable/rounded_textview"
-        android:padding="16dp"
-        android:layout_marginTop="16dp"
-        android:lines="10"
-        android:gravity="top"
         style="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#747574"
-        android:hint="Description..."
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_textview"
+        android:gravity="top"
+        android:hint="Description..."
+        android:lines="10"
+        android:padding="16dp"
+        android:textColor="#747574"
         app:fontFamily="@font/roboto_mono"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_date"/>
+        app:layout_constraintTop_toBottomOf="@+id/txt_date" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/input_description"
+        app:layout_constraintEnd_toEndOf="@+id/input_description"
+        app:layout_constraintStart_toStartOf="@+id/input_description"
+        app:layout_constraintTop_toTopOf="@+id/input_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

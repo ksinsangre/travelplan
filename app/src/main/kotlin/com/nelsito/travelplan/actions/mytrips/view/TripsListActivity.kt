@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.mytrips.view
+package com.nelsito.travelplan.actions.mytrips.view
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -15,8 +15,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.addtrip.AddTripActivity
-import com.nelsito.travelplan.mytrips.domain.Trip
+import com.nelsito.travelplan.actions.addtrip.AddTripActivity
+import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope

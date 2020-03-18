@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.addtrip
+package com.nelsito.travelplan.actions.addtrip
 
 import android.app.Activity
 import android.content.Context
@@ -20,21 +20,32 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.detail.view.TripDetailActivity
+import com.nelsito.travelplan.actions.detail.view.TripDetailActivity
+import com.nelsito.travelplan.infra.FirestoreTripRepository
+import com.nelsito.travelplan.infra.InMemoryTripRepository
+import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.android.synthetic.main.content_edit.*
+import kotlinx.android.synthetic.main.content_edit.txt_destination_title
+import kotlinx.android.synthetic.main.trip_list_item.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 
-class AddTripActivity : AppCompatActivity() {
+class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
+    private lateinit var presenter: AddTripPresenter
     private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
-
-    private lateinit var placeSelected: Place
-    private var dateFromSelected: Long = 0
-    private var dateToSelected: Long = 0
 
     companion object {
         private const val AUTOCOMPLETE_REQUEST_CODE = 1
     }
+
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +59,7 @@ class AddTripActivity : AppCompatActivity() {
         }
 
         initializePlaces()
+        job = Job()
 
         picker = buildDatePicker()
         txt_date.setOnClickListener {
@@ -68,18 +80,19 @@ class AddTripActivity : AppCompatActivity() {
         }
 
         btn_save.setOnClickListener {
-            //Save to Firestore
-            Snackbar.make(toolbar, "Saving...", Snackbar.LENGTH_SHORT)
-                .addCallback(object : Snackbar.Callback() {
-                    override fun onDismissed(snackbar: Snackbar, event: Int) {
-                        val intent = Intent(this@AddTripActivity, TripDetailActivity::class.java)
-                        intent.putExtra("Place", placeSelected)
-                        startActivity(intent)
-                        finish()
-                    }
-                })
-                .show()
+            progress.visibility = View.VISIBLE
+            launch {
+                presenter.save(input_description.text.toString())
+            }
         }
+
+        presenter = AddTripPresenter(this, InfraProvider.provideTripRepository())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        job.cancel()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -87,7 +100,8 @@ class AddTripActivity : AppCompatActivity() {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    placeSelected = Autocomplete.getPlaceFromIntent(data)
+                    val placeSelected = Autocomplete.getPlaceFromIntent(data)
+                    presenter.destinationSelected(placeSelected)
                     txt_destination_title.text = placeSelected.name
                     Log.i("Places", "Place: " + placeSelected.name + ", " + placeSelected.id)
                 }
@@ -123,8 +137,7 @@ class AddTripActivity : AppCompatActivity() {
         val picker = builder.build()
         picker.addOnPositiveButtonClickListener {
             txt_date.text = picker.headerText
-            dateFromSelected = it.first!!
-            dateToSelected = it.second!!
+            presenter.dateSelected(it)
         }
         return picker
     }
@@ -151,5 +164,10 @@ class AddTripActivity : AppCompatActivity() {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, apiKey)
         }
+    }
+
+    override fun dismiss() {
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 }

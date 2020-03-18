@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.mytrips.view
+package com.nelsito.travelplan.actions.mytrips.view
 
 import android.graphics.Bitmap
 import android.util.Log
@@ -17,7 +17,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
-import kotlinx.android.synthetic.main.poi_list_item.view.*
 import kotlinx.android.synthetic.main.trip_list_item.view.*
 
 class TripsListAdapter(private var placesClient: PlacesClient, private val clickListener: (TripListItem) -> Unit) : ListAdapter<TripListItem, RecyclerView.ViewHolder>(TripDiffCallback()) {

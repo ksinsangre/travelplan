@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.detail.view
+package com.nelsito.travelplan.actions.detail.view
 
 import android.app.Activity
 import android.content.Intent
@@ -25,7 +25,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.mytrips.view.TripsListAdapter
 import kotlinx.android.synthetic.main.activity_trip_detail.*
 
 
@@ -161,7 +160,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
                 if (data != null) {
                     val poiSelected = Autocomplete.getPlaceFromIntent(data)
                     presenter.pointOfInterestAdded(poiSelected)
-                    mMap.addMarker(MarkerOptions().position(poiSelected.latLng?:LatLng(0.0,0.0)).title("${place.name}"))
+                    mMap.addMarker(MarkerOptions().position(poiSelected.latLng?: LatLng(0.0,0.0)).title("${place.name}"))
                     Log.i("Places", "POI: " + poiSelected.name + ", " + poiSelected.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {

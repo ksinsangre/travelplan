@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.detail.view
+package com.nelsito.travelplan.actions.detail.view
 
 import com.google.android.libraries.places.api.model.Place
 
