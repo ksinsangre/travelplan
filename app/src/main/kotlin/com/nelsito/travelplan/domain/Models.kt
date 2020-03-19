@@ -7,7 +7,7 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 @Parcelize
-data class Trip(val id: String, val placeId: String, val destination: String, val description: String, val dateFrom: Long, val dateTo: Long, val pointsOfInterest: MutableList<String> = mutableListOf()) : Parcelable {
+data class Trip(val placeId: String, val destination: String, val description: String, val dateFrom: Long, val dateTo: Long, val pointsOfInterest: MutableList<String> = mutableListOf()) : Parcelable {
     fun daysToGo(): Int {
         return Duration.between(Instant.now(), Instant.ofEpochMilli(dateFrom)).toDays().toInt()
     }

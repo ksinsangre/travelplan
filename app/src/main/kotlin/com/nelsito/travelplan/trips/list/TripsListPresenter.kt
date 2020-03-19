@@ -15,7 +15,7 @@ class TripsListPresenter(
 ) {
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
-        val trips = tripRepository.getTrips(user)
+        val trips = tripRepository.getTrips(user!!)
             .map {
                 val date = it.formatDate()
                 TripListItem(it, it.destination, date, it.description, it.daysToGo())
