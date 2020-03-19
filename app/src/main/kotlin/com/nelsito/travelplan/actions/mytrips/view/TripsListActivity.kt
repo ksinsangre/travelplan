@@ -55,6 +55,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         presenter = TripsListPresenter(this, InfraProvider.provideTripRepository())
         job = Job()
         launch {
+            progress.visibility = View.VISIBLE
             presenter.loadTrips()
         }
         listAdapter =
@@ -152,12 +153,14 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             }
         } else if (requestCode == NEW_REQ_CODE) {
             launch {
+                progress.visibility = View.VISIBLE
                 presenter.loadTrips()
             }
         }
     }
 
     override fun showTrips(trips: List<TripListItem>) {
+        progress.visibility = View.GONE
         if(trips.isNotEmpty()) {
             trip_list.visibility = View.VISIBLE
             empty_placeholder.visibility = View.GONE
