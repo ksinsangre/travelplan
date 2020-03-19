@@ -7,4 +7,5 @@ interface TripRepository {
     suspend fun getTrips(user: FirebaseUser?): List<Trip>
     fun update(trip: Trip)
     fun find(placeId: String): Trip
+    fun remove(trip: Trip)
 }

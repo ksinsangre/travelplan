@@ -34,7 +34,6 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     companion object {
         private const val NEW_REQ_CODE = 4343
-        private const val EDIT_REQ_CODE = 4343
     }
     private lateinit var listAdapter: TripsListAdapter
 
@@ -127,7 +126,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == NEW_REQ_CODE || requestCode == EDIT_REQ_CODE) {
+        if (requestCode == NEW_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 launch {
                     progress.visibility = View.VISIBLE

@@ -26,4 +26,8 @@ class InMemoryTripRepository : TripRepository {
     override fun find(placeId: String) : Trip {
         return myTrips[placeId] ?: throw Exception("No trip found")
     }
+
+    override fun remove(trip: Trip) {
+        myTrips.remove(trip.placeId)
+    }
 }

@@ -25,6 +25,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/paris1" />
 
+            <ProgressBar
+                android:id="@+id/progress"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txt_destination_title" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/txt_destination_title"
                 style="@style/TextAppearance.MaterialComponents.Headline5"

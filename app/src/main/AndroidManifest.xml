@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".user.AnonymousActivity"></activity>
+        <activity android:name=".trips.edit.EditTripActivity"></activity>
+        <activity android:name=".user.AnonymousActivity" />
         <activity android:name=".user.WaitForVerificationActivity" />
         <activity android:name=".user.ProfileActivity" />
 
@@ -18,13 +19,13 @@
             android:value="@string/api_key" />
 
         <activity
-            android:name="com.nelsito.travelplan.trips.detail.TripDetailActivity"
+            android:name=".trips.detail.TripDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.nelsito.travelplan.trips.add.AddTripActivity"
+            android:name=".trips.add.AddTripActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.nelsito.travelplan.trips.list.TripsListActivity"
+            android:name=".trips.list.TripsListActivity"
             android:screenOrientation="portrait" /> <!-- Your Splash Activity theme -->
         <activity
             android:name=".SplashActivity"

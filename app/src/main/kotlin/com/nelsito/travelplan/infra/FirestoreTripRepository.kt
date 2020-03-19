@@ -21,4 +21,8 @@ class FirestoreTripRepository : TripRepository {
     override fun find(tripId: String): Trip {
         TODO("Not yet implemented")
     }
+
+    override fun remove(trip: Trip) {
+        TODO("Not yet implemented")
+    }
 }

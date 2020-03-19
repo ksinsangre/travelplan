@@ -32,6 +32,11 @@ class TripDetailPresenter(private var placeId: String,
         loadPointsOfInterest(trip)
     }
 
+    fun refreshTrip() {
+        this.trip = tripRepository.find(placeId)
+        tripDetailView.showTripInfo(trip)
+    }
+
     private fun loadPointsOfInterest(trip: Trip) {
         // Specify the fields to return.
         val placeFields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
@@ -131,6 +136,15 @@ class TripDetailPresenter(private var placeId: String,
         tripDetailView.showTripInfo(trip)
         tripRepository.update(trip)
     }
+
+    fun deleteTrip() {
+        tripRepository.remove(trip)
+        tripDetailView.tripRemoved()
+    }
+
+    fun editTrip() {
+        tripDetailView.showTripEdition(trip)
+    }
 }
 
 interface TripDetailView {
@@ -139,4 +153,6 @@ interface TripDetailView {
     fun showTripInfo(trip: Trip)
     fun showPlaceInfo(place: Place)
     fun showPlacePhotos(bitmap: Bitmap)
+    fun tripRemoved()
+    fun showTripEdition(trip: Trip)
 }

@@ -1,13 +1,17 @@
 package com.nelsito.travelplan.trips.detail
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,25 +28,23 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.trips.list.formatDate
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
-import kotlinx.android.synthetic.main.activity_add_trip.*
+import com.nelsito.travelplan.trips.edit.EditTripActivity
+import com.nelsito.travelplan.trips.list.formatDate
 import kotlinx.android.synthetic.main.activity_trip_detail.*
-import kotlinx.android.synthetic.main.activity_trip_detail.toolbar
-import kotlinx.android.synthetic.main.activity_trip_detail.txt_date
-import kotlinx.android.synthetic.main.activity_trip_detail.txt_destination_title
 
 
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailView {
     companion object {
         private const val AUTOCOMPLETE_REQUEST_CODE = 1
+        private const val EDIT_REQ_CODE = 4343
     }
 
     private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
     private lateinit var presenter: TripDetailPresenter
-    private lateinit var place: Place
     private lateinit var mMap: GoogleMap
 
     private lateinit var placesClient: PlacesClient
@@ -57,6 +59,20 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
             setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
+        }
+        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+            when(menuItem.itemId) {
+                R.id.menu_edit -> {
+                    presenter.editTrip()
+                    true
+                }
+                R.id.menu_delete -> {
+                    deleteTrip()
+                    true
+                }
+                else -> false
+            }
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -79,6 +95,29 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         edit_date.setOnClickListener {
             pickDate()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun deleteTrip() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Delete Trip")
+            .setMessage("Are you sure you want to delete this trip?")
+            .setPositiveButton("Delete") { dialogInterface: DialogInterface, _: Int ->
+                dialogInterface.dismiss()
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        presenter.deleteTrip()
+                    }
+            }
+            .setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
+                dialogInterface.dismiss()
+            }
+            .show()
     }
 
     private fun pickDate() {
@@ -117,6 +156,17 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
     override fun showPlacePhotos(bitmap: Bitmap) {
         img_header.setImageBitmap(bitmap)
+    }
+
+    override fun tripRemoved() {
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
+
+    override fun showTripEdition(trip: Trip) {
+        val intent = Intent(this, EditTripActivity::class.java)
+        intent.putExtra("TRIP", trip)
+        startActivityForResult(intent, EDIT_REQ_CODE)
     }
 
     override fun onResume() {
@@ -190,6 +240,11 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i("Places", "User Canceled")
+            }
+        } else if (requestCode == EDIT_REQ_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                setResult(Activity.RESULT_OK)
+                presenter.refreshTrip()
             }
         }
     }
