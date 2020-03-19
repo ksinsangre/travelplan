@@ -60,72 +60,35 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         mapFragment.getMapAsync(this)
 
         initializePlaces()
-        val trip = intent.getParcelableExtra<Trip>("Trip")
-        showTrip(trip)
         listAdapter = PointsOfInterestAdapter(placesClient, addPoiClickListener = {
             presenter.addPointOfInterest()
         })
         poi_list.adapter = listAdapter
 
-        presenter = TripDetailPresenter()
+        val trip = intent.getParcelableExtra<Trip>("Trip")
+        presenter = TripDetailPresenter(trip, placesClient)
     }
 
-    private fun showTrip(trip: Trip) {
-
+    override fun showTripInfo(trip: Trip) {
         txt_date.text = trip.formatDate()
         txt_description.text = trip.description
+    }
 
-        // Specify the fields to return.
-        val placeFields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
+    override fun showPlaceInfo(place: Place) {
+        txt_destination_title.text = getString(R.string.trip_to_detail_title, place.name)
 
-        // Construct a request object, passing the place ID and fields array.
-        val request = FetchPlaceRequest.builder(trip.placeId, placeFields).build()
+        val marker = place.latLng ?: LatLng(0.0, 0.0)
+        mMap.addMarker(MarkerOptions().position(marker).title("${place.name}"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+    }
 
-        placesClient.fetchPlace(request)
-            .addOnSuccessListener { response: FetchPlaceResponse ->
-                place = response.place
-                txt_destination_title.text = getString(R.string.trip_to_detail_title, place.name)
-                fetchPhoto(place)
-                val marker = place.latLng ?: LatLng(0.0, 0.0)
-                mMap.addMarker(MarkerOptions().position(marker).title("${place.name}"))
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
-            }.addOnFailureListener { exception: Exception ->
-                if (exception is ApiException) {
-                    val apiException = exception as ApiException
-                    val statusCode = apiException.statusCode
-                    // Handle error with given status code.
-                    Log.e("Places", "Place not found: " + exception.message)
-                }
-            }
+    override fun showPlacePhotos(bitmap: Bitmap) {
+        img_header.setImageBitmap(bitmap)
     }
 
     override fun onResume() {
         super.onResume()
         presenter.attachView(this)
-    }
-
-
-    private fun fetchPhoto(place: Place) {
-        // Get the photo metadata.
-        if (place.photoMetadatas != null) {
-            val photoMetadata = place.photoMetadatas!![0]
-
-            // Get the attribution text.
-            val attributions = photoMetadata.attributions
-
-            // Create a FetchPhotoRequest.
-            val photoRequest = FetchPhotoRequest.builder(photoMetadata).build()
-            placesClient.fetchPhoto(photoRequest).addOnSuccessListener { fetchPhotoResponse ->
-                val bitmap: Bitmap = fetchPhotoResponse.bitmap
-                img_header.setImageBitmap(bitmap)
-            }.addOnFailureListener { exception ->
-                if (exception is ApiException) {
-                    val statusCode = exception.statusCode
-                    // Handle error with given status code.
-                    Log.e("Places", "Place not found: " + exception.message)
-                }
-            }
-        }
     }
 
     private fun initializePlaces() {
