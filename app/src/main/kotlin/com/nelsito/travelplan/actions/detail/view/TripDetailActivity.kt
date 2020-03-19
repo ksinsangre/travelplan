@@ -20,11 +20,15 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.actions.mytrips.view.formatDate
+import com.nelsito.travelplan.domain.Trip
 import kotlinx.android.synthetic.main.activity_trip_detail.*
 
 
@@ -56,18 +60,43 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         mapFragment.getMapAsync(this)
 
         initializePlaces()
-
-        place = intent.getParcelableExtra("Place")
-        txt_destination_title.text = getString(R.string.trip_to_detail_title, place.name)
-
-        fetchPhoto(place)
-
+        val trip = intent.getParcelableExtra<Trip>("Trip")
+        showTrip(trip)
         listAdapter = PointsOfInterestAdapter(placesClient, addPoiClickListener = {
             presenter.addPointOfInterest()
         })
         poi_list.adapter = listAdapter
 
         presenter = TripDetailPresenter()
+    }
+
+    private fun showTrip(trip: Trip) {
+
+        txt_date.text = trip.formatDate()
+        txt_description.text = trip.description
+
+        // Specify the fields to return.
+        val placeFields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
+
+        // Construct a request object, passing the place ID and fields array.
+        val request = FetchPlaceRequest.builder(trip.placeId, placeFields).build()
+
+        placesClient.fetchPlace(request)
+            .addOnSuccessListener { response: FetchPlaceResponse ->
+                place = response.place
+                txt_destination_title.text = getString(R.string.trip_to_detail_title, place.name)
+                fetchPhoto(place)
+                val marker = place.latLng ?: LatLng(0.0, 0.0)
+                mMap.addMarker(MarkerOptions().position(marker).title("${place.name}"))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
+            }.addOnFailureListener { exception: Exception ->
+                if (exception is ApiException) {
+                    val apiException = exception as ApiException
+                    val statusCode = apiException.statusCode
+                    // Handle error with given status code.
+                    Log.e("Places", "Place not found: " + exception.message)
+                }
+            }
     }
 
     override fun onResume() {
@@ -118,10 +147,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        val marker = place.latLng ?: LatLng(0.0, 0.0)
-        mMap.addMarker(MarkerOptions().position(marker).title("${place.name}"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
     }
 
     override fun onSupportNavigateUp(): Boolean {

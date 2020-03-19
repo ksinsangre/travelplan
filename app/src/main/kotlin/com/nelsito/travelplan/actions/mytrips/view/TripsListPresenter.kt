@@ -17,10 +17,7 @@ class TripsListPresenter(
         val user = FirebaseAuth.getInstance().currentUser
         val trips = tripRepository.getTrips(user)
             .map {
-                val format = "MMM dd, YYYY"
-                val from = LocalDate.from(Instant.ofEpochMilli(it.dateFrom).atZone(ZoneOffset.UTC)).format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
-                val to = LocalDate.from(Instant.ofEpochMilli(it.dateTo).atZone(ZoneOffset.UTC)).format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
-                val date = "$from / $to"
+                val date = it.formatDate()
                 TripListItem(it, it.destination, date, it.description, it.daysToGo())
             }
 
@@ -36,4 +33,13 @@ class TripsListPresenter(
 
 interface TripsView {
     fun showTrips(trips: List<TripListItem>)
+}
+
+fun Trip.formatDate(): String {
+    val format = "MMM dd, YYYY"
+    val from = LocalDate.from(Instant.ofEpochMilli(dateFrom).atZone(ZoneOffset.UTC))
+        .format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
+    val to = LocalDate.from(Instant.ofEpochMilli(dateTo).atZone(ZoneOffset.UTC))
+        .format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
+    return "$from / $to"
 }

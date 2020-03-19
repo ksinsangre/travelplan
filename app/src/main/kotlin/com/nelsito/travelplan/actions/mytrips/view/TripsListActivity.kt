@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.actions.addtrip.AddTripActivity
+import com.nelsito.travelplan.actions.detail.view.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
@@ -58,7 +59,9 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         }
         listAdapter =
             TripsListAdapter(initializePlaces(), clickListener = {
-                Snackbar.make(trip_list, "Trip selected...", Snackbar.LENGTH_SHORT).show()
+                val intent = Intent(this, TripDetailActivity::class.java)
+                intent.putExtra("Trip", it.trip)
+                startActivity(intent)
             })
         trip_list.adapter = listAdapter
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
