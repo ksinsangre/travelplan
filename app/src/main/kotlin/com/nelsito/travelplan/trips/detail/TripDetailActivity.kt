@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.Pair
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,11 +23,16 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.trips.list.formatDate
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
+import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.android.synthetic.main.activity_trip_detail.*
+import kotlinx.android.synthetic.main.activity_trip_detail.toolbar
+import kotlinx.android.synthetic.main.activity_trip_detail.txt_date
+import kotlinx.android.synthetic.main.activity_trip_detail.txt_destination_title
 
 
 class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailView {
@@ -34,6 +40,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         private const val AUTOCOMPLETE_REQUEST_CODE = 1
     }
 
+    private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
     private lateinit var presenter: TripDetailPresenter
     private lateinit var place: Place
     private lateinit var mMap: GoogleMap
@@ -64,6 +71,35 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
         val placeId = intent.getStringExtra("PlaceId")
         presenter = TripDetailPresenter(placeId, placesClient, InfraProvider.provideTripRepository())
+
+        picker = buildDatePicker()
+        txt_date.setOnClickListener {
+            pickDate()
+        }
+        edit_date.setOnClickListener {
+            pickDate()
+        }
+    }
+
+    private fun pickDate() {
+        picker.show(supportFragmentManager, picker.toString())
+    }
+
+    private fun buildDatePicker(): MaterialDatePicker<Pair<Long, Long>> {
+        val builder = datePickerBuilder()
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener {
+            if (it.first != null && it.second != null) {
+                //this will notify the previous activity that something changed
+                setResult(Activity.RESULT_OK)
+                presenter.dateChanged(it.first!!, it.second!!)
+            }
+        }
+        return picker
+    }
+
+    private fun datePickerBuilder(): MaterialDatePicker.Builder<Pair<Long, Long>> {
+        return MaterialDatePicker.Builder.dateRangePicker()
     }
 
     override fun showTripInfo(trip: Trip) {

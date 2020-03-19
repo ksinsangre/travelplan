@@ -2,6 +2,7 @@ package com.nelsito.travelplan.trips.detail
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.core.util.Pair
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -122,6 +123,12 @@ class TripDetailPresenter(private var placeId: String,
 
     fun pointOfInterestAdded(poiSelected: Place) {
         trip.pointsOfInterest.add(poiSelected.id ?: "")
+        tripRepository.update(trip)
+    }
+
+    fun dateChanged(dateFrom: Long, dateTo: Long) {
+        trip = trip.copy(dateFrom = dateFrom, dateTo = dateTo)
+        tripDetailView.showTripInfo(trip)
         tripRepository.update(trip)
     }
 }

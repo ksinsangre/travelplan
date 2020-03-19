@@ -21,8 +21,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_add_trip.*
-import kotlinx.android.synthetic.main.content_edit.*
-import kotlinx.android.synthetic.main.content_edit.txt_destination_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -160,7 +158,6 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
 
     private fun datePickerBuilder(): MaterialDatePicker.Builder<Pair<Long, Long>> {
         return MaterialDatePicker.Builder.dateRangePicker()
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

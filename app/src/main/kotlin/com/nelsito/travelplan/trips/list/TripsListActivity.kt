@@ -1,5 +1,6 @@
 package com.nelsito.travelplan.trips.list
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -33,6 +34,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     companion object {
         private const val NEW_REQ_CODE = 4343
+        private const val EDIT_REQ_CODE = 4343
     }
     private lateinit var listAdapter: TripsListAdapter
 
@@ -60,7 +62,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             TripsListAdapter(initializePlaces(), clickListener = {
                 val intent = Intent(this, TripDetailActivity::class.java)
                 intent.putExtra("PlaceId", it.trip.placeId)
-                startActivity(intent)
+                startActivityForResult(intent, NEW_REQ_CODE)
             })
         trip_list.adapter = listAdapter
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
@@ -125,10 +127,12 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == NEW_REQ_CODE) {
-            launch {
-                progress.visibility = View.VISIBLE
-                presenter.loadTrips()
+        if (requestCode == NEW_REQ_CODE || requestCode == EDIT_REQ_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                launch {
+                    progress.visibility = View.VISIBLE
+                    presenter.loadTrips()
+                }
             }
         }
     }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
-    tools:context=".actions.addtrip.AddTripActivity">
+    tools:context=".trips.add.AddTripActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
@@ -34,6 +34,65 @@
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_edit" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".trips.add.AddTripActivity"
+        tools:showIn="@layout/activity_add_trip">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txt_destination_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_textview"
+            android:drawableEnd="@drawable/ic_search_black_24dp"
+            android:padding="16dp"
+            android:text="Select your destination"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_textview"
+            android:drawableEnd="@drawable/ic_date_range_black_24dp"
+            android:padding="16dp"
+            android:text="Select the dates of your trip"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_destination_title" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_description"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_textview"
+            android:gravity="top"
+            android:hint="Description..."
+            android:lines="10"
+            android:padding="16dp"
+            android:textColor="#747574"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/input_description"
+            app:layout_constraintEnd_toEndOf="@+id/input_description"
+            app:layout_constraintStart_toStartOf="@+id/input_description"
+            app:layout_constraintTop_toTopOf="@+id/input_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
