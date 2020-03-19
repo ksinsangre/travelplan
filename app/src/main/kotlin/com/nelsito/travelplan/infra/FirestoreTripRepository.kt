@@ -53,12 +53,36 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override fun update(trip: Trip) {
-        TODO("Not yet implemented")
+    override suspend fun update(trip: Trip) : Boolean {
+        return suspendCoroutine { cont ->
+            val user = auth.currentUser as FirebaseUser
+            db.collection("users")
+                .document(user.uid)
+                .collection("trips")
+                .document(trip.placeId)
+                .set(trip.toDto(), SetOptions.merge()).addOnSuccessListener {
+                    cont.resumeWith(Result.success(true))
+                }
+                .addOnFailureListener {
+                    cont.resumeWithException(it)
+                }
+        }
     }
 
-    override fun find(tripId: String): Trip {
-        TODO("Not yet implemented")
+    override suspend fun find(placeId: String): Trip {
+        return suspendCoroutine { cont ->
+            val user = auth.currentUser as FirebaseUser
+            db.collection("users")
+                .document(user.uid)
+                .collection("trips")
+                .document(placeId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    cont.resume(documentSnapshot.toTrip())
+                }.addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
     }
 
     override fun remove(trip: Trip) {

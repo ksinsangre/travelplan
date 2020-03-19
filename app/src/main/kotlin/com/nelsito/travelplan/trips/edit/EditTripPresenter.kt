@@ -9,7 +9,7 @@ class EditTripPresenter(private var trip: Trip, private val editTripView: EditTr
         editTripView.showTripInfo(trip)
     }
 
-    fun save(description: String) {
+    suspend fun save(description: String) {
         trip = trip.copy(description = description)
         tripRepository.update(trip)
         editTripView.tripSaved()

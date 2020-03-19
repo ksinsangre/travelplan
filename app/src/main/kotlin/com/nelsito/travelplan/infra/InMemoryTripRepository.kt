@@ -22,12 +22,17 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         return myTrips.values.toList()
     }
 
-    override fun update(trip: Trip) {
+    override suspend fun update(trip: Trip): Boolean {
         myTrips[trip.placeId] = trip
+        return repository.update(trip)
     }
 
-    override fun find(placeId: String) : Trip {
-        return myTrips[placeId] ?: throw Exception("No trip found")
+    override suspend fun find(placeId: String) : Trip {
+        return if (myTrips.containsKey(placeId)) {
+            myTrips[placeId]!!
+        } else {
+            repository.find(placeId)
+        }
     }
 
     override fun remove(trip: Trip) {

@@ -35,20 +35,28 @@ import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.edit.EditTripActivity
 import com.nelsito.travelplan.trips.list.formatDate
 import kotlinx.android.synthetic.main.activity_trip_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 
-class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailView {
+class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallback, TripDetailView {
     companion object {
         private const val AUTOCOMPLETE_REQUEST_CODE = 1
         private const val EDIT_REQ_CODE = 4343
     }
 
-    private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
     private lateinit var presenter: TripDetailPresenter
     private lateinit var mMap: GoogleMap
 
     private lateinit var placesClient: PlacesClient
     private lateinit var listAdapter: PointsOfInterestAdapter
+
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +87,7 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        job = Job()
         initializePlaces()
         listAdapter = PointsOfInterestAdapter(placesClient, addPoiClickListener = {
             presenter.addPointOfInterest()
@@ -87,14 +96,12 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
         val placeId = intent.getStringExtra("PlaceId")
         presenter = TripDetailPresenter(placeId, placesClient, InfraProvider.provideTripRepository())
+    }
 
-        picker = buildDatePicker()
-        txt_date.setOnClickListener {
-            pickDate()
-        }
-        edit_date.setOnClickListener {
-            pickDate()
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+
+        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -118,27 +125,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
                 dialogInterface.dismiss()
             }
             .show()
-    }
-
-    private fun pickDate() {
-        picker.show(supportFragmentManager, picker.toString())
-    }
-
-    private fun buildDatePicker(): MaterialDatePicker<Pair<Long, Long>> {
-        val builder = datePickerBuilder()
-        val picker = builder.build()
-        picker.addOnPositiveButtonClickListener {
-            if (it.first != null && it.second != null) {
-                //this will notify the previous activity that something changed
-                setResult(Activity.RESULT_OK)
-                presenter.dateChanged(it.first!!, it.second!!)
-            }
-        }
-        return picker
-    }
-
-    private fun datePickerBuilder(): MaterialDatePicker.Builder<Pair<Long, Long>> {
-        return MaterialDatePicker.Builder.dateRangePicker()
     }
 
     override fun showTripInfo(trip: Trip) {
@@ -172,7 +158,9 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
     override fun onResume() {
         super.onResume()
-        presenter.attachView(this)
+        launch {
+            presenter.attachView(this@TripDetailActivity)
+        }
     }
 
     private fun initializePlaces() {
@@ -231,7 +219,9 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     val poiSelected = Autocomplete.getPlaceFromIntent(data)
-                    presenter.pointOfInterestAdded(poiSelected)
+                    launch {
+                        presenter.pointOfInterestAdded(poiSelected)
+                    }
                     Log.i("Places", "POI: " + poiSelected.name + ", " + poiSelected.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -245,7 +235,9 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         } else if (requestCode == EDIT_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 setResult(Activity.RESULT_OK)
-                presenter.refreshTrip()
+                launch {
+                    presenter.refreshTrip()
+                }
             }
         }
     }

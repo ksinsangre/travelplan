@@ -13,10 +13,19 @@ import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.formatDate
 import kotlinx.android.synthetic.main.activity_edit_trip.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class EditTripActivity : AppCompatActivity(), EditTripView {
+class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
     private lateinit var presenter: EditTripPresenter
     private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
+
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +42,9 @@ class EditTripActivity : AppCompatActivity(), EditTripView {
         toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_save -> {
-                    presenter.save(txt_description.text.toString())
+                    launch {
+                        presenter.save(txt_description.text.toString())
+                    }
                     true
                 }
                 else -> false
@@ -44,8 +55,8 @@ class EditTripActivity : AppCompatActivity(), EditTripView {
         txt_date.setOnClickListener {
             pickDate()
         }
+        job = Job()
 
-        val placeid = intent.getStringExtra("PlaceID")
         val trip: Trip? = intent.getParcelableExtra("Trip")
         if (trip != null) {
             showTripInfo(trip)
@@ -53,6 +64,12 @@ class EditTripActivity : AppCompatActivity(), EditTripView {
         } else {
             finish()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        job.cancel()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

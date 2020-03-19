@@ -23,7 +23,7 @@ class TripDetailPresenter(private var placeId: String,
     private lateinit var tripDetailView: TripDetailView
     private var listOfPOI = mutableListOf<PointOfInterestListItem>(PointOfInterestListItem.FooterPointOfInterestListItem("footer"))
 
-    fun attachView(tripDetailView: TripDetailView) {
+    suspend fun attachView(tripDetailView: TripDetailView) {
         this.tripDetailView = tripDetailView
         this.trip = tripRepository.find(placeId)
         tripDetailView.showTripInfo(trip)
@@ -32,7 +32,7 @@ class TripDetailPresenter(private var placeId: String,
         loadPointsOfInterest(trip)
     }
 
-    fun refreshTrip() {
+    suspend fun refreshTrip() {
         this.trip = tripRepository.find(placeId)
         tripDetailView.showTripInfo(trip)
     }
@@ -126,15 +126,11 @@ class TripDetailPresenter(private var placeId: String,
         tripDetailView.showAddPointOfInterest(latLngBounds)
     }
 
-    fun pointOfInterestAdded(poiSelected: Place) {
-        trip.pointsOfInterest.add(poiSelected.id ?: "")
-        tripRepository.update(trip)
-    }
-
-    fun dateChanged(dateFrom: Long, dateTo: Long) {
-        trip = trip.copy(dateFrom = dateFrom, dateTo = dateTo)
-        tripDetailView.showTripInfo(trip)
-        tripRepository.update(trip)
+    suspend fun pointOfInterestAdded(poiSelected: Place) {
+        if (poiSelected.id != null && !trip.pointsOfInterest.contains(poiSelected.id)) {
+            trip.pointsOfInterest.add(poiSelected.id!!)
+            tripRepository.update(trip)
+        }
     }
 
     fun deleteTrip() {
