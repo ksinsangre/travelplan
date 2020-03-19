@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.SplashActivity.Companion.RC_SIGN_IN
-import com.nelsito.travelplan.mytrips.TripsListActivity
+import com.nelsito.travelplan.trips.list.TripsListActivity
 import kotlinx.android.synthetic.main.activity_wait_for_verification.*
 
 class WaitForVerificationActivity : AppCompatActivity() {

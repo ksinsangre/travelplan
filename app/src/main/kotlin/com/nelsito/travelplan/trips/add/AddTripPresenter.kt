@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.addtrip
+package com.nelsito.travelplan.trips.add
 
 import androidx.core.util.Pair
 import com.google.android.libraries.places.api.model.Place

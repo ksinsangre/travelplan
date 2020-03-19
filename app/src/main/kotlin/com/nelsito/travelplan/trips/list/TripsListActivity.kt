@@ -1,6 +1,5 @@
-package com.nelsito.travelplan.mytrips
+package com.nelsito.travelplan.trips.list
 
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -13,10 +12,9 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.addtrip.AddTripActivity
-import com.nelsito.travelplan.detail.TripDetailActivity
+import com.nelsito.travelplan.trips.add.AddTripActivity
+import com.nelsito.travelplan.trips.detail.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_trips.*

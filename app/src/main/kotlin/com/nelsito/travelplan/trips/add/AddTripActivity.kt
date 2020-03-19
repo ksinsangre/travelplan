@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.addtrip
+package com.nelsito.travelplan.trips.add
 
 import android.app.Activity
 import android.content.Context
@@ -18,16 +18,11 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.detail.TripDetailActivity
-import com.nelsito.travelplan.infra.FirestoreTripRepository
-import com.nelsito.travelplan.infra.InMemoryTripRepository
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.android.synthetic.main.content_edit.*
 import kotlinx.android.synthetic.main.content_edit.txt_destination_title
-import kotlinx.android.synthetic.main.trip_list_item.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

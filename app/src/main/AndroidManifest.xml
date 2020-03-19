@@ -18,13 +18,13 @@
             android:value="@string/api_key" />
 
         <activity
-            android:name=".detail.TripDetailActivity"
+            android:name="com.nelsito.travelplan.trips.detail.TripDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".addtrip.AddTripActivity"
+            android:name="com.nelsito.travelplan.trips.add.AddTripActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".mytrips.TripsListActivity"
+            android:name="com.nelsito.travelplan.trips.list.TripsListActivity"
             android:screenOrientation="portrait" /> <!-- Your Splash Activity theme -->
         <activity
             android:name=".SplashActivity"
