@@ -36,6 +36,8 @@ import kotlin.coroutines.CoroutineContext
 
 
 class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
+    private var destinationSelected = false
+    private var dateSelected = false
     private lateinit var presenter: AddTripPresenter
     private lateinit var picker: MaterialDatePicker<Pair<Long, Long>>
 
@@ -80,9 +82,18 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
         }
 
         btn_save.setOnClickListener {
-            progress.visibility = View.VISIBLE
-            launch {
-                presenter.save(input_description.text.toString())
+            if (!destinationSelected) {
+                txt_destination_title.background = getDrawable(R.drawable.red_rounded_textview)
+            }
+            if (!dateSelected) {
+                txt_date.background = getDrawable(R.drawable.red_rounded_textview)
+            }
+
+            if (dateSelected && destinationSelected) {
+                progress.visibility = View.VISIBLE
+                launch {
+                    presenter.save(input_description.text.toString())
+                }
             }
         }
 
@@ -103,6 +114,8 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
                     val placeSelected = Autocomplete.getPlaceFromIntent(data)
                     presenter.destinationSelected(placeSelected)
                     txt_destination_title.text = placeSelected.name
+                    txt_destination_title.background = getDrawable(R.drawable.rounded_textview)
+                    destinationSelected = true
                     Log.i("Places", "Place: " + placeSelected.name + ", " + placeSelected.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -137,6 +150,8 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
         val picker = builder.build()
         picker.addOnPositiveButtonClickListener {
             txt_date.text = picker.headerText
+            dateSelected = true
+            txt_date.background = getDrawable(R.drawable.rounded_textview)
             presenter.dateSelected(it)
         }
         return picker

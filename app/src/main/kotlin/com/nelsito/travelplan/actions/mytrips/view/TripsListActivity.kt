@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
@@ -154,7 +155,11 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
     }
 
     override fun showTrips(trips: List<TripListItem>) {
-        listAdapter.submitList(trips)
+        if(trips.isNotEmpty()) {
+            trip_list.visibility = View.VISIBLE
+            empty_placeholder.visibility = View.GONE
+            listAdapter.submitList(trips)
+        }
     }
 
     override fun onDeleteTrip(trip: Trip) {

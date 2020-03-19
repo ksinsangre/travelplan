@@ -17,9 +17,24 @@
             android:id="@+id/trip_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/trip_list_item" />
+
+        <TextView
+            android:id="@+id/empty_placeholder"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="48dp"
+            app:fontFamily="@font/roboto_mono"
+            android:text="Click the add button to start planning your trips"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
