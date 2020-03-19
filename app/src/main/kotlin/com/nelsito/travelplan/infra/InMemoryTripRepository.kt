@@ -1,10 +1,10 @@
 package com.nelsito.travelplan.infra
 
+import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import com.nelsito.travelplan.domain.TripToAdd
 import kotlinx.coroutines.delay
-import kotlin.coroutines.suspendCoroutine
 
 class InMemoryTripRepository : TripRepository {
     private val myTrips = mutableListOf<Trip>()
@@ -15,7 +15,7 @@ class InMemoryTripRepository : TripRepository {
         )
     }
 
-    override suspend fun getTrips(): List<Trip> {
+    override suspend fun getTrips(user: FirebaseUser?): List<Trip> {
         delay(2000)
         return myTrips.toList()
     }

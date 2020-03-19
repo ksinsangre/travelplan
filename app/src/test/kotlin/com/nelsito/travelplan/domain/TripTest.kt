@@ -3,10 +3,10 @@ package com.nelsito.travelplan.domain
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 
 class TripShould {
     @Test
@@ -33,5 +33,19 @@ class TripShould {
         //then
         val expected = -60
         Assertions.assertThat(actual).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test formatter`() {
+        //given
+        val dateFrom = LocalDate.now(ZoneOffset.UTC).plusWeeks(1).plusMonths(2).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+        val format = "MMM dd, YYYY"
+
+        val from = LocalDateTime.from(org.threeten.bp.Instant.ofEpochMilli(dateFrom).atZone(ZoneOffset.UTC)).format(
+            DateTimeFormatter.ofPattern(format, Locale.getDefault()))
+        //when
+        //then
+        val expected = "MAY 25, 2020"
+        Assertions.assertThat(from).isEqualTo(expected)
     }
 }

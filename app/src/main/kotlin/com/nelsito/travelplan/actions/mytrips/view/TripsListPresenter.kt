@@ -1,31 +1,31 @@
 package com.nelsito.travelplan.actions.mytrips.view
 
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
-import kotlinx.coroutines.delay
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 
 class TripsListPresenter(
     private val tripsView: TripsView,
-    val tripRepository: TripRepository
+    private val tripRepository: TripRepository
 ) {
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
-
-        val trips = tripRepository.getTrips()
+        val trips = tripRepository.getTrips(user)
             .map {
-                val date = "Oct 15, 2020 / Nov 15, 2020"
+                val format = "MMM dd, YYYY"
+                val from = LocalDate.from(Instant.ofEpochMilli(it.dateFrom).atZone(ZoneOffset.UTC)).format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
+                val to = LocalDate.from(Instant.ofEpochMilli(it.dateTo).atZone(ZoneOffset.UTC)).format(DateTimeFormatter.ofPattern(format, Locale.getDefault()))
+                val date = "$from / $to"
                 TripListItem(it, it.destination, date, it.description, it.daysToGo())
             }
 
+
         tripsView.showTrips(trips)
-    }
-
-    private suspend fun mockTrips(): List<TripListItem> {
-        delay(5000)
-
-        return emptyList()
     }
 
     fun onDelete(trip: Trip) {

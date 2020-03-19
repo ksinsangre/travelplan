@@ -51,7 +51,10 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
     class TripViewHolder(itemView: View, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(itemView) {
         fun bind(tripListItem: TripListItem, clickListener: (TripListItem) -> Unit) {
             itemView.txt_destination_title.text = tripListItem.destination
-            itemView.txt_description.text = tripListItem.description
+            if (tripListItem.description.isEmpty())
+                itemView.txt_description.visibility = View.GONE
+            else
+                itemView.txt_description.text = tripListItem.description
             itemView.txt_period.text = tripListItem.date
             loadPlacePhotos(tripListItem.trip.placeId)
             itemView.setOnClickListener { clickListener(tripListItem) }
@@ -72,15 +75,20 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
             val placeFields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
 
             // Construct a request object, passing the place ID and fields array.
-            val request = FetchPlaceRequest.builder("ChIJOwg_06VPwokRYv534QaPC8g", placeFields)
-                .build()//.newInstance(placeId, placeFields)
+            val request = FetchPlaceRequest.builder(placeId, placeFields).build()
 
             placesClient.fetchPlace(request)
                 .addOnSuccessListener { response: FetchPlaceResponse ->
                     val place = response.place
                     Log.i("Places", "Place found: " + place.name)
+                    Log.i("Places", "Place photos: " + (place.photoMetadatas != null).toString())
                     if(place.photoMetadatas != null) {
-                        if (place.photoMetadatas!!.size > 0) displayPhotoMetadata(place.photoMetadatas!![0], itemView.img_1)
+                        Log.i("Places", "Place photos: " + place.photoMetadatas!!.size)
+                        if (place.photoMetadatas!!.size > 0) {
+                            displayPhotoMetadata(place.photoMetadatas!![0], itemView.img_1)
+                        } else {
+                            itemView.img_1.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_image_black_24dp))
+                        }
                         if (place.photoMetadatas!!.size > 1) displayPhotoMetadata(place.photoMetadatas!![1], itemView.img_2)
                         if (place.photoMetadatas!!.size > 2) displayPhotoMetadata(place.photoMetadatas!![2], itemView.img_3)
                         if (place.photoMetadatas!!.size > 3) displayPhotoMetadata(place.photoMetadatas!![3], itemView.img_4)

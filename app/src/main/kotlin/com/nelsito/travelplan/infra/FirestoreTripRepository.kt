@@ -1,5 +1,6 @@
 package com.nelsito.travelplan.infra
 
+import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import com.nelsito.travelplan.domain.TripToAdd
@@ -9,7 +10,7 @@ class FirestoreTripRepository : TripRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getTrips(): List<Trip> {
+    override suspend fun getTrips(user: FirebaseUser?): List<Trip> {
         TODO("Not yet implemented")
     }
 }
