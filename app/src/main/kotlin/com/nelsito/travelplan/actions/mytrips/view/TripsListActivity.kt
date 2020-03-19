@@ -61,7 +61,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         listAdapter =
             TripsListAdapter(initializePlaces(), clickListener = {
                 val intent = Intent(this, TripDetailActivity::class.java)
-                intent.putExtra("Trip", it.trip)
+                intent.putExtra("PlaceId", it.trip.placeId)
                 startActivity(intent)
             })
         trip_list.adapter = listAdapter

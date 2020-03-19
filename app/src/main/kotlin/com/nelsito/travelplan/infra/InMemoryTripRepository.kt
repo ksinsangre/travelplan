@@ -7,16 +7,23 @@ import com.nelsito.travelplan.domain.TripToAdd
 import kotlinx.coroutines.delay
 
 class InMemoryTripRepository : TripRepository {
-    private val myTrips = mutableListOf<Trip>()
+    private val myTrips = hashMapOf<String, Trip>()
     override suspend fun add(tripToAdd: TripToAdd) {
         delay(2000)
-        myTrips.add(
+        myTrips[tripToAdd.place.id ?: ""] =
             Trip(System.currentTimeMillis().toString(), tripToAdd.place.id ?: "", tripToAdd.place.name ?: "", tripToAdd.description, tripToAdd.dateFrom, tripToAdd.dateTo)
-        )
     }
 
     override suspend fun getTrips(user: FirebaseUser?): List<Trip> {
         delay(2000)
-        return myTrips.toList()
+        return myTrips.values.toList()
+    }
+
+    override fun update(trip: Trip) {
+        myTrips[trip.placeId] = trip
+    }
+
+    override fun find(placeId: String) : Trip {
+        return myTrips[placeId] ?: throw Exception("No trip found")
     }
 }

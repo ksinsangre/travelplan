@@ -13,4 +13,12 @@ class FirestoreTripRepository : TripRepository {
     override suspend fun getTrips(user: FirebaseUser?): List<Trip> {
         TODO("Not yet implemented")
     }
+
+    override fun update(trip: Trip) {
+        TODO("Not yet implemented")
+    }
+
+    override fun find(tripId: String): Trip {
+        TODO("Not yet implemented")
+    }
 }

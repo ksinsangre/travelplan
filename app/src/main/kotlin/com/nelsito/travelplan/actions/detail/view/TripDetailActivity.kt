@@ -29,6 +29,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.actions.mytrips.view.formatDate
 import com.nelsito.travelplan.domain.Trip
+import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_trip_detail.*
 
 
@@ -65,8 +66,8 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         })
         poi_list.adapter = listAdapter
 
-        val trip = intent.getParcelableExtra<Trip>("Trip")
-        presenter = TripDetailPresenter(trip, placesClient)
+        val placeId = intent.getStringExtra("PlaceId")
+        presenter = TripDetailPresenter(placeId, placesClient, InfraProvider.provideTripRepository())
     }
 
     override fun showTripInfo(trip: Trip) {
@@ -117,17 +118,10 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
         return true
     }
 
-    override fun showAddPointOfInterest() {
+    override fun showAddPointOfInterest(latLngBounds: LatLngBounds) {
         // Set the fields to specify which types of place data to return after the user has made a selection.
         val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
 
-
-        val upper = LatLng(place.latLng?.latitude?.plus(0.5) ?: 0.0,
-                            place.latLng?.longitude?.plus(0.5) ?: 0.0)
-        val lower = LatLng(place.latLng?.latitude?.minus(0.5) ?: 0.0,
-            place.latLng?.longitude?.minus(0.5) ?: 0.0)
-
-        val latLngBounds = LatLngBounds.builder().include(place.latLng).include(upper).include(lower).build()
         // Start the autocomplete intent.
         val intent = Autocomplete
             .IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
@@ -139,6 +133,13 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
     override fun showPointOfInterest(poiSelected: List<PointOfInterestListItem>) {
         listAdapter.submitList(poiSelected)
+        poiSelected.forEach {
+            if (it is PointOfInterestListItem.PlacePointOfInterestListItem) {
+                mMap.addMarker(
+                    MarkerOptions().position(it.place.latLng ?: LatLng(0.0, 0.0)).title("${it.place.name}")
+                )
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -148,7 +149,6 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
                 if (data != null) {
                     val poiSelected = Autocomplete.getPlaceFromIntent(data)
                     presenter.pointOfInterestAdded(poiSelected)
-                    mMap.addMarker(MarkerOptions().position(poiSelected.latLng?: LatLng(0.0,0.0)).title("${place.name}"))
                     Log.i("Places", "POI: " + poiSelected.name + ", " + poiSelected.id)
                 }
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
