@@ -7,18 +7,24 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.mytrips.TripsListActivity
+import com.nelsito.travelplan.user.WaitForVerificationActivity
 
 class SplashActivity : AppCompatActivity() {
 
     companion object {
-        private const val RC_SIGN_IN = 4346
+        const val RC_SIGN_IN = 4346
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            openTrips()
+            if (!user.isEmailVerified) {
+                user.sendEmailVerification()
+                openWaitingForVerification()
+            } else {
+                openTrips()
+            }
         } else {
             openLogin()
         }
@@ -45,14 +51,25 @@ class SplashActivity : AppCompatActivity() {
 
         if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
             val user = FirebaseAuth.getInstance().currentUser!!
-            if (!user.isEmailVerified) user.sendEmailVerification()
-
-            openTrips()
+            if (!user.isEmailVerified) {
+                user.sendEmailVerification()
+                openWaitingForVerification()
+            } else {
+                openTrips()
+            }
+        } else{
+            finish()
         }
     }
 
+    private fun openWaitingForVerification() {
+        val intent = Intent(this@SplashActivity, WaitForVerificationActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun openTrips() {
-        val intent = Intent(this@SplashActivity, TripsListActivity::class.java)
+        val intent = Intent(this, TripsListActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -27,13 +27,14 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
+import com.nelsito.travelplan.user.AnonymousActivity
+import com.nelsito.travelplan.user.ProfileActivity
 
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
     private lateinit var presenter: TripsListPresenter
 
     companion object {
         private const val NEW_REQ_CODE = 4343
-        private const val RC_SIGN_IN = 4346
     }
     private lateinit var listAdapter: TripsListAdapter
 
@@ -84,10 +85,11 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                     logout()
                     true
                 }
-                /*R.id.menu_profile -> {
-                    //openCaloriesSettings()
+                R.id.menu_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    true
                 }
-                R.id.menu_filter -> {
+                /*R.id.menu_filter -> {
                     openFilterPage()
                 }
                 R.id.menu_clear_filter -> {
@@ -109,7 +111,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                 AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener {
-                        openLogin()
+                        openAnonymous()
                     }
             }
             .setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
@@ -118,39 +120,14 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             .show()
     }
 
-    private fun openLogin() {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build())
-
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.LoginAppTheme) // Set theme
-                .build(),
-            RC_SIGN_IN
-        )
+    private fun openAnonymous() {
+        startActivity(Intent(this, AnonymousActivity::class.java))
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == Activity.RESULT_OK) {
-                // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
-                // ...
-                if (user != null) {
-                    //load()
-                    val user = FirebaseAuth.getInstance().currentUser
-                }
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-            }
-        } else if (requestCode == NEW_REQ_CODE) {
+        if (requestCode == NEW_REQ_CODE) {
             launch {
                 progress.visibility = View.VISIBLE
                 presenter.loadTrips()

@@ -17,7 +17,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        resValue "string", "api_key", keys["api_key"]//(project.findProperty("PLACES_API_KEY") ?: "")
+        resValue "string", "api_key", keys["api_key"]
+//(project.findProperty("PLACES_API_KEY") ?: "")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -46,6 +47,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     implementation 'com.google.android.libraries.places:places:2.2.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     //implementation 'com.facebook.android:facebook-android-sdk:4.x'
     //implementation 'com.twitter.sdk.android:twitter-core:3.x'
     testImplementation 'junit:junit:4.12'

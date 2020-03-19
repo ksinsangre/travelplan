@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.WaitForVerificationActivity">
+
+    <TextView
+        android:id="@+id/empty_placeholder"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="48dp"
+        app:fontFamily="@font/roboto_mono"
+        android:text="You need a verified email to proceed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_email" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_username"
+        style="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="96dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Nelson Puglisi" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_email"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_username"
+        tools:text="nelson.puglisi@gmail.com" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/lnk_verify_email"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:textColor="#2196F3"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/empty_placeholder"
+        android:text="Verify email" />
+    <View
+        android:id="@+id/lnk_verify_email_underlilne"
+        app:layout_constraintLeft_toLeftOf="@+id/lnk_verify_email"
+        app:layout_constraintRight_toRightOf="@+id/lnk_verify_email"
+        app:layout_constraintTop_toBottomOf="@+id/lnk_verify_email"
+        android:background="#2196F3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"/>
+
+    <ImageView
+        android:id="@+id/img_not_verified"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintTop_toTopOf="@+id/txt_email"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_email"
+        app:layout_constraintLeft_toRightOf="@+id/txt_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_help_black_24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/lnk_verify_email"
+        android:text="or"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/lnk_sign_in"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginTop="48dp"
+        android:textColor="#2196F3"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lnk_verify_email"
+        android:text="Sign In with another user" />
+    <View
+        android:id="@+id/lnk_sign_in_underlilne"
+        app:layout_constraintLeft_toLeftOf="@+id/lnk_sign_in"
+        app:layout_constraintRight_toRightOf="@+id/lnk_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/lnk_sign_in"
+        android:background="#2196F3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
