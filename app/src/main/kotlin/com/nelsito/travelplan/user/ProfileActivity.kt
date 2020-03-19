@@ -61,6 +61,11 @@ class ProfileActivity : AppCompatActivity() {
             .downloadUrl.addOnSuccessListener {
             Glide.with(this).load(it).centerCrop()
                 .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
+        }.addOnFailureListener {
+            if (user.photoUrl != null) {
+                Glide.with(this).load(user.photoUrl).centerCrop()
+                    .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
+            }
         }
     }
 
