@@ -165,7 +165,8 @@ class TripDetailActivity : AppCompatActivity(), OnMapReadyCallback, TripDetailVi
 
     override fun showTripEdition(trip: Trip) {
         val intent = Intent(this, EditTripActivity::class.java)
-        intent.putExtra("TRIP", trip)
+        intent.putExtra("Trip", trip)
+        intent.putExtra("PlaceID", trip.placeId)
         startActivityForResult(intent, EDIT_REQ_CODE)
     }
 

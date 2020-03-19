@@ -50,10 +50,13 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
     class TripViewHolder(itemView: View, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(itemView) {
         fun bind(tripListItem: TripListItem, clickListener: (TripListItem) -> Unit) {
             itemView.txt_destination_title.text = tripListItem.destination
-            if (tripListItem.description.isEmpty())
+            if (tripListItem.description.isEmpty()) {
                 itemView.txt_description.visibility = View.GONE
-            else
+            }
+            else {
+                itemView.txt_description.visibility = View.VISIBLE
                 itemView.txt_description.text = tripListItem.description
+            }
             itemView.txt_period.text = tripListItem.date
             loadPlacePhotos(tripListItem.trip.placeId)
             itemView.setOnClickListener { clickListener(tripListItem) }

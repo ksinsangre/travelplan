@@ -11,13 +11,22 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/txt_destination_title"
         style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:fontFamily="@font/roboto_mono"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Paris" />
+        app:layout_constraintRight_toLeftOf="@+id/barrier7"
+        tools:text="Colonia del Sacramento" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier7"
+        app:layout_constraintRight_toLeftOf="@+id/txt_days_to_go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="txt_days_to_go"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/txt_days_to_go"
