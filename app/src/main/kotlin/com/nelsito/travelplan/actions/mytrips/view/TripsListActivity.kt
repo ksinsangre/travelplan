@@ -103,9 +103,9 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     private fun logout() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Goodbye")
-            .setMessage("Are you sure?")
-            .setPositiveButton("Yes") { dialogInterface: DialogInterface, _: Int ->
+            .setTitle("Log Out")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Log Out") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
                 AuthUI.getInstance()
                     .signOut(this)
@@ -113,7 +113,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                         openLogin()
                     }
             }
-            .setNegativeButton("No") { dialogInterface: DialogInterface, _: Int ->
+            .setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
             }
             .show()
