@@ -13,13 +13,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/api_key" />
         <activity
-            android:name="com.nelsito.travelplan.actions.detail.view.TripDetailActivity"
+            android:name="com.nelsito.travelplan.detail.TripDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.nelsito.travelplan.actions.addtrip.AddTripActivity"
+            android:name="com.nelsito.travelplan.addtrip.AddTripActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.nelsito.travelplan.actions.mytrips.view.TripsListActivity"
+            android:name="com.nelsito.travelplan.mytrips.TripsListActivity"
             android:screenOrientation="portrait" /> <!-- Your Splash Activity theme -->
         <activity
             android:name=".SplashActivity"

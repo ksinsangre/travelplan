@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.mytrips.view
+package com.nelsito.travelplan.mytrips
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -13,14 +13,12 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.actions.addtrip.AddTripActivity
-import com.nelsito.travelplan.actions.detail.view.TripDetailActivity
+import com.nelsito.travelplan.addtrip.AddTripActivity
+import com.nelsito.travelplan.detail.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
-import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
+import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
     private lateinit var presenter: TripsListPresenter

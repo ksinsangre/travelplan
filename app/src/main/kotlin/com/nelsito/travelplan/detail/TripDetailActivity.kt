@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.detail.view
+package com.nelsito.travelplan.detail
 
 import android.app.Activity
 import android.content.Intent
@@ -27,7 +27,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.actions.mytrips.view.formatDate
+import com.nelsito.travelplan.mytrips.formatDate
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_trip_detail.*

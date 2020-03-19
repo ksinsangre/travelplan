@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.mytrips.view
+package com.nelsito.travelplan.mytrips
 
 import androidx.recyclerview.widget.DiffUtil
 

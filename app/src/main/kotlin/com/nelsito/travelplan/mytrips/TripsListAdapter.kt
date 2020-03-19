@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.mytrips.view
+package com.nelsito.travelplan.mytrips
 
 import android.graphics.Bitmap
 import android.util.Log
@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place

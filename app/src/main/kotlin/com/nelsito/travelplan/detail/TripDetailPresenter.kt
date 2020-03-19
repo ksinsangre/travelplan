@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.detail.view
+package com.nelsito.travelplan.detail
 
 import android.graphics.Bitmap
 import android.util.Log

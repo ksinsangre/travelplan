@@ -8,7 +8,7 @@ import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.nelsito.travelplan.domain.Trip
-import com.nelsito.travelplan.actions.mytrips.view.TripsListAdapter
+import com.nelsito.travelplan.mytrips.TripsListAdapter
 
 class SwipeToDeleteCallback(
     private val icon: Drawable?,

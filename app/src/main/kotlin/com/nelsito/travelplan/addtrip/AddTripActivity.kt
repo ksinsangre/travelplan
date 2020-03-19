@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.addtrip
+package com.nelsito.travelplan.addtrip
 
 import android.app.Activity
 import android.content.Context
@@ -20,7 +20,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.actions.detail.view.TripDetailActivity
+import com.nelsito.travelplan.detail.TripDetailActivity
 import com.nelsito.travelplan.infra.FirestoreTripRepository
 import com.nelsito.travelplan.infra.InMemoryTripRepository
 import com.nelsito.travelplan.infra.InfraProvider
@@ -35,7 +35,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
-class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
+class AddTripActivity : AppCompatActivity(), CoroutineScope,
+    AddTripView {
     private var destinationSelected = false
     private var dateSelected = false
     private lateinit var presenter: AddTripPresenter
@@ -78,7 +79,9 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
                 .setTypeFilter(TypeFilter.CITIES)
                 .setTypeFilter(TypeFilter.REGIONS)
                 .build(this)
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+            startActivityForResult(intent,
+                AUTOCOMPLETE_REQUEST_CODE
+            )
         }
 
         btn_save.setOnClickListener {
@@ -97,7 +100,10 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope, AddTripView {
             }
         }
 
-        presenter = AddTripPresenter(this, InfraProvider.provideTripRepository())
+        presenter = AddTripPresenter(
+            this,
+            InfraProvider.provideTripRepository()
+        )
     }
 
     override fun onDestroy() {

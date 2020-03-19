@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.actions.mytrips.view
+package com.nelsito.travelplan.mytrips
 
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.domain.Trip
