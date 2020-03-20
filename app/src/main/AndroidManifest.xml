@@ -9,15 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".trips.map.MapTripsActivity"
+        <activity android:name=".trips.list.FilterActivity"></activity>
+        <activity
+            android:name=".trips.map.MapTripsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".trips.edit.EditTripActivity"
+        <activity
+            android:name=".trips.edit.EditTripActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.AnonymousActivity"
+        <activity
+            android:name=".user.AnonymousActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.WaitForVerificationActivity"
+        <activity
+            android:name=".user.WaitForVerificationActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.ProfileActivity"
+        <activity
+            android:name=".user.ProfileActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

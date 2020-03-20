@@ -14,6 +14,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.trips.add.AddTripActivity
 import com.nelsito.travelplan.trips.detail.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
@@ -35,6 +36,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     companion object {
         private const val NEW_REQ_CODE = 4343
+        private const val SEARCH_REQ_CODE = 4344
     }
     private lateinit var listAdapter: TripsListAdapter
 
@@ -93,17 +95,28 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                     startActivity(Intent(this, MapTripsActivity::class.java))
                     true
                 }
-                /*R.id.menu_filter -> {
+                R.id.menu_filter -> {
                     openFilterPage()
+                    true
                 }
                 R.id.menu_clear_filter -> {
                     bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = false
-                    loadMeals()
+                    presenter.clearFilter()
+                    launch {
+                        progress.visibility = View.VISIBLE
+                        presenter.loadTrips()
+                    }
                     true
-                }*/
+                }
                 else -> false
             }
         }
+    }
+
+    private fun openFilterPage() {
+        val intent = Intent(this, FilterActivity::class.java)
+        intent.putExtra("LAST_SEARCH", presenter.lastSearch)
+        startActivityForResult(intent, SEARCH_REQ_CODE)
     }
 
     private fun logout() {
@@ -136,6 +149,17 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                 launch {
                     progress.visibility = View.VISIBLE
                     presenter.loadTrips()
+                }
+            }
+        } else if (requestCode == SEARCH_REQ_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = true
+                launch {
+                    val search = data?.getParcelableExtra<Search>("SEARCH")
+                    if (search != null) {
+                        progress.visibility = View.VISIBLE
+                        presenter.searchTrips(search)
+                    }
                 }
             }
         }

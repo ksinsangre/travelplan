@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    tools:context=".trips.add.AddTripActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:background="#FAFAFA"
+            app:fontFamily="@font/roboto_mono"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".trips.add.AddTripActivity"
+        tools:showIn="@layout/activity_add_trip">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_destination_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_textview"
+            android:padding="16dp"
+            android:hint="Search trips by title"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="Trip Start Date from:"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/txt_date_from"
+            app:fontFamily="@font/roboto_mono">
+
+        </com.google.android.material.textview.MaterialTextView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txt_date_from"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_textview"
+            android:drawableEnd="@drawable/ic_date_range_black_24dp"
+            android:padding="16dp"
+            android:hint="Start date after..."
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_destination_title" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="Trip Start Date to:"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/txt_date_to"
+            app:fontFamily="@font/roboto_mono">
+
+        </com.google.android.material.textview.MaterialTextView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/txt_date_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_textview"
+            android:drawableEnd="@drawable/ic_date_range_black_24dp"
+            android:padding="16dp"
+            android:hint="Start date before..."
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date_from" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:text="Only applies to the start date of the trip"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:textSize="8sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date_to"
+            app:fontFamily="@font/roboto_mono"
+            android:layout_marginBottom="8dp">
+
+        </com.google.android.material.textview.MaterialTextView>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_description"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_textview"
+            android:gravity="top"
+            android:hint="Search trips by description..."
+            android:lines="5"
+            android:padding="16dp"
+            android:textColor="#747574"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date_to" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/input_description"
+            app:layout_constraintEnd_toEndOf="@+id/input_description"
+            app:layout_constraintStart_toStartOf="@+id/input_description"
+            app:layout_constraintTop_toTopOf="@+id/input_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

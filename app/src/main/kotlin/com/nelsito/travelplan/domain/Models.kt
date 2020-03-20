@@ -13,3 +13,6 @@ data class Trip(val placeId: String, val destination: String, val description: S
         return Duration.between(Instant.now(), Instant.ofEpochMilli(dateFrom)).toDays().toInt()
     }
 }
+
+@Parcelize
+data class Search(val title: String, val description: String, val dateFrom: Long, val dateTo: Long) : Parcelable

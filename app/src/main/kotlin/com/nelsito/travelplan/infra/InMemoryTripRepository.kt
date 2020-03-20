@@ -1,9 +1,11 @@
 package com.nelsito.travelplan.infra
 
 import com.google.firebase.auth.FirebaseUser
+import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import kotlinx.coroutines.delay
+import java.util.*
 
 class InMemoryTripRepository(private val repository: TripRepository) : TripRepository {
     private val myTrips = hashMapOf<String, Trip>()
@@ -20,6 +22,12 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         }
 
         return myTrips.values.toList()
+    }
+
+    override suspend fun searchTrips(user: FirebaseUser, search: Search): List<Trip> {
+        return repository.searchTrips(user, search)
+            .filter { search.title.isEmpty() || it.destination.toLowerCase(Locale.getDefault()).contains(search.title.toLowerCase(Locale.getDefault()))}
+            .filter { search.description.isEmpty() || it.description.toLowerCase(Locale.getDefault()).contains(search.description.toLowerCase(Locale.getDefault())) }
     }
 
     override suspend fun update(user: FirebaseUser, trip: Trip): Boolean {

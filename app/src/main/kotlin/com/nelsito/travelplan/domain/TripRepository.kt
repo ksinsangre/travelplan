@@ -8,4 +8,5 @@ interface TripRepository {
     suspend fun find(user: FirebaseUser, placeId: String): Trip
     suspend fun add(user: FirebaseUser, trip: Trip): Boolean
     suspend fun update(user: FirebaseUser, trip: Trip): Boolean
+    suspend fun searchTrips(user: FirebaseUser, search: Search): List<Trip>
 }

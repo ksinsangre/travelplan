@@ -3,10 +3,8 @@ package com.nelsito.travelplan.infra
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
+import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import kotlin.coroutines.resume
@@ -36,6 +34,7 @@ class FirestoreTripRepository : TripRepository {
             db.collection("users")
                 .document(user.uid)
                 .collection("trips")
+                .orderBy("date_from", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     val trips = querySnapshot.documents.map { document ->
@@ -44,6 +43,27 @@ class FirestoreTripRepository : TripRepository {
                         document.toTrip()
                     }
                     cont.resume(trips)
+                }.addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
+    }
+
+    override suspend fun searchTrips(user: FirebaseUser, search: Search): List<Trip> {
+        return suspendCoroutine { cont ->
+            val trips = db.collection("users")
+                .document(user.uid)
+                .collection("trips")
+                .whereGreaterThanOrEqualTo("date_from", Timestamp(search.dateFrom / 1000, 0))
+                .whereLessThanOrEqualTo("date_from", Timestamp(search.dateTo / 1000, 0))
+                .orderBy("date_from", Query.Direction.DESCENDING).get()
+                .addOnSuccessListener { querySnapshot ->
+                    val result = querySnapshot.documents.map { document ->
+                        // The method is now being called after
+                        // loading the users list.
+                        document.toTrip()
+                    }
+                    cont.resume(result)
                 }.addOnFailureListener { e ->
                     cont.resumeWithException(e)
                 }

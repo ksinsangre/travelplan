@@ -1,6 +1,7 @@
 package com.nelsito.travelplan.trips.list
 
 import com.google.firebase.auth.FirebaseAuth
+import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 import org.threeten.bp.Instant
@@ -13,10 +14,13 @@ class TripsListPresenter(
     private val tripsView: TripsView,
     private val tripRepository: TripRepository
 ) {
+    private val nextMonthSearch = buildNextMonthAsDefaultSearch()
+    var lastSearch = nextMonthSearch
+
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            val trips = tripRepository.getTrips(user!!)
+            val trips = tripRepository.getTrips(user)
                 .map {
                     val date = it.formatDate()
                     TripListItem(it, it.destination, date, it.description, it.daysToGo())
@@ -29,6 +33,28 @@ class TripsListPresenter(
 
     }
 
+    suspend fun searchTrips(search: Search) {
+        this.lastSearch = search
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            val trips = tripRepository.searchTrips(user, search)
+                .map {
+                    val date = it.formatDate()
+                    TripListItem(it, it.destination, date, it.description, it.daysToGo())
+                }
+            tripsView.showTrips(trips)
+        }
+    }
+
+    private fun buildNextMonthAsDefaultSearch(): Search {
+        return Search("", "", Instant.now().toEpochMilli(),
+            Instant.now().atZone(ZoneOffset.UTC).toLocalDate().plusMonths(1).atStartOfDay()
+                .toEpochSecond(ZoneOffset.UTC) * 1000)
+    }
+
+    fun clearFilter() {
+        lastSearch = nextMonthSearch
+    }
 }
 
 interface TripsView {
