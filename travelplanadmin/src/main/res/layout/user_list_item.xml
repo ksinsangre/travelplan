@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:background="@drawable/rounded_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:padding="16dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_avatar"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/ic_person_white_24dp"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_username"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:fontFamily="@font/roboto_mono"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/img_avatar"
+        app:layout_constraintTop_toTopOf="@+id/img_avatar"
+        app:layout_constraintBottom_toTopOf="@+id/txt_email"
+        tools:text="Nelson Puglisi" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_email"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="16dp" app:fontFamily="@font/roboto_mono"
+        app:layout_constraintStart_toEndOf="@+id/img_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/txt_username"
+        app:layout_constraintBottom_toBottomOf="@+id/img_avatar"
+        tools:text="nelson.puglisi@gmail.com" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

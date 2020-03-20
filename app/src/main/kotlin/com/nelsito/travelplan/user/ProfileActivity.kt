@@ -6,11 +6,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -56,16 +58,9 @@ class ProfileActivity : AppCompatActivity() {
         txt_username.text = user.displayName
         txt_email.text = user.email
 
-        storage.reference.child(FirebaseAuth.getInstance().uid!!).child("images")
-            .child("profile")
-            .downloadUrl.addOnSuccessListener {
-            Glide.with(this).load(it).centerCrop()
+        if (user.photoUrl != null) {
+            Glide.with(this).load(user.photoUrl).centerCrop()
                 .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
-        }.addOnFailureListener {
-            if (user.photoUrl != null) {
-                Glide.with(this).load(user.photoUrl).centerCrop()
-                    .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
-            }
         }
     }
 
@@ -75,18 +70,36 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun saveProfilePicture(imagePath: Uri) {
+        progress.visibility = View.VISIBLE
         val imageReference =
             storage.reference.child(FirebaseAuth.getInstance().uid!!).child("images")
                 .child("profile")
-        imageReference.putFile(imagePath).addOnSuccessListener {
-                Log.d("Profile", "Image upload successful")
+        imageReference.putFile(imagePath).continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                imageReference.downloadUrl
             }
-            .addOnFailureListener {
-                Log.e("Profile", "Image upload failure", it)
-                Snackbar.make(img_avatar, "There was an error uploading your profile picture, please try again", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry") {
-                        saveProfilePicture(imagePath)
-                    }.show()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d("Profile", "Image upload successful")
+                    val user = FirebaseAuth.getInstance().currentUser
+
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setPhotoUri(it.result)
+                        .build()
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { task ->
+                            progress.visibility = View.GONE
+                            if (task.isSuccessful) {
+                                Log.d("Profile", "User profile updated.")
+                            }
+                        }
+                } else {
+                    progress.visibility = View.GONE
+                }
             }
     }
 

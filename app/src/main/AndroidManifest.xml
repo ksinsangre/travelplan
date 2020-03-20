@@ -9,10 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".trips.edit.EditTripActivity"></activity>
-        <activity android:name=".user.AnonymousActivity" />
-        <activity android:name=".user.WaitForVerificationActivity" />
-        <activity android:name=".user.ProfileActivity" />
+        <activity android:name=".trips.edit.EditTripActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.AnonymousActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.WaitForVerificationActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.ProfileActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

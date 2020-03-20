@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FAFAFA"
     android:fitsSystemWindows="true"
-    tools:context=".actions.mytrips.view.TripsListActivity">
+    tools:context=".trips.list.TripsListActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

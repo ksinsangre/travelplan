@@ -80,5 +80,15 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_verified_user_black_24dp"/>
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_email"
+            app:layout_constraintEnd_toEndOf="@+id/img_avatar"
+            app:layout_constraintStart_toStartOf="@+id/img_avatar"
+            app:layout_constraintTop_toTopOf="@+id/img_avatar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
