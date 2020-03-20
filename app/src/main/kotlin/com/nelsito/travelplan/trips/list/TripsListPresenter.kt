@@ -1,6 +1,7 @@
 package com.nelsito.travelplan.trips.list
 
 import com.google.firebase.auth.FirebaseAuth
+import com.nelsito.travelplan.domain.LoadTrips
 import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
@@ -12,7 +13,8 @@ import java.util.*
 
 class TripsListPresenter(
     private val tripsView: TripsView,
-    private val tripRepository: TripRepository
+    private val tripRepository: TripRepository,
+    private val loadTrips: LoadTrips
 ) {
     private val nextMonthSearch = buildNextMonthAsDefaultSearch()
     var lastSearch = nextMonthSearch
@@ -20,7 +22,7 @@ class TripsListPresenter(
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            val trips = tripRepository.getTrips(user)
+            val trips = loadTrips(user)
                 .map {
                     val date = it.formatDate()
                     TripListItem(it, it.destination, date, it.description, it.daysToGo())

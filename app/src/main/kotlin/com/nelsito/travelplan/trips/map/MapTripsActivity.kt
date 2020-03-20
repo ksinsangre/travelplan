@@ -1,35 +1,26 @@
 package com.nelsito.travelplan.trips.map
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.SnapHelper
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.detail.TripDetailActivity
-import com.nelsito.travelplan.trips.list.TripsListActivity
-import com.nelsito.travelplan.trips.list.TripsListAdapter
-import com.nelsito.travelplan.ui.OnSnapPositionChangeListener
 import com.nelsito.travelplan.ui.SnapOnScrollListener
 import com.nelsito.travelplan.ui.attachSnapHelperWithListener
-import kotlinx.android.synthetic.main.activity_edit_trip.*
 import kotlinx.android.synthetic.main.activity_maps.*
-import kotlinx.android.synthetic.main.activity_maps.toolbar
-import kotlinx.android.synthetic.main.activity_maps.trip_list
-import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -123,11 +114,18 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
     }
 
     override fun mapTrips(trips: List<MapTripListItem>) {
+        val bounds = LatLngBounds.builder()
         trips.forEach {
             mMap.addMarker(MarkerOptions().position(it.latLng).title(it.destination))
+            bounds.include(it.latLng)
         }
         listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
+            val width = resources.displayMetrics.widthPixels
+            val height: Int = resources.displayMetrics.heightPixels
+            val padding = (width * 0.12).toInt() // offset from edges of the map 12% of screen
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), width, height, padding))
             trip_list.visibility = View.VISIBLE
         } else {
             trip_list.visibility = View.GONE

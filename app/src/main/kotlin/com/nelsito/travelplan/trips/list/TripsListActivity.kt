@@ -14,6 +14,8 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.domain.LoadTrips
+import com.nelsito.travelplan.domain.LocalDateService
 import com.nelsito.travelplan.domain.Search
 import com.nelsito.travelplan.trips.add.AddTripActivity
 import com.nelsito.travelplan.trips.detail.TripDetailActivity
@@ -54,7 +56,9 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
         }
 
-        presenter = TripsListPresenter(this, InfraProvider.provideTripRepository())
+        val repo = InfraProvider.provideTripRepository()
+        val loadTrips = LoadTrips(repo, LocalDateService())
+        presenter = TripsListPresenter(this, repo, loadTrips)
         job = Job()
         launch {
             progress.visibility = View.VISIBLE
