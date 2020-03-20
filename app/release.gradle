@@ -1,0 +1,10 @@
+android {
+    signingConfigs {
+        release {
+            keyAlias 'travelPlan'
+            keyPassword '{key password}!'
+            storeFile file('keys/travelplan.jks')
+            storePassword '{store password}'
+        }
+    }
+}

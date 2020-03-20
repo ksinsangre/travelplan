@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.google.gms.google-services'
 
+apply from: 'release.gradle'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
