@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.util.Pair
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -27,8 +26,9 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
@@ -95,7 +95,8 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
         poi_list.adapter = listAdapter
 
         val placeId = intent.getStringExtra("PlaceId")
-        presenter = TripDetailPresenter(placeId, placesClient, InfraProvider.provideTripRepository())
+        val user = FirebaseAuth.getInstance().currentUser!!
+        presenter = TripDetailPresenter(placeId, user, placesClient, InfraProvider.provideTripRepository())
     }
 
     override fun onDestroy() {
@@ -115,11 +116,9 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
             .setMessage("Are you sure you want to delete this trip?")
             .setPositiveButton("Delete") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
-                AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener {
-                        presenter.deleteTrip()
-                    }
+                launch {
+                    presenter.deleteTrip()
+                }
             }
             .setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
@@ -152,8 +151,11 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
     override fun showTripEdition(trip: Trip) {
         val intent = Intent(this, EditTripActivity::class.java)
         intent.putExtra("Trip", trip)
-        intent.putExtra("PlaceID", trip.placeId)
         startActivityForResult(intent, EDIT_REQ_CODE)
+    }
+
+    override fun showError(message: String) {
+        Snackbar.make(toolbar, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onResume() {

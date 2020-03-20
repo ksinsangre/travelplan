@@ -2,7 +2,6 @@ package com.nelsito.travelplan.trips.detail
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.util.Pair
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -11,10 +10,12 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
 
 class TripDetailPresenter(private var placeId: String,
+                          private var user: FirebaseUser,
                           private val placesClient: PlacesClient,
                           private val tripRepository: TripRepository) {
 
@@ -25,7 +26,7 @@ class TripDetailPresenter(private var placeId: String,
 
     suspend fun attachView(tripDetailView: TripDetailView) {
         this.tripDetailView = tripDetailView
-        this.trip = tripRepository.find(placeId)
+        this.trip = tripRepository.find(user, placeId)
         tripDetailView.showTripInfo(trip)
         tripDetailView.showPointOfInterest(listOfPOI)
         loadPlace(trip)
@@ -33,7 +34,7 @@ class TripDetailPresenter(private var placeId: String,
     }
 
     suspend fun refreshTrip() {
-        this.trip = tripRepository.find(placeId)
+        this.trip = tripRepository.find(user, placeId)
         tripDetailView.showTripInfo(trip)
     }
 
@@ -127,15 +128,20 @@ class TripDetailPresenter(private var placeId: String,
     }
 
     suspend fun pointOfInterestAdded(poiSelected: Place) {
-        if (poiSelected.id != null && !trip.pointsOfInterest.contains(poiSelected.id)) {
+        if (poiSelected.id != null && !trip.pointsOfInterest.contains(poiSelected.id.toString())) {
             trip.pointsOfInterest.add(poiSelected.id!!)
-            tripRepository.update(trip)
+            tripRepository.update(user, trip)
         }
     }
 
-    fun deleteTrip() {
-        tripRepository.remove(trip)
-        tripDetailView.tripRemoved()
+    suspend fun deleteTrip() {
+        try {
+            tripRepository.remove(user, trip)
+            tripDetailView.tripRemoved()
+        } catch (e: Exception) {
+            Log.e("Delete", "error", e)
+            tripDetailView.showError("There was an error, please try again")
+        }
     }
 
     fun editTrip() {
@@ -151,4 +157,5 @@ interface TripDetailView {
     fun showPlacePhotos(bitmap: Bitmap)
     fun tripRemoved()
     fun showTripEdition(trip: Trip)
+    fun showError(message: String)
 }

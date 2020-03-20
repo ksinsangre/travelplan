@@ -3,9 +3,9 @@ package com.nelsito.travelplan.domain
 import com.google.firebase.auth.FirebaseUser
 
 interface TripRepository {
-    suspend fun add(trip: Trip): Boolean
     suspend fun getTrips(user: FirebaseUser): List<Trip>
-    suspend fun update(trip: Trip): Boolean
-    suspend fun find(placeId: String): Trip
-    fun remove(trip: Trip)
+    suspend fun remove(user: FirebaseUser, trip: Trip): Boolean
+    suspend fun find(user: FirebaseUser, placeId: String): Trip
+    suspend fun add(user: FirebaseUser, trip: Trip): Boolean
+    suspend fun update(user: FirebaseUser, trip: Trip): Boolean
 }

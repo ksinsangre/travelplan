@@ -7,9 +7,9 @@ import kotlinx.coroutines.delay
 
 class InMemoryTripRepository(private val repository: TripRepository) : TripRepository {
     private val myTrips = hashMapOf<String, Trip>()
-    override suspend fun add(trip: Trip) : Boolean {
+    override suspend fun add(user: FirebaseUser, trip: Trip): Boolean {
         myTrips[trip.placeId] = trip
-        return repository.add(trip)
+        return repository.add(user, trip)
     }
 
     override suspend fun getTrips(user: FirebaseUser): List<Trip> {
@@ -22,20 +22,21 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         return myTrips.values.toList()
     }
 
-    override suspend fun update(trip: Trip): Boolean {
+    override suspend fun update(user: FirebaseUser, trip: Trip): Boolean {
         myTrips[trip.placeId] = trip
-        return repository.update(trip)
+        return repository.update(user, trip)
     }
 
-    override suspend fun find(placeId: String) : Trip {
+    override suspend fun find(user: FirebaseUser, placeId: String): Trip {
         return if (myTrips.containsKey(placeId)) {
             myTrips[placeId]!!
         } else {
-            repository.find(placeId)
+            repository.find(user, placeId)
         }
     }
 
-    override fun remove(trip: Trip) {
+    override suspend fun remove(user: FirebaseUser, trip: Trip): Boolean {
         myTrips.remove(trip.placeId)
+        return repository.remove(user, trip)
     }
 }

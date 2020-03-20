@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Pair
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
@@ -60,7 +61,7 @@ class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
         val trip: Trip? = intent.getParcelableExtra("Trip")
         if (trip != null) {
             showTripInfo(trip)
-            presenter = EditTripPresenter(trip, this, InfraProvider.provideTripRepository())
+            presenter = EditTripPresenter(trip, FirebaseAuth.getInstance().currentUser!!, this, InfraProvider.provideTripRepository())
         } else {
             finish()
         }

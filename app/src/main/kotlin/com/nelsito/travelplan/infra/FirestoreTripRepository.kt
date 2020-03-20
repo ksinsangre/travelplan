@@ -1,31 +1,26 @@
 package com.nelsito.travelplan.infra
 
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.domain.TripRepository
-import org.threeten.bp.Instant
-import org.threeten.bp.ZoneOffset
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirestoreTripRepository : TripRepository {
     private val db = FirebaseFirestore.getInstance()
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    override suspend fun add(tripToAdd: Trip) : Boolean {
+    
+    override suspend fun add(user: FirebaseUser, trip: Trip) : Boolean {
         return suspendCoroutine { cont ->
-            val user = auth.currentUser as FirebaseUser
             db.collection("users")
                 .document(user.uid)
                 .collection("trips")
-                .document(tripToAdd.placeId)
-                .set(tripToAdd.toDto(), SetOptions.merge()).addOnSuccessListener {
+                .document(trip.placeId)
+                .set(trip.toDto(), SetOptions.merge()).addOnSuccessListener {
                     cont.resumeWith(Result.success(true))
                 }
                 .addOnFailureListener {
@@ -53,9 +48,8 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override suspend fun update(trip: Trip) : Boolean {
+    override suspend fun update(user: FirebaseUser, trip: Trip) : Boolean {
         return suspendCoroutine { cont ->
-            val user = auth.currentUser as FirebaseUser
             db.collection("users")
                 .document(user.uid)
                 .collection("trips")
@@ -69,9 +63,8 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override suspend fun find(placeId: String): Trip {
+    override suspend fun find(user: FirebaseUser, placeId: String): Trip {
         return suspendCoroutine { cont ->
-            val user = auth.currentUser as FirebaseUser
             db.collection("users")
                 .document(user.uid)
                 .collection("trips")
@@ -85,8 +78,19 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override fun remove(trip: Trip) {
-        TODO("Not yet implemented")
+    override suspend fun remove(user: FirebaseUser, trip: Trip) : Boolean {
+        return suspendCoroutine { cont ->
+            db.collection("users")
+                .document(user.uid)
+                .collection("trips")
+                .document(trip.placeId)
+                .delete()
+                .addOnSuccessListener {
+                    cont.resumeWith(Result.success(true))
+                }.addOnFailureListener { e ->
+                    cont.resumeWithException(e)
+                }
+        }
     }
 }
 

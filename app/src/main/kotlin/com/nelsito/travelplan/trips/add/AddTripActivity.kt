@@ -18,6 +18,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.android.synthetic.main.activity_add_trip.*
@@ -95,6 +96,7 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
 
         presenter = AddTripPresenter(
             this,
+            FirebaseAuth.getInstance().currentUser!!,
             InfraProvider.provideTripRepository()
         )
     }

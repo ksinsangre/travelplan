@@ -138,10 +138,13 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     override fun showTrips(trips: List<TripListItem>) {
         progress.visibility = View.GONE
+        listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
             trip_list.visibility = View.VISIBLE
             empty_placeholder.visibility = View.GONE
-            listAdapter.submitList(trips)
+        } else {
+            trip_list.visibility = View.GONE
+            empty_placeholder.visibility = View.VISIBLE
         }
     }
 
