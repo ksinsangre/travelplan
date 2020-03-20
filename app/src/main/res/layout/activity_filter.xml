@@ -35,12 +35,23 @@
         tools:context=".trips.add.AddTripActivity"
         tools:showIn="@layout/activity_add_trip">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:text="Search your next month trips as default"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt_destination_title"
+            app:fontFamily="@font/roboto_mono"/>
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_destination_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_textview"
             android:padding="16dp"
+            android:layout_marginTop="32dp"
             android:hint="Search trips by title"
             app:fontFamily="@font/roboto_mono"
             app:layout_constraintLeft_toLeftOf="parent"
