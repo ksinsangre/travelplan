@@ -6,13 +6,11 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'com.google.gms.google-services'
 
-apply from: 'release.gradle'
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     def keys = rootProject.extensions.getByName("ext")
-
+    apply from: rootProject.file('app/release.gradle')
     defaultConfig {
         applicationId "com.nelsito.travelplan"
         minSdkVersion 21
