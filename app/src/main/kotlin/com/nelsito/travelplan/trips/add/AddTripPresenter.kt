@@ -1,6 +1,7 @@
 package com.nelsito.travelplan.trips.add
 
 import androidx.core.util.Pair
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.Trip
@@ -22,7 +23,7 @@ class AddTripPresenter(private val addTripView: AddTripView, private val user: F
     }
 
     suspend fun save(description: String) {
-        val trip = Trip(destination.id!!, destination.name!!, description, dateFrom, dateTo)
+        val trip = Trip(destination.id!!, destination.name!!, description, dateFrom, dateTo, latLng = destination.latLng?: LatLng(0.0, 0.0))
         tripRepository.add(user, trip)
         addTripView.dismiss()
     }

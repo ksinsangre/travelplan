@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
+        <activity android:name=".trips.map.MapTripsActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".trips.edit.EditTripActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".user.AnonymousActivity"

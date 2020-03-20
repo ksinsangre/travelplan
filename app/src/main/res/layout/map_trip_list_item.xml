@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:background="@drawable/rounded_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.nelsito.travelplan.ui.WideImageView
+        android:id="@+id/img_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_image_black_24dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/paris1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_destination_title"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_1"
+        app:layout_constraintRight_toLeftOf="@+id/barrier7"
+        tools:text="Colonia del Sacramento" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier7"
+        app:layout_constraintRight_toLeftOf="@+id/txt_days_to_go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="txt_days_to_go"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_days_to_go"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txt_destination_title"
+        tools:text="4 days to go" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_period"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:textAllCaps="true"
+        android:textStyle="italic"
+        app:fontFamily="@font/roboto_mono"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_destination_title"
+        tools:maxLines="4"
+        tools:text="15 Oct 2020 / 11 Dec 2020" />
+
+    <View
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:id="@+id/past_overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@id/txt_period"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

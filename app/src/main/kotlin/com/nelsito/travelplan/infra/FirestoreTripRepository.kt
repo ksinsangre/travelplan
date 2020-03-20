@@ -1,5 +1,6 @@
 package com.nelsito.travelplan.infra
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -95,10 +96,10 @@ class FirestoreTripRepository : TripRepository {
 }
 
 fun Trip.toDto() : TripDto{
-    return TripDto(placeId, destination, description, Timestamp(dateFrom / 1000, 0), Timestamp(dateTo / 1000, 0), pointsOfInterest)
+    return TripDto(placeId, destination, description, Timestamp(dateFrom / 1000, 0), Timestamp(dateTo / 1000, 0), pointsOfInterest, latLng.latitude, latLng.longitude)
 }
 
-data class TripDto(val place_id: String, val destination: String, val description: String, val date_from: Timestamp, val date_to: Timestamp, val points_of_interest: MutableList<String>)
+data class TripDto(val place_id: String, val destination: String, val description: String, val date_from: Timestamp, val date_to: Timestamp, val points_of_interest: MutableList<String>, val latitude: Double, val longitude: Double)
 
 
 
@@ -110,6 +111,7 @@ fun DocumentSnapshot.toTrip(): Trip {
         this["description"].toString(),
         date_from.seconds * 1000,
         date_to.seconds * 1000,
-        (this["points_of_interest"] as List<String>).toMutableList()
+        (this["points_of_interest"] as List<String>).toMutableList(),
+        LatLng(this["latitude"] as Double, this["longitude"] as Double)
     )
 }

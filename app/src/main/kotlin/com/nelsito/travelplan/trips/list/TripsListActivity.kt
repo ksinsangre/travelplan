@@ -18,6 +18,7 @@ import com.nelsito.travelplan.trips.add.AddTripActivity
 import com.nelsito.travelplan.trips.detail.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
+import com.nelsito.travelplan.trips.map.MapTripsActivity
 import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -88,6 +89,10 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                     startActivity(Intent(this, ProfileActivity::class.java))
                     true
                 }
+                R.id.menu_map_trips -> {
+                    startActivity(Intent(this, MapTripsActivity::class.java))
+                    true
+                }
                 /*R.id.menu_filter -> {
                     openFilterPage()
                 }
@@ -140,9 +145,11 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         progress.visibility = View.GONE
         listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
+            bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = true
             trip_list.visibility = View.VISIBLE
             empty_placeholder.visibility = View.GONE
         } else {
+            bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = false
             trip_list.visibility = View.GONE
             empty_placeholder.visibility = View.VISIBLE
         }
