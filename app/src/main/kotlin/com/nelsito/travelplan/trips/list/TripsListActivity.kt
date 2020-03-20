@@ -64,10 +64,10 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                 intent.putExtra("PlaceId", it.trip.placeId)
                 startActivityForResult(intent, NEW_REQ_CODE)
             })
-        trip_list.adapter = listAdapter
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
+        trip_list.adapter = listAdapter
     }
 
     override fun onDestroy() {
