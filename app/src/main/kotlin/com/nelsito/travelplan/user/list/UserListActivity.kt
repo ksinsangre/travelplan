@@ -1,8 +1,8 @@
-package com.nelsito.travelplanadmin.user.list
+package com.nelsito.travelplan.user.list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.nelsito.travelplanadmin.R
+import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.activity_user_list.*
 
 class UserListActivity : AppCompatActivity(), UserListView {

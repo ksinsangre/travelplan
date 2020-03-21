@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity android:name=".trips.list.FilterActivity"></activity>
+        <activity android:name=".user.login.LoginActivity"></activity>
+        <activity
+            android:name=".user.list.UserListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".trips.list.FilterActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".trips.map.MapTripsActivity"
             android:screenOrientation="portrait" />
@@ -20,7 +26,7 @@
             android:name=".user.AnonymousActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user.WaitForVerificationActivity"
+            android:name=".user.login.WaitForVerificationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".user.ProfileActivity"

@@ -1,4 +1,4 @@
-package com.nelsito.travelplanadmin.user.list
+package com.nelsito.travelplan.user.list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.nelsito.travelplanadmin.R
+import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.user_list_item.view.*
 
 class UserListAdapter(private val context: Context): ListAdapter<UserListItem, RecyclerView.ViewHolder>(UserDiffCallback()) {

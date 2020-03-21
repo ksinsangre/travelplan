@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.trips.list.TripsListActivity
+import com.nelsito.travelplan.user.login.WaitForVerificationActivity
 
 class AnonymousActivity : AppCompatActivity() {
 

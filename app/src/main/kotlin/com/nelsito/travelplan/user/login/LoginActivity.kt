@@ -1,26 +1,26 @@
-package com.nelsito.travelplan
+package com.nelsito.travelplan.user.login
 
+import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.firebase.ui.auth.AuthUI
+import com.nelsito.travelplan.R
+import com.nelsito.travelplan.SplashActivity
 import com.nelsito.travelplan.infra.FirebaseUserRepository
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.ui.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
-import com.nelsito.travelplan.user.login.WaitForVerificationActivity
 import com.nelsito.travelplan.user.list.UserListActivity
-import com.nelsito.travelplan.user.login.LoginActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class SplashActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
+class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
 
-    companion object {
-        const val RC_SIGN_IN = 4346
-    }
+    private lateinit var presenter: UserNavigationPresenter
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -29,10 +29,10 @@ class SplashActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         job = Job()
-        val presenter = UserNavigationPresenter(this, FirebaseUserRepository())
-        launch {
-            presenter.startNavigation()
-        }
+
+        presenter = UserNavigationPresenter(this, FirebaseUserRepository())
+
+        showLoginScreen()
     }
 
     override fun onDestroy() {
@@ -41,10 +41,35 @@ class SplashActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         job.cancel()
     }
 
+    private fun showLoginScreen() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.LoginAppTheme) // Set theme
+                .build(),
+            SplashActivity.RC_SIGN_IN
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SplashActivity.RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
+            launch {
+                presenter.startNavigation()
+            }
+        } else{
+            finish()
+        }
+    }
+
     override fun openLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
+        showLoginScreen()
     }
 
     override fun openUserList() {

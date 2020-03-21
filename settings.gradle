@@ -1,3 +1,2 @@
 rootProject.name='Travel Plan'
 include ':app'
-include ':travelplanadmin'
