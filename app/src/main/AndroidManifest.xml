@@ -23,9 +23,6 @@
             android:name=".trips.edit.EditTripActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user.AnonymousActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".user.login.WaitForVerificationActivity"
             android:screenOrientation="portrait" />
         <activity

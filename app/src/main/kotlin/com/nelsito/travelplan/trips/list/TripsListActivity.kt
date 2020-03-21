@@ -30,8 +30,8 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import kotlin.coroutines.CoroutineContext
 import com.nelsito.travelplan.ui.SwipeToDeleteCallback
-import com.nelsito.travelplan.user.AnonymousActivity
 import com.nelsito.travelplan.user.ProfileActivity
+import com.nelsito.travelplan.user.login.LoginActivity
 
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
     private lateinit var presenter: TripsListPresenter
@@ -142,7 +142,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
     }
 
     private fun openAnonymous() {
-        startActivity(Intent(this, AnonymousActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 
