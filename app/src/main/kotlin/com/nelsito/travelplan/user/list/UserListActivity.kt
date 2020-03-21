@@ -2,6 +2,7 @@ package com.nelsito.travelplan.user.list
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.LoggedInUser
@@ -47,5 +48,7 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
 
     override fun showUsers(list: List<UserListItem>) {
         listAdapter.submitList(list)
+        progress.visibility = View.GONE
+        user_list.visibility = View.VISIBLE
     }
 }

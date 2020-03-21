@@ -30,6 +30,22 @@ class UserListAdapter(private val context: Context): ListAdapter<UserListItem, R
         fun bind(userListItem: UserListItem, context: Context) {
             itemView.txt_username.text = userListItem.username
             itemView.txt_email.text = userListItem.email
+
+            when(userListItem.role) {
+                "admin" -> {
+                    itemView.lbl_manager.visibility = View.GONE
+                    itemView.lbl_admin.visibility = View.VISIBLE
+                }
+                "manager" -> {
+                    itemView.lbl_admin.visibility = View.GONE
+                    itemView.lbl_manager.visibility = View.VISIBLE
+                }
+                else -> {
+                    itemView.lbl_manager.visibility = View.GONE
+                    itemView.lbl_admin.visibility = View.GONE
+                }
+            }
+
             Glide.with(context)
                 .load(userListItem.photoUrl)
                 .centerCrop()

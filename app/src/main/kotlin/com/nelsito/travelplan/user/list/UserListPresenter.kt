@@ -5,7 +5,7 @@ import com.nelsito.travelplan.domain.UserRepository
 class UserListPresenter(private val userListView: UserListView, private val userRepository: UserRepository) {
     suspend fun loadUsers() {
         val list = userRepository.getUserList().map {
-            UserListItem(it.firebaseUser.uid, it.firebaseUser.displayName ?: "", it.firebaseUser.email ?: "", it.firebaseUser.photoUrl.toString())
+            UserListItem(it.uid, it.displayName, it.email, "", it.role)
         }
         userListView.showUsers(list)
     }
