@@ -10,7 +10,9 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     def keys = rootProject.extensions.getByName("ext")
+
     apply from: rootProject.file('app/release.gradle')
+
     defaultConfig {
         applicationId "com.nelsito.travelplan"
         minSdkVersion 21
@@ -23,6 +25,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -30,6 +33,12 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
 }
 
