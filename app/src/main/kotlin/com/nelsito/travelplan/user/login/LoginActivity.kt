@@ -8,6 +8,7 @@ import com.firebase.ui.auth.AuthUI
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.SplashActivity
 import com.nelsito.travelplan.infra.FirebaseUserRepository
+import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.ui.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
@@ -30,7 +31,7 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         super.onCreate(savedInstanceState)
         job = Job()
 
-        presenter = UserNavigationPresenter(this, FirebaseUserRepository())
+        presenter = UserNavigationPresenter(this, InfraProvider.provideUserRepository())
 
         showLoginScreen()
     }

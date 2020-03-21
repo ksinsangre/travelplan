@@ -1,15 +1,14 @@
 package com.nelsito.travelplan.user.list
 
-import com.google.firebase.auth.FirebaseAuth
+import com.nelsito.travelplan.domain.UserRepository
 
-class UserListPresenter(private val userListView: UserListView) {
-    fun loadUsers() {
-        /*val list = FirebaseAuth.getInstance().listUsers(null).values.map {
-            UserListItem(it.uid, it.displayName, it.email, it.photoUrl)
+class UserListPresenter(private val userListView: UserListView, private val userRepository: UserRepository) {
+    suspend fun loadUsers() {
+        val list = userRepository.getUserList().map {
+            UserListItem(it.firebaseUser.uid, it.firebaseUser.displayName ?: "", it.firebaseUser.email ?: "", it.firebaseUser.photoUrl.toString())
         }
-        userListView.showUsers(list)*/
+        userListView.showUsers(list)
     }
-
 }
 
 interface UserListView {

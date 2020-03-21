@@ -41,6 +41,10 @@ class FirebaseUserRepository : UserRepository {
         }
     }
 
+    override suspend fun getUserList(): List<LoggedInUser> {
+        TODO("Not yet implemented")
+    }
+
     private fun isUser(cont: Continuation<TravelUser>, user: FirebaseUser) {
         if (user.isEmailVerified) {
             cont.resume(VerifiedUser(user))

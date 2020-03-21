@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.domain.users.LoggedInUser
 import com.nelsito.travelplan.infra.FirebaseUserRepository
+import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import kotlinx.android.synthetic.main.activity_wait_for_verification.*
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,7 @@ class WaitForVerificationActivity : AppCompatActivity(), CoroutineScope, WaitFor
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wait_for_verification)
         job = Job()
-        presenter = WaitForVerificationPresenter(this, FirebaseUserRepository())
+        presenter = WaitForVerificationPresenter(this, InfraProvider.provideUserRepository())
 
         lnk_sign_in.setOnClickListener {
             openLogin()
