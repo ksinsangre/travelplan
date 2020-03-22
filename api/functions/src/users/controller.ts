@@ -46,7 +46,8 @@ function mapUser(user: admin.auth.UserRecord) {
       role,
       lastSignInTime: user.metadata.lastSignInTime,
       creationTime: user.metadata.creationTime,
-      photoUrl: user.photoURL
+      photoUrl: user.photoURL,
+      disabled: user.disabled
   }
 }
 
