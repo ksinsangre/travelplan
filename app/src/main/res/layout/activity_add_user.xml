@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    tools:context=".trips.edit.EditTripActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:background="#FAFAFA"
+            app:fontFamily="@font/roboto_mono"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_username"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_textview"
+            android:gravity="top"
+            android:hint="Username"
+            android:padding="16dp"
+            android:textColor="#747574"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_date" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_email"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_textview"
+            android:gravity="top"
+            android:hint="Email"
+            android:padding="16dp"
+            android:textColor="#747574"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_username" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_password"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_textview"
+            android:gravity="top"
+            android:hint="Password"
+            android:padding="16dp"
+            android:textColor="#747574"
+            app:fontFamily="@font/roboto_mono"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_email" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/input_description"
+            app:layout_constraintEnd_toEndOf="@+id/input_description"
+            app:layout_constraintStart_toStartOf="@+id/input_description"
+            app:layout_constraintTop_toTopOf="@+id/input_description" />
+
+        <RadioGroup
+            android:visibility="gone"
+            android:id="@+id/roles_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/txt_password"
+            app:layout_constraintStart_toStartOf="@+id/txt_password"
+            app:layout_constraintTop_toBottomOf="@+id/txt_password" >
+            <RadioButton
+                android:id="@+id/role_regular"
+                android:text="Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton
+                android:id="@+id/role_manager"
+                android:text="Manager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton
+                android:id="@+id/role_admin"
+                android:text="Admin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -15,6 +15,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".user.admin.EditUserActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".user.admin.AddUserActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".user.list.UserListActivity"
             android:screenOrientation="portrait" />

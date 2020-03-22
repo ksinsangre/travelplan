@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.*
+import com.nelsito.travelplan.user.admin.AddUser
 import com.nelsito.travelplan.user.list.UserListItem
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -78,6 +79,12 @@ class FirebaseUserRepository : UserRepository {
         client.deleteUser("Bearer $token", user.uid)
     }
 
+    override suspend fun add(user: AddUser) {
+        val token = getToken()
+        val body = AddUserRequest(user.email, user.username, user.role, user.pasword)
+        client.addUser("Bearer $token", body)
+    }
+
     private suspend fun getToken(): String {
         return suspendCoroutine { cont ->
             val user = FirebaseAuth.getInstance().currentUser!!
@@ -107,6 +114,9 @@ interface FirebaseAdminNetworkClient {
 
     @PATCH("users/{uid}")
     suspend fun updateUser(@Header("Authorization") token: String, @Path("uid") uid: String, @Body user: UserResponse): Response<Unit>
+
+    @POST("users")
+    suspend fun addUser(@Header("Authorization") token: String, @Body user: AddUserRequest): Response<Unit>
 }
 
 class AnonymousUserException : Throwable()

@@ -9,22 +9,6 @@
     android:fitsSystemWindows="true"
     tools:context=".user.list.UserListActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FAFAFA"
-        android:fitsSystemWindows="true"
-        app:liftOnScroll="true">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#FAFAFA" />
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="8dp"
         android:layout_width="match_parent"
@@ -52,4 +36,24 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#80FFFFFF"
+        app:fabAlignmentMode="end"
+        app:fabAnimationMode="scale"
+        app:fabCradleMargin="8dp"
+        app:fabCradleRoundedCornerRadius="8dp"
+        app:hideOnScroll="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="#FFF"
+        app:layout_anchor="@id/bottomAppBar"
+        app:srcCompat="@drawable/ic_add_menu" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
