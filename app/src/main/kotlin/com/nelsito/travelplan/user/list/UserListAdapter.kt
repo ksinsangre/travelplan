@@ -34,16 +34,24 @@ class UserListAdapter(private val context: Context, private val clickListener: (
             itemView.txt_username.text = userListItem.username
             itemView.txt_email.text = userListItem.email
 
+            if (userListItem.disabled) {
+                itemView.lbl_manager.visibility = View.GONE
+                itemView.lbl_admin.visibility = View.GONE
+                itemView.lbl_disabled.visibility = View.VISIBLE
+            }
             when(userListItem.role) {
                 "admin" -> {
+                    itemView.lbl_disabled.visibility = View.GONE
                     itemView.lbl_manager.visibility = View.GONE
                     itemView.lbl_admin.visibility = View.VISIBLE
                 }
                 "manager" -> {
+                    itemView.lbl_disabled.visibility = View.GONE
                     itemView.lbl_admin.visibility = View.GONE
                     itemView.lbl_manager.visibility = View.VISIBLE
                 }
                 else -> {
+                    itemView.lbl_disabled.visibility = View.GONE
                     itemView.lbl_manager.visibility = View.GONE
                     itemView.lbl_admin.visibility = View.GONE
                 }

@@ -1,5 +1,6 @@
 package com.nelsito.travelplan.domain
 
+import com.google.android.gms.tasks.Task
 import com.nelsito.travelplan.domain.users.LoggedInUser
 import com.nelsito.travelplan.domain.users.TravelUser
 import com.nelsito.travelplan.infra.UserResponse
@@ -13,4 +14,6 @@ interface UserRepository {
     suspend fun update(user: UserListItem)
     suspend fun deleteUser(user: UserListItem)
     suspend fun add(user: AddUser)
+    suspend fun blockUser(email: String): String
+    suspend fun enableUser(uid: String): String
 }

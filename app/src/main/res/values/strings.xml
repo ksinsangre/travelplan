@@ -5,4 +5,5 @@
         <item quantity="other">%d days to go</item>
     </plurals>
     <string name="trip_to_detail_title">Trip to %s</string>
+    <string name="email_hint"><![CDATA[E-mail & Password]]></string>
 </resources>

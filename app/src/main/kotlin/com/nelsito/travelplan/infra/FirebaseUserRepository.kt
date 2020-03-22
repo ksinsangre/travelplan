@@ -1,7 +1,12 @@
 package com.nelsito.travelplan.infra
 
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.functions.FirebaseFunctionsException
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.*
 import com.nelsito.travelplan.user.admin.AddUser
@@ -12,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class FirebaseUserRepository : UserRepository {
@@ -70,7 +76,7 @@ class FirebaseUserRepository : UserRepository {
 
     override suspend fun update(user: UserListItem) {
         val token = getToken()
-        val body = UserResponse(user.uid, user.email, user.username, user.role, user.photoUrl)
+        val body = UserResponse(user.uid, user.email, user.username, user.role, user.photoUrl, user.disabled)
         client.updateUser("Bearer $token", user.uid, body)
     }
 
@@ -85,38 +91,89 @@ class FirebaseUserRepository : UserRepository {
         client.addUser("Bearer $token", body)
     }
 
-    private suspend fun getToken(): String {
+    override suspend fun blockUser(email: String): String {
         return suspendCoroutine { cont ->
-            val user = FirebaseAuth.getInstance().currentUser!!
-            user.getIdToken(false)
-                .addOnSuccessListener { result ->
-                    cont.resumeWith(Result.success(result.token?:""))
-                }
+            val data = hashMapOf(
+                "email" to email
+            )
+            Firebase.functions
+                .getHttpsCallable("blockUser")
+                .call(data)
+                .continueWith { task ->
+                    cont.resumeWith(Result.success(""))
+                }.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        val e = task.exception
+                        if (e is FirebaseFunctionsException) {
+                            cont.resumeWithException(e)
+                        }
+                    }
+                })
         }
     }
-    private fun isUser(cont: Continuation<TravelUser>, user: FirebaseUser) {
-        if (user.isEmailVerified) {
-            cont.resume(VerifiedUser(user))
-        } else {
-            cont.resume(NotVerifiedUser(user))
+
+    override suspend fun enableUser(uid: String): String {
+        return suspendCoroutine { cont ->
+            val data = hashMapOf(
+                "uid" to uid
+            )
+            Firebase.functions
+                .getHttpsCallable("enableUser")
+                .call(data)
+                .continueWith { task ->
+                    cont.resumeWith(Result.success(""))
+                }.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        val e = task.exception
+                        if (e is FirebaseFunctionsException) {
+                            cont.resumeWithException(e)
+                        }
+                    }
+                })
         }
     }
 }
 
+private suspend fun getToken(): String {
+    return suspendCoroutine { cont ->
+        val user = FirebaseAuth.getInstance().currentUser!!
+        user.getIdToken(false)
+            .addOnSuccessListener { result ->
+                cont.resumeWith(Result.success(result.token ?: ""))
+            }
+    }
+}
 
+private fun isUser(cont: Continuation<TravelUser>, user: FirebaseUser) {
+    if (user.isEmailVerified) {
+        cont.resume(VerifiedUser(user))
+    } else {
+        cont.resume(NotVerifiedUser(user))
+    }
+}
 
 interface FirebaseAdminNetworkClient {
     @GET("users")
     suspend fun getUserList(@Header("Authorization") token: String): UserAdminResponse
 
     @DELETE("users/{uid}")
-    suspend fun deleteUser(@Header("Authorization") token: String, @Path("uid") uid: String) : Response<Unit>
+    suspend fun deleteUser(
+        @Header("Authorization") token: String,
+        @Path("uid") uid: String
+    ): Response<Unit>
 
     @PATCH("users/{uid}")
-    suspend fun updateUser(@Header("Authorization") token: String, @Path("uid") uid: String, @Body user: UserResponse): Response<Unit>
+    suspend fun updateUser(
+        @Header("Authorization") token: String,
+        @Path("uid") uid: String,
+        @Body user: UserResponse
+    ): Response<Unit>
 
     @POST("users")
-    suspend fun addUser(@Header("Authorization") token: String, @Body user: AddUserRequest): Response<Unit>
+    suspend fun addUser(
+        @Header("Authorization") token: String,
+        @Body user: AddUserRequest
+    ): Response<Unit>
 }
 
 class AnonymousUserException : Throwable()

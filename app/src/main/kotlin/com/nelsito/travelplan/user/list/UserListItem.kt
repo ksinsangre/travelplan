@@ -9,5 +9,6 @@ data class UserListItem(
     val username: String,
     val email: String,
     val photoUrl: String,
-    val role: String
+    val role: String,
+    val disabled: Boolean
 ) : Parcelable

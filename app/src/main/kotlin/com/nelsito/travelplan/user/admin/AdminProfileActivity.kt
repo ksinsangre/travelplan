@@ -75,6 +75,12 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
                 }
             })
         trip_list.adapter = listAdapter
+        if (user.disabled) btn_disable.text = "Enable User" else "Disable User"
+        btn_disable.setOnClickListener {
+            launch {
+                presenter.toggleDisable()
+            }
+        }
     }
 
     override fun onResume() {
@@ -153,6 +159,14 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
             trip_list.visibility = View.GONE
             empty_placeholder.visibility = View.VISIBLE
         }
+    }
+
+    override fun userEnabled() {
+        btn_disable.text = "Disable User"
+    }
+
+    override fun userDisabled() {
+        btn_disable.text = "Enable User"
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

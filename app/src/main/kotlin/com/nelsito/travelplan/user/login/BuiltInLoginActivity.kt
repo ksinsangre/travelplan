@@ -13,14 +13,13 @@ import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.ui.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
 import com.nelsito.travelplan.user.list.UserListActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
+class BuiltInLoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
 
     private lateinit var presenter: UserNavigationPresenter
     private lateinit var job: Job
@@ -30,15 +29,11 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
         job = Job()
 
         presenter = UserNavigationPresenter(this, InfraProvider.provideUserRepository())
 
-        btn_email.setOnClickListener {
-            val intent = Intent(this, EmailPasswordActivity::class.java)
-            startActivityForResult(intent, SplashActivity.RC_SIGN_IN)
-        }
+        showLoginScreen()
     }
 
     override fun onDestroy() {
@@ -47,17 +42,35 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         job.cancel()
     }
 
+    private fun showLoginScreen() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.LoginAppTheme) // Set theme
+                .build(),
+            SplashActivity.RC_SIGN_IN
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SplashActivity.RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
             launch {
                 presenter.startNavigation()
             }
+        } else{
+            finish()
         }
     }
 
     override fun openLogin() {
-        //Nothing
+        showLoginScreen()
     }
 
     override fun openUserList() {
