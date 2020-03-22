@@ -8,6 +8,8 @@ class UserDiffCallback : DiffUtil.ItemCallback<UserListItem>(){
     }
 
     override fun areContentsTheSame(oldItem: UserListItem, newItem: UserListItem): Boolean {
-        return oldItem.email == newItem.email
+        return oldItem.email == newItem.email &&
+                oldItem.username == newItem.username &&
+                oldItem.role == newItem.role
     }
 }

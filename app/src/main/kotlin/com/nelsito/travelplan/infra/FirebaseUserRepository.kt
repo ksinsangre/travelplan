@@ -4,10 +4,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.*
+import com.nelsito.travelplan.user.list.UserListItem
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
+import retrofit2.http.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -66,6 +67,17 @@ class FirebaseUserRepository : UserRepository {
         return client.getUserList("Bearer $token").users
     }
 
+    override suspend fun update(user: UserListItem) {
+        val token = getToken()
+        val body = UserResponse(user.uid, user.email, user.username, user.role)
+        client.updateUser("Bearer $token", user.uid, body)
+    }
+
+    override suspend fun deleteUser(user: UserListItem) {
+        val token = getToken()
+        client.deleteUser("Bearer $token", user.uid)
+    }
+
     private suspend fun getToken(): String {
         return suspendCoroutine { cont ->
             val user = FirebaseAuth.getInstance().currentUser!!
@@ -89,6 +101,12 @@ class FirebaseUserRepository : UserRepository {
 interface FirebaseAdminNetworkClient {
     @GET("users")
     suspend fun getUserList(@Header("Authorization") token: String): UserAdminResponse
+
+    @DELETE("users/{uid}")
+    suspend fun deleteUser(@Header("Authorization") token: String, @Path("uid") uid: String) : Response<Unit>
+
+    @PATCH("users/{uid}")
+    suspend fun updateUser(@Header("Authorization") token: String, @Path("uid") uid: String, @Body user: UserResponse): Response<Unit>
 }
 
 class AnonymousUserException : Throwable()

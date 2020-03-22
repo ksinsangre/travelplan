@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.nelsito.travelplan.R
 import kotlinx.android.synthetic.main.user_list_item.view.*
 
-class UserListAdapter(private val context: Context): ListAdapter<UserListItem, RecyclerView.ViewHolder>(UserDiffCallback()) {
+class UserListAdapter(private val context: Context, private val clickListener: (UserListItem) -> Unit): ListAdapter<UserListItem, RecyclerView.ViewHolder>(UserDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return UserViewHolder(
@@ -23,11 +23,14 @@ class UserListAdapter(private val context: Context): ListAdapter<UserListItem, R
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as UserViewHolder).bind(getItem(position) as UserListItem, context)
+        (holder as UserViewHolder).bind(getItem(position) as UserListItem, context, clickListener)
     }
 
-    private class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(userListItem: UserListItem, context: Context) {
+    private class UserViewHolder(
+        itemView: View
+    ) : RecyclerView.ViewHolder(itemView) {
+        fun bind(userListItem: UserListItem, context: Context,
+                 clickListener: (UserListItem) -> Unit) {
             itemView.txt_username.text = userListItem.username
             itemView.txt_email.text = userListItem.email
 
@@ -51,6 +54,8 @@ class UserListAdapter(private val context: Context): ListAdapter<UserListItem, R
                 .centerCrop()
                 .placeholder(context.getDrawable(R.drawable.ic_person_white_24dp))
                 .into(itemView.img_avatar)
+
+            itemView.setOnClickListener { clickListener(userListItem) }
         }
     }
 }
