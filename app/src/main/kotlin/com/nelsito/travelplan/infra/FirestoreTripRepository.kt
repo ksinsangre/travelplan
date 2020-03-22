@@ -29,10 +29,10 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override suspend fun getTrips(user: FirebaseUser): List<Trip> {
+    override suspend fun getTrips(uid: String): List<Trip> {
         return suspendCoroutine { cont ->
             db.collection("users")
-                .document(user.uid)
+                .document(uid)
                 .collection("trips")
                 .orderBy("date_from", Query.Direction.DESCENDING)
                 .get()
@@ -100,12 +100,12 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override suspend fun remove(user: FirebaseUser, trip: Trip) : Boolean {
+    override suspend fun remove(uid: String, placeId: String) : Boolean {
         return suspendCoroutine { cont ->
             db.collection("users")
-                .document(user.uid)
+                .document(uid)
                 .collection("trips")
-                .document(trip.placeId)
+                .document(placeId)
                 .delete()
                 .addOnSuccessListener {
                     cont.resumeWith(Result.success(true))

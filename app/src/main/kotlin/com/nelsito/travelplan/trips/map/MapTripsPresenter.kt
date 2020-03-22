@@ -14,7 +14,7 @@ class MapTripsPresenter(private val mapTripsView: MapTripsView, private val trip
     suspend fun loadTrips() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
-            trips = tripRepository.getTrips(user)
+            trips = tripRepository.getTrips(user.uid)
                 .map {
                     val date = it.formatDate()
                     MapTripListItem(it.placeId, it.destination, date, it.latLng, it.daysToGo())

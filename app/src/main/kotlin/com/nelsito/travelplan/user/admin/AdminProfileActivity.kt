@@ -11,21 +11,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.user.list.UserListActivity
 import com.nelsito.travelplan.user.list.UserListItem
 import kotlinx.android.synthetic.main.activity_admin_profile.*
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.activity_profile.img_avatar
-import kotlinx.android.synthetic.main.activity_profile.toolbar
-import kotlinx.android.synthetic.main.activity_profile.txt_email
-import kotlinx.android.synthetic.main.activity_profile.txt_username
-import kotlinx.android.synthetic.main.activity_trip_detail.*
-import kotlinx.android.synthetic.main.activity_user_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,6 +30,7 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
+    private lateinit var listAdapter: AdminTripsListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +64,24 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
             finish()
         } else {
             showUserData(user)
+            presenter = AdminProfilePresenter(user, InfraProvider.provideUserRepository(), InfraProvider.provideTripRepository())
         }
 
-        presenter = AdminProfilePresenter(user, this, InfraProvider.provideUserRepository())
+        listAdapter =
+            AdminTripsListAdapter(deleteClickListener = {
+                progress.visibility = View.VISIBLE
+                launch {
+                    presenter.deleteTrip(it)
+                }
+            })
+        trip_list.adapter = listAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        launch {
+            presenter.attachView(this@AdminProfileActivity)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -95,8 +101,9 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
             .setMessage("Are you sure you want to delete this user?")
             .setPositiveButton("Delete") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
+                progress.visibility = View.VISIBLE
                 launch {
-                    presenter.deleteTrip()
+                    presenter.deleteUser()
                 }
             }
             .setNegativeButton("Cancel") { dialogInterface: DialogInterface, _: Int ->
@@ -134,6 +141,18 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
     override fun userDeleted() {
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    override fun showTrips(trips: List<AdminTripListItem>) {
+        progress.visibility = View.GONE
+        listAdapter.submitList(trips)
+        if(trips.isNotEmpty()) {
+            trip_list.visibility = View.VISIBLE
+            empty_placeholder.visibility = View.GONE
+        } else {
+            trip_list.visibility = View.GONE
+            empty_placeholder.visibility = View.VISIBLE
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

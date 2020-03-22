@@ -104,15 +104,45 @@
             app:layout_constraintLeft_toRightOf="@id/txt_username"
             />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trip_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="8dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_email"
+            tools:listitem="@layout/admin_trip_list_item" />
+
+        <TextView
+            android:id="@+id/empty_placeholder"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="48dp"
+            android:visibility="gone"
+            app:fontFamily="@font/roboto_mono"
+            android:text="This user don't have any trips"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_email" />
+
         <ProgressBar
             android:id="@+id/progress"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_email"
-            app:layout_constraintEnd_toEndOf="@+id/img_avatar"
-            app:layout_constraintStart_toStartOf="@+id/img_avatar"
-            app:layout_constraintTop_toTopOf="@+id/img_avatar" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_email" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -17,13 +17,8 @@ class EditUserPresenter(private var user: UserListItem, private val userReposito
         when(userRepository.loadUser()) {
             is Admin -> {
                 editUserView.showAdminWidgets()
-                loadTrips(user)
             }
         }
-    }
-
-    private fun loadTrips(user: UserListItem) {
-
     }
 
     suspend fun edit(username: String, email: String) {

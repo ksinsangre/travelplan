@@ -18,16 +18,16 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         return repository.add(user, trip)
     }
 
-    override suspend fun getTrips(user: FirebaseUser): List<Trip> {
-        if (!myTrips.containsKey(user.uid)) {
-            myTrips[user.uid] = hashMapOf()
+    override suspend fun getTrips(uid: String): List<Trip> {
+        if (!myTrips.containsKey(uid)) {
+            myTrips[uid] = hashMapOf()
         }
-        if (myTrips[user.uid]?.size == 0) {
-            repository.getTrips(user).forEach {
-                myTrips[user.uid]!![it.placeId] = it
+        if (myTrips[uid]?.size == 0) {
+            repository.getTrips(uid).forEach {
+                myTrips[uid]!![it.placeId] = it
             }
         }
-        return myTrips[user.uid]!!.values.toList()
+        return myTrips[uid]!!.values.toList()
     }
 
     override suspend fun searchTrips(user: FirebaseUser, search: Search): List<Trip> {
@@ -49,8 +49,8 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         }
     }
 
-    override suspend fun remove(user: FirebaseUser, trip: Trip): Boolean {
-        myTrips[user.uid]?.remove(trip.placeId)
-        return repository.remove(user, trip)
+    override suspend fun remove(uid: String, placeId: String): Boolean {
+        myTrips[uid]?.remove(placeId)
+        return repository.remove(uid, placeId)
     }
 }
