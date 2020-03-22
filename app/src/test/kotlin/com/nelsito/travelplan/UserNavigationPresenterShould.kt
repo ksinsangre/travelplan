@@ -3,7 +3,6 @@ package com.nelsito.travelplan
 import com.google.firebase.auth.FirebaseUser
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.*
-import com.nelsito.travelplan.ui.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
@@ -17,7 +16,10 @@ class UserNavigationPresenterShould {
         val userNavigationView = mock(UserNavigationView::class.java)
         val userRepository = mock(UserRepository::class.java)
         `when`(userRepository.loadUser()).thenReturn(AnonymousUser())
-        val presenter = UserNavigationPresenter(userNavigationView, userRepository)
+        val presenter = UserNavigationPresenter(
+            userNavigationView,
+            userRepository
+        )
         //when
         presenter.startNavigation()
         //then
@@ -30,7 +32,10 @@ class UserNavigationPresenterShould {
         val userNavigationView = mock(UserNavigationView::class.java)
         val userRepository = mock(UserRepository::class.java)
         `when`(userRepository.loadUser()).thenReturn(Admin(mock(FirebaseUser::class.java)))
-        val presenter = UserNavigationPresenter(userNavigationView, userRepository)
+        val presenter = UserNavigationPresenter(
+            userNavigationView,
+            userRepository
+        )
         //when
         presenter.startNavigation()
         //then
@@ -43,7 +48,10 @@ class UserNavigationPresenterShould {
         val userNavigationView = mock(UserNavigationView::class.java)
         val userRepository = mock(UserRepository::class.java)
         `when`(userRepository.loadUser()).thenReturn(TravelManager(mock(FirebaseUser::class.java)))
-        val presenter = UserNavigationPresenter(userNavigationView, userRepository)
+        val presenter = UserNavigationPresenter(
+            userNavigationView,
+            userRepository
+        )
         //when
         presenter.startNavigation()
         //then
@@ -56,7 +64,10 @@ class UserNavigationPresenterShould {
         val userNavigationView = mock(UserNavigationView::class.java)
         val userRepository = mock(UserRepository::class.java)
         `when`(userRepository.loadUser()).thenReturn(VerifiedUser(mock(FirebaseUser::class.java)))
-        val presenter = UserNavigationPresenter(userNavigationView, userRepository)
+        val presenter = UserNavigationPresenter(
+            userNavigationView,
+            userRepository
+        )
         //when
         presenter.startNavigation()
         //then
@@ -69,7 +80,10 @@ class UserNavigationPresenterShould {
         val userNavigationView = mock(UserNavigationView::class.java)
         val userRepository = mock(UserRepository::class.java)
         `when`(userRepository.loadUser()).thenReturn(NotVerifiedUser(mock(FirebaseUser::class.java)))
-        val presenter = UserNavigationPresenter(userNavigationView, userRepository)
+        val presenter = UserNavigationPresenter(
+            userNavigationView,
+            userRepository
+        )
         //when
         presenter.startNavigation()
         //then

@@ -7,10 +7,9 @@ import android.os.Bundle
 import com.firebase.ui.auth.AuthUI
 import com.nelsito.travelplan.R
 import com.nelsito.travelplan.SplashActivity
-import com.nelsito.travelplan.infra.FirebaseUserRepository
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
-import com.nelsito.travelplan.ui.UserNavigationPresenter
+import com.nelsito.travelplan.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
 import com.nelsito.travelplan.user.list.UserListActivity
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +30,10 @@ class BuiltInLoginActivity : AppCompatActivity(), UserNavigationView, CoroutineS
         super.onCreate(savedInstanceState)
         job = Job()
 
-        presenter = UserNavigationPresenter(this, InfraProvider.provideUserRepository())
+        presenter = UserNavigationPresenter(
+            this,
+            InfraProvider.provideUserRepository()
+        )
 
         showLoginScreen()
     }

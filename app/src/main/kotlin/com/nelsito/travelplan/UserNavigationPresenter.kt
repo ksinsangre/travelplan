@@ -1,4 +1,4 @@
-package com.nelsito.travelplan.ui
+package com.nelsito.travelplan
 
 import com.nelsito.travelplan.domain.UserRepository
 import com.nelsito.travelplan.domain.users.*

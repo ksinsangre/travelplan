@@ -6,4 +6,6 @@
     </plurals>
     <string name="trip_to_detail_title">Trip to %s</string>
     <string name="email_hint"><![CDATA[E-mail & Password]]></string>
+    <string name="facebook_app_id">215196392908033</string>
+    <string name="fb_login_protocol_scheme">fb215196392908033</string>
 </resources>

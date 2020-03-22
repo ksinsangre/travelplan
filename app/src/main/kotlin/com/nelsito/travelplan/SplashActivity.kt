@@ -3,10 +3,8 @@ package com.nelsito.travelplan
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.nelsito.travelplan.infra.FirebaseUserRepository
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
-import com.nelsito.travelplan.ui.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
 import com.nelsito.travelplan.user.login.WaitForVerificationActivity
 import com.nelsito.travelplan.user.list.UserListActivity
@@ -30,7 +28,10 @@ class SplashActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         job = Job()
-        val presenter = UserNavigationPresenter(this, InfraProvider.provideUserRepository())
+        val presenter = UserNavigationPresenter(
+            this,
+            InfraProvider.provideUserRepository()
+        )
         launch {
             presenter.startNavigation()
         }

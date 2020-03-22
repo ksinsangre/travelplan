@@ -36,14 +36,13 @@
         app:layout_constraintRight_toRightOf="@+id/logo"
         android:text="Google Sign-In"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:textColor="@color/colorAccent"
-        android:id="@+id/facebook_sign_in"
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/buttonFacebookLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         app:layout_constraintTop_toBottomOf="@+id/btn_google"
         app:layout_constraintLeft_toLeftOf="@+id/logo"
-        app:layout_constraintRight_toRightOf="@+id/logo"
-        android:text="Facebook Sign-In"/>
+        app:layout_constraintRight_toRightOf="@+id/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
