@@ -70,7 +70,7 @@ class FirebaseUserRepository : UserRepository {
 
     override suspend fun update(user: UserListItem) {
         val token = getToken()
-        val body = UserResponse(user.uid, user.email, user.username, user.role)
+        val body = UserResponse(user.uid, user.email, user.username, user.role, user.photoUrl)
         client.updateUser("Bearer $token", user.uid, body)
     }
 
