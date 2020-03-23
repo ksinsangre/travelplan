@@ -1,8 +1,11 @@
 package com.nelsito.travelplan
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.user.UserNavigationView
@@ -35,6 +38,23 @@ class SplashActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         launch {
             presenter.startNavigation()
         }
+        FirebaseDynamicLinks.getInstance()
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                // Get deep link from result (may be null if no link is found)
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+                }
+
+                // Handle the deep link. For example, open the linked
+                // content, or apply promotional credit to the user's
+                // account.
+                // ...
+
+                // ...
+            }
+            .addOnFailureListener(this) { e -> Log.w("Splash", "getDynamicLink:onFailure", e) }
     }
 
     override fun onDestroy() {
