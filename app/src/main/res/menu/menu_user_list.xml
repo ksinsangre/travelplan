@@ -13,4 +13,10 @@
         android:title="Map Trips"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menu_invite"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="Invite"
+        app:showAsAction="always" />
+
 </menu>

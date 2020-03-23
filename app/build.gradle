@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.1'
     implementation 'com.google.firebase:firebase-functions-ktx:19.0.2'
+    implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
     implementation 'com.google.android.libraries.places:places:2.2.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
