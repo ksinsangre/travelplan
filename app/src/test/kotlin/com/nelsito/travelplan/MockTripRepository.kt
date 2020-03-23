@@ -14,7 +14,7 @@ class MockTripRepository : TripRepository {
         return true
     }
 
-    override suspend fun getTrips(user: FirebaseUser): List<Trip> {
+    override suspend fun getTrips(uid: String): List<Trip> {
         return myTrips
     }
 
@@ -29,12 +29,12 @@ class MockTripRepository : TripRepository {
         return true
     }
 
-    override suspend fun find(user: FirebaseUser, placeId: String): Trip {
-        return myTrips.find { it.placeId == placeId }!!
+    override suspend fun remove(uid: String, placeId: String): Boolean {
+        myTrips.removeIf { it.placeId == placeId }
+        return true
     }
 
-    override suspend fun remove(user: FirebaseUser, trip: Trip): Boolean {
-        myTrips.remove(trip)
-        return true
+    override suspend fun find(user: FirebaseUser, placeId: String): Trip {
+        return myTrips.find { it.placeId == placeId }!!
     }
 }
