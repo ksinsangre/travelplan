@@ -13,6 +13,7 @@ import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.user.admin.AddUserActivity
 import com.nelsito.travelplan.user.admin.AdminProfileActivity
+import com.nelsito.travelplan.user.invite.InviteActivity
 import com.nelsito.travelplan.user.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_user_list.*
 import kotlinx.coroutines.CoroutineScope
@@ -86,9 +87,18 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
                     openTripList()
                     true
                 }
+                R.id.menu_invite -> {
+                    openInvite()
+                    true
+                }
                 else -> false
             }
         }
+    }
+
+    private fun openInvite() {
+        val intent = Intent(this, InviteActivity::class.java)
+        startActivity(intent)
     }
 
     private fun openTripList() {

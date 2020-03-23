@@ -1,9 +1,9 @@
 package com.nelsito.travelplan.domain.users
 
 class InviteUser(private val inviteLinkService: InviteLinkService, private val emailSender: EmailSender) {
-    fun sendEmail(email: String) {
+    suspend fun sendEmail(email: String): Boolean {
         val link = inviteLinkService.generateLink()
-        emailSender.sendEmail(email, link)
+        return emailSender.sendEmail(email, link)
     }
 
 }

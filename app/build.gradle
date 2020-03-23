@@ -20,6 +20,7 @@ android {
         versionCode 1
         versionName "1.0"
         resValue "string", "api_key", keys["api_key"]
+        resValue "string", "send_grid_api_key", keys["send_grid"]
 //(project.findProperty("PLACES_API_KEY") ?: "")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
