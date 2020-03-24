@@ -1,10 +1,7 @@
-package com.nelsito.travelplan
+package com.nelsito.travelplan.domain
 
 import com.google.firebase.auth.FirebaseUser
-import com.nelsito.travelplan.domain.DateService
-import com.nelsito.travelplan.domain.LoadTrips
-import com.nelsito.travelplan.domain.Trip
-import com.nelsito.travelplan.domain.TripRepository
+import com.nelsito.travelplan.MockTripRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
