@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "525cda8a-8bdf-4348-b81b-16d44e7cb5e8",
+		"name": "travelplan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "patch",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjgyZTZiMWM5MjFmYTg2NzcwZjNkNTBjMTJjMTVkNmVhY2E4ZjBkMzUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdHJhdmVsLXBsYW4tNWUzZWYiLCJhdWQiOiJ0cmF2ZWwtcGxhbi01ZTNlZiIsImF1dGhfdGltZSI6MTU4NDgwODI4NiwidXNlcl9pZCI6IkxkRGE4ZEtNcjhlSUpveld1TG9ZUUtqMnhMbTIiLCJzdWIiOiJMZERhOGRLTXI4ZUlKb3pXdUxvWVFLajJ4TG0yIiwiaWF0IjoxNTg0ODA4Mjg2LCJleHAiOjE1ODQ4MTE4ODYsImVtYWlsIjoiYWRtaW5AdHJhdmVscGxhbi5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWRtaW5AdHJhdmVscGxhbi5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.XYiHnmfu-mzE7NacLIFIoY5djwFizxPfcxCab-JbE_DfRiz3TIyXINu4dDeZxWGe4nLMG2-60K_IzcJJIGbzaTODI9tG--RIUXL3ayNqN1fOeAGImZ7xkcw_HzEkBnIx2QP_Zp2pHnIJRtZcxa1xeczcxjmmw9oSwA-H30lrjlxDzn5SJ9St9OUOLVTqBhkaSvC3MNChM6GiOlPrEBWQrMLUSk8-Op2BjODhNJSuFurAyNCN6wtaqCQB-m1Rcv98-P_tXcEGSixIExXNy5RhxPltZezLpw-HHX-XZx_pT31K2_TTenxVB7xuvugT7IIH6jlDadZzLvuBvwK5gtUE2w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"displayName\" : \"Admin\",\n\t\"password\": \"Fruta123\",\n\t\"email\": \"admin@travelplan.com\",\n\t\"role\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://us-central1-travel-plan-5e3ef.cloudfunctions.net/api/users/LdDa8dKMr8eIJozWuLoYQKj2xLm2",
+					"protocol": "https",
+					"host": [
+						"us-central1-travel-plan-5e3ef",
+						"cloudfunctions",
+						"net"
+					],
+					"path": [
+						"api",
+						"users",
+						"LdDa8dKMr8eIJozWuLoYQKj2xLm2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "AEu4IL2hiW10cyznyh3v9TSABQ5pbFnOK-nMKMbchzE9RJHy1knuTOJYJbZEthxNfxPYm3q6lodxj9_nenAYGaEOZG2yueEDhahSlRbvB2Og4ceyx991fxbnsS65lFeEksefuNn3gkzkJQJFfjmOoxfqnVcxxDfaHZYYyb66guti8NPG2y6Tkp5CW3pGsj4XUZTGcy8095I-jo8ZyH6QjN7O8knV1IpmA5S1da0oFUhfbO4TrK6nt7o\",\n    \"accessToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjFmODhiODE0MjljYzQ1MWEzMzVjMmY1Y2RiM2RmYjM0ZWIzYmJjN2YiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdHJhdmVsLXBsYW4tNWUzZWYiLCJhdWQiOiJ0cmF2ZWwtcGxhbi01ZTNlZiIsImF1dGhfdGltZSI6MTU4NDg5NjkxOSwidXNlcl9pZCI6IkxkRGE4ZEtNcjhlSUpveld1TG9ZUUtqMnhMbTIiLCJzdWIiOiJMZERhOGRLTXI4ZUlKb3pXdUxvWVFLajJ4TG0yIiwiaWF0IjoxNTg0ODk2OTE5LCJleHAiOjE1ODQ5MDA1MTksImVtYWlsIjoiYWRtaW5AdHJhdmVscGxhbi5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYWRtaW5AdHJhdmVscGxhbi5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.eveYZpuoMRH4NUiVW_-eMHNwnn2xxVHwzb58eZXhYvaif2lG5R4yi-3tpyz_OJggMcDuGBr_ownXbFDQ95FfuZs9cnVI0mmXu4GIFInQUQ7PjH0YQeLzTt_zkDGsup84grv743oOPVaAWTeEyV5ZyCznAJevR5ZFjO5UPKhUSrb3lOlLuOswUNNjemWrG3rgE4aPLWISSAwjrkEfevzjuIpmMtCbrycSHDOBdtmBdfvfp6F_o7mmZx6tXIcyasc-3rWx_W7C9JMfTPIhGX_of2YwDxSzVpWqoJQGcKi16Ka62r_u_Rq_XlpiEhLF-kvWECGC5zZ_uunYb45oHUYYpA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://us-central1-travel-plan-5e3ef.cloudfunctions.net/api/users",
+					"protocol": "https",
+					"host": [
+						"us-central1-travel-plan-5e3ef",
+						"cloudfunctions",
+						"net"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
