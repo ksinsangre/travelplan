@@ -25,3 +25,25 @@ I've added **some** **Domain Actions** as *Sandro Mancuso* suggest in [Interacti
 Also, I've used the repository pattern to encapsulate the *Firestore SDK* and the REST calls. There two kinds of network access: *Firestore SDK* used to obtain trips information from the database (As suggested by Google), and a REST Api to admin users (For this I've used *Retrofit*, the android community standard library for REST Api calls)
 
 ## User Guide
+
+
+
+![](/images/main_screen.png)
+
+In your main screen you will see your trips. First your future trips with the counter of days to go! And then your past trips. Also there is a bottom bar with some actions:
+* Log Out
+* Profile
+* Filter Trips
+* Map Trips
+
+![](/images/trip_detail.png)
+
+If you click on any trip, you will see a detail where you can add some -Points of interest-, and edit or delete your trip
+
+![](/images/map_trips.png)
+
+If you click the _Map Trips_ button in the bottom bar, you will a Google Maps with all your trips markers.
+
+![](/images/filter_trips.png)
+
+The default filter options are the *Next Month* trips, but you can reduce your results filtering by place or description
