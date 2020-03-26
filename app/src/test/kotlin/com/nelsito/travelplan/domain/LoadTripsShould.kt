@@ -5,6 +5,7 @@ import com.nelsito.travelplan.MockTripRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
+import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
@@ -15,6 +16,15 @@ import org.threeten.bp.format.DateTimeFormatter
 
 @ExperimentalCoroutinesApi
 class LoadTripsShould {
+
+    private lateinit var aUser: FirebaseUser
+
+    @Before
+    fun setup() {
+        aUser = mock(FirebaseUser::class.java)
+        `when`(aUser.uid).thenReturn("some id")
+    }
+
     @Test
     fun `return first closest future trips`() = runBlockingTest {
         //given
@@ -26,7 +36,7 @@ class LoadTripsShould {
         val repo = aRepo(listOf(farTrip, closeTrip))
         val loadTrips = LoadTrips(repo, aMockService("01/05/2020"))
         //when
-        val actual = loadTrips(mock(FirebaseUser::class.java))
+        val actual = loadTrips(aUser)
         //then
         val expected = listOf(closeTrip, farTrip)
         Assertions.assertThat(actual).isEqualTo(expected)
@@ -51,7 +61,7 @@ class LoadTripsShould {
         val repo = aRepo(listOf(oldestTrip, closeTrip))
         val loadTrips = LoadTrips(repo, aMockService("01/05/2020"))
         //when
-        val actual = loadTrips(mock(FirebaseUser::class.java))
+        val actual = loadTrips(aUser)
         //then
         val expected = listOf(closeTrip, oldestTrip)
         Assertions.assertThat(actual).isEqualTo(expected)
@@ -72,7 +82,7 @@ class LoadTripsShould {
         val repo = aRepo(listOf(farFutureTrip, oldestPastTrip, closeFutureTrip, closePastTrip))
         val loadTrips = LoadTrips(repo, aMockService("01/05/2020"))
         //when
-        val actual = loadTrips(mock(FirebaseUser::class.java))
+        val actual = loadTrips(aUser)
         //then
         val expected = listOf(closeFutureTrip, farFutureTrip, closePastTrip, oldestPastTrip)
         Assertions.assertThat(actual).isEqualTo(expected)
