@@ -27,7 +27,6 @@ import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.UserNavigationPresenter
 import com.nelsito.travelplan.user.UserNavigationView
 import com.nelsito.travelplan.user.list.UserListActivity
-import kotlinx.android.synthetic.main.activity_admin_profile.*
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
