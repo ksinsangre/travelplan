@@ -133,6 +133,8 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
     }
 
     override fun moveCamera(latLng: LatLng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+
     }
 }

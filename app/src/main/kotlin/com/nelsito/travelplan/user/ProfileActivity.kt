@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -69,7 +68,7 @@ class ProfileActivity : AppCompatActivity() {
         return true
     }
 
-    private fun saveProfilePicture(imagePath: Uri) {
+    private fun     saveProfilePicture(imagePath: Uri) {
         progress.visibility = View.VISIBLE
         val imageReference =
             storage.reference.child(FirebaseAuth.getInstance().uid!!).child("images")
@@ -106,10 +105,13 @@ class ProfileActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data?.data != null) {
             try {
-                val imagePath = data?.data!!
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imagePath)
+                val imageUri = data?.data!!
+
+
+
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
                 img_avatar.setImageBitmap(bitmap)
-                saveProfilePicture(imagePath)
+                saveProfilePicture(imageUri)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
