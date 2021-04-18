@@ -75,7 +75,7 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
                 }
             })
         trip_list.adapter = listAdapter
-        if (user.disabled) btn_disable.text = "Enable User" else "Disable User"
+        if (user!!.disabled) btn_disable.text = "Enable User" else "Disable User"
         btn_disable.setOnClickListener {
             launch {
                 presenter.toggleDisable()

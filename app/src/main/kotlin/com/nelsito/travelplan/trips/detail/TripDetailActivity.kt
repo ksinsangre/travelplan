@@ -95,9 +95,11 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
         poi_list.adapter = listAdapter
 
         val placeId = intent.getStringExtra("PlaceId")
+        if (placeId.isNullOrEmpty()) return
         val user = FirebaseAuth.getInstance().currentUser!!
         presenter = TripDetailPresenter(placeId, user, placesClient, InfraProvider.provideTripRepository())
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -229,7 +231,7 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 if (data != null) {
                     val status = Autocomplete.getStatusFromIntent(data);
-                    Log.i("Places", status.statusMessage)
+                    Log.i("Places", status.statusMessage?: "No message")
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i("Places", "User Canceled")

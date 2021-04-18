@@ -122,7 +122,7 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 if (data != null) {
                     val status = Autocomplete.getStatusFromIntent(data);
-                    Log.i("Places", status.statusMessage)
+                    Log.i("Places", status.statusMessage ?: "No message")
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 Log.i("Places", "User Canceled")
