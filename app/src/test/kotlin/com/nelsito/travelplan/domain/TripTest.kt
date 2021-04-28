@@ -25,13 +25,13 @@ class TripShould {
     @Test
     fun `return negative when is a past trip`() {
         //given
-        val dateFrom = LocalDate.now(ZoneOffset.UTC).minusMonths(2).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-        val dateTo = LocalDate.now(ZoneOffset.UTC).minusMonths(1).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+        val dateFrom = 1612148400000
+        val dateTo = 1614567600000
         val aFutureTrip = Trip( "some place id", "some detination", "some description", dateFrom, dateTo)
         //when
         val actual = aFutureTrip.daysToGo()
         //then
-        val expected = -60
+        val expected = -86
         Assertions.assertThat(actual).isEqualTo(expected)
     }
 }
