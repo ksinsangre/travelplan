@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
@@ -34,6 +35,8 @@ import com.nelsito.travelplan.user.ProfileActivity
 import com.nelsito.travelplan.user.login.LoginActivity
 
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
+
+    private val viewModel by viewModels<TripListViewModel>()
     private lateinit var presenter: TripsListPresenter
 
     companion object {
@@ -65,11 +68,12 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             presenter.loadTrips()
         }
         listAdapter =
-            TripsListAdapter(initializePlaces(), clickListener = {
+            /*TripsListAdapter(initializePlaces(), clickListener = {
                 val intent = Intent(this, TripDetailActivity::class.java)
                 intent.putExtra("PlaceId", it.trip.placeId)
                 startActivityForResult(intent, NEW_REQ_CODE)
-            })
+            })*/
+            TripsListAdapter(initializePlaces(), viewModel::onTripClicked)
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
