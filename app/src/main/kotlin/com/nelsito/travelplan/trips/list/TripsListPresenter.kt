@@ -25,7 +25,7 @@ class TripsListPresenter(
             val trips = loadTrips(user)
                 .map {
                     val date = it.formatDate()
-                    TripListItem(it, it.destination, date, it.description, it.daysToGo())
+                    TripListItem(it, it.destination, date, it.description, it.daysToGo(Instant.now()))
                 }
             tripsView.showTrips(trips)
         }
@@ -42,7 +42,7 @@ class TripsListPresenter(
             val trips = tripRepository.searchTrips(user, search)
                 .map {
                     val date = it.formatDate()
-                    TripListItem(it, it.destination, date, it.description, it.daysToGo())
+                    TripListItem(it, it.destination, date, it.description, it.daysToGo(Instant.now()))
                 }
             tripsView.showTrips(trips)
         }

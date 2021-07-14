@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.domain.TripRepository
 import com.nelsito.travelplan.trips.list.formatDate
 import com.nelsito.travelplan.ui.OnSnapPositionChangeListener
+import org.threeten.bp.Instant
 
 class MapTripsPresenter(private val mapTripsView: MapTripsView, private val tripRepository: TripRepository) :
     OnSnapPositionChangeListener {
@@ -17,7 +18,7 @@ class MapTripsPresenter(private val mapTripsView: MapTripsView, private val trip
             trips = tripRepository.getTrips(user.uid)
                 .map {
                     val date = it.formatDate()
-                    MapTripListItem(it.placeId, it.destination, date, it.latLng, it.daysToGo())
+                    MapTripListItem(it.placeId, it.destination, date, it.latLng, it.daysToGo(Instant.now()))
                 }
             if (canShowInMap) {
                 mapTripsView.mapTrips(trips)
