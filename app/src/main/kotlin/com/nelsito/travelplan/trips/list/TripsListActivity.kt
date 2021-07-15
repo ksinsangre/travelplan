@@ -37,7 +37,6 @@ import com.nelsito.travelplan.user.login.LoginActivity
 class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
 
     private val viewModel by viewModels<TripListViewModel>()
-    private lateinit var presenter: TripsListPresenter
 
     companion object {
         private const val NEW_REQ_CODE = 4343
@@ -59,25 +58,32 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
             startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
         }
 
-        val repo = InfraProvider.provideTripRepository()
-        val loadTrips = LoadTrips(repo, LocalDateService())
-        presenter = TripsListPresenter(this, repo, loadTrips)
-        job = Job()
-        launch {
-            progress.visibility = View.VISIBLE
-            presenter.loadTrips()
-        }
-        listAdapter =
-            /*TripsListAdapter(initializePlaces(), clickListener = {
-                val intent = Intent(this, TripDetailActivity::class.java)
-                intent.putExtra("PlaceId", it.trip.placeId)
-                startActivityForResult(intent, NEW_REQ_CODE)
-            })*/
-            TripsListAdapter(initializePlaces(), viewModel::onTripClicked)
+
+        listAdapter = TripsListAdapter(initializePlaces(), viewModel::onTripClicked)
         val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
         trip_list.adapter = listAdapter
+
+        viewModel.trips.observe(this, this::showTrips)
+
+        viewModel.progress.observe(this, {
+            if (it) {
+                progress.visibility = View.VISIBLE
+            } else {
+                progress.visibility = View.GONE
+            }
+        })
+
+        viewModel.selectedTrip.observe(this, this::onTripSelected)
+
+        viewModel.loadTrips()
+    }
+
+    private fun onTripSelected(item: TripListItem) {
+        val intent = Intent(this, TripDetailActivity::class.java)
+        intent.putExtra("PlaceId", item.trip.placeId)
+        startActivityForResult(intent, NEW_REQ_CODE)
     }
 
     override fun onDestroy() {
@@ -109,11 +115,8 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
                 }
                 R.id.menu_clear_filter -> {
                     bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = false
-                    presenter.clearFilter()
-                    launch {
-                        progress.visibility = View.VISIBLE
-                        presenter.loadTrips()
-                    }
+                    viewModel.clearFilter()
+                    viewModel.loadTrips()
                     true
                 }
                 else -> false
@@ -174,7 +177,6 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
     }
 
     override fun showTrips(trips: List<TripListItem>) {
-        progress.visibility = View.GONE
         listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
             bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = true
