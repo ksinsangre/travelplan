@@ -29,8 +29,8 @@ class MockTripRepository : TripRepository {
         return true
     }
 
-    override suspend fun remove(uid: String, placeId: String): Boolean {
-        myTrips.removeIf { it.placeId == placeId }
+    override suspend fun remove(user: FirebaseUser, trip: Trip): Boolean {
+        myTrips.removeIf { it.placeId == trip.placeId }
         return true
     }
 

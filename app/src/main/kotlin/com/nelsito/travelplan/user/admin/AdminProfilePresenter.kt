@@ -40,7 +40,7 @@ class AdminProfilePresenter(private var user: UserListItem,
     }
 
     suspend fun deleteTrip(trip: AdminTripListItem) {
-        tripRepository.remove(user.uid, trip.placeId)
+        //tripRepository.remove(user, trip)
         loadTrips(user)
     }
 

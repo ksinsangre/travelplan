@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.domain.LoadTrips
 import com.nelsito.travelplan.domain.LocalDateService
 import com.nelsito.travelplan.domain.Search
+import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import kotlinx.coroutines.launch
 import org.threeten.bp.Instant
@@ -60,5 +61,23 @@ class TripListViewModel : ViewModel() {
 
     fun clearFilter() {
         lastSearch = nextMonthSearch
+    }
+
+    fun searchTrips(search: Search) {
+        this.lastSearch = search
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            viewModelScope.launch {
+                _trips.value = InfraProvider.provideTripRepository().searchTrips(user, search)
+                    .map {
+                        val date = it.formatDate()
+                        TripListItem(it, it.destination, date, it.description, it.daysToGo(Instant.now()))
+                    }
+            }
+        }
+    }
+
+    fun delete(trip: Trip) {
+
     }
 }

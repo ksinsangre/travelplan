@@ -34,7 +34,7 @@ import com.nelsito.travelplan.ui.SwipeToDeleteCallback
 import com.nelsito.travelplan.user.ProfileActivity
 import com.nelsito.travelplan.user.login.LoginActivity
 
-class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeToDeleteCallback.OnDeleteListener {
+class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.OnDeleteListener {
 
     private val viewModel by viewModels<TripListViewModel>()
 
@@ -43,10 +43,6 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         private const val SEARCH_REQ_CODE = 4344
     }
     private lateinit var listAdapter: TripsListAdapter
-
-    private lateinit var job: Job
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,12 +82,6 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         startActivityForResult(intent, NEW_REQ_CODE)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        job.cancel()
-    }
-
     private fun setupBottomBar() {
         bottomAppBar.replaceMenu(R.menu.menu)
         bottomAppBar.setOnMenuItemClickListener { item ->
@@ -126,7 +116,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
 
     private fun openFilterPage() {
         val intent = Intent(this, FilterActivity::class.java)
-        intent.putExtra("LAST_SEARCH", presenter.lastSearch)
+        intent.putExtra("LAST_SEARCH", viewModel.lastSearch)
         startActivityForResult(intent, SEARCH_REQ_CODE)
     }
 
@@ -157,20 +147,14 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == NEW_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                launch {
-                    progress.visibility = View.VISIBLE
-                    presenter.loadTrips()
-                }
+                viewModel.loadTrips()
             }
         } else if (requestCode == SEARCH_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = true
-                launch {
-                    val search = data?.getParcelableExtra<Search>("SEARCH")
-                    if (search != null) {
-                        progress.visibility = View.VISIBLE
-                        presenter.searchTrips(search)
-                    }
+                val search = data?.getParcelableExtra<Search>("SEARCH")
+                if (search != null) {
+                    viewModel.searchTrips(search)
                 }
             }
         }
@@ -190,7 +174,7 @@ class TripsListActivity : AppCompatActivity(), CoroutineScope, TripsView, SwipeT
     }
 
     override fun onDeleteTrip(trip: Trip) {
-        presenter.onDelete(trip)
+        viewModel.delete(trip)
     }
 
     private fun initializePlaces(): PlacesClient {

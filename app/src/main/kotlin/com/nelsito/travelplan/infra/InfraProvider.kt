@@ -6,7 +6,7 @@ import com.nelsito.travelplan.domain.UserRepository
 class InfraProvider {
     companion object Provider {
         private val userRepository = FirebaseUserRepository()
-        private val tripRepository = InMemoryTripRepository(FirestoreTripRepository())
+        private val tripRepository = FirestoreTripRepository()
         fun provideTripRepository() : TripRepository {
             return tripRepository
         }

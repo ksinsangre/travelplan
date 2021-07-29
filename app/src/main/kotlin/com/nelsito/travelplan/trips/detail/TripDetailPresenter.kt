@@ -136,7 +136,7 @@ class TripDetailPresenter(private var placeId: String,
 
     suspend fun deleteTrip() {
         try {
-            tripRepository.remove(user.uid, trip.placeId)
+            tripRepository.remove(user, trip)
             tripDetailView.tripRemoved()
         } catch (e: Exception) {
             Log.e("Delete", "error", e)

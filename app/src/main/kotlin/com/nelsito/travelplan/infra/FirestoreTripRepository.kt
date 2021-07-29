@@ -100,12 +100,12 @@ class FirestoreTripRepository : TripRepository {
         }
     }
 
-    override suspend fun remove(uid: String, placeId: String) : Boolean {
+    override suspend fun remove(user: FirebaseUser, trip: Trip) : Boolean {
         return suspendCoroutine { cont ->
             db.collection("users")
-                .document(uid)
+                .document(user.uid)
                 .collection("trips")
-                .document(placeId)
+                .document(trip.placeId)
                 .delete()
                 .addOnSuccessListener {
                     cont.resumeWith(Result.success(true))

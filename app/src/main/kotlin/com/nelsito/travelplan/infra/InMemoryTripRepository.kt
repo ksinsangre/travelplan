@@ -49,8 +49,8 @@ class InMemoryTripRepository(private val repository: TripRepository) : TripRepos
         }
     }
 
-    override suspend fun remove(uid: String, placeId: String): Boolean {
-        myTrips[uid]?.remove(placeId)
-        return repository.remove(uid, placeId)
+    override suspend fun remove(user: FirebaseUser, trip: Trip): Boolean {
+        myTrips[user.uid]?.remove(trip.placeId)
+        return repository.remove(user, trip)
     }
 }
