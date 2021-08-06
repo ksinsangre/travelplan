@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.firebase.ui.auth.AuthUI
 import com.google.android.libraries.places.api.Places
@@ -56,7 +57,7 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
 
 
         listAdapter = TripsListAdapter(initializePlaces(), viewModel::onTripClicked)
-        val icon: Drawable? = getDrawable(R.drawable.ic_delete_white_24dp)
+        val icon: Drawable? = AppCompatResources.getDrawable(this, R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
         itemTouchHelper.attachToRecyclerView(trip_list)
         trip_list.adapter = listAdapter

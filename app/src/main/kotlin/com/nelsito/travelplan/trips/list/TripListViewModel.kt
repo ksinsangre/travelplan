@@ -37,14 +37,7 @@ class TripListViewModel : ViewModel() {
             viewModelScope.launch {
                 _trips.value = loadTrips(user)
                     .map {
-                        val date = it.formatDate()
-                        TripListItem(
-                            it,
-                            it.destination,
-                            date,
-                            it.description,
-                            it.daysToGo(Instant.now())
-                        )
+                        it.toTripListItem()
                     }
                 _progress.value = false
             }
