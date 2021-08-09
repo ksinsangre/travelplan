@@ -36,9 +36,7 @@ class TripListViewModel : ViewModel() {
             _progress.value = true
             viewModelScope.launch {
                 _trips.value = loadTrips(user)
-                    .map {
-                        it.toTripListItem()
-                    }
+                    .map { it.toTripListItem() }
                 _progress.value = false
             }
         }
@@ -62,10 +60,7 @@ class TripListViewModel : ViewModel() {
         if (user != null) {
             viewModelScope.launch {
                 _trips.value = InfraProvider.provideTripRepository().searchTrips(user, search)
-                    .map {
-                        val date = it.formatDate()
-                        TripListItem(it, it.destination, date, it.description, it.daysToGo(Instant.now()))
-                    }
+                    .map { it.toTripListItem() }
             }
         }
     }
