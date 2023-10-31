@@ -30,11 +30,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityAddTripBinding
+import com.nelsito.travelplan.databinding.ActivityTripDetailBinding
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.edit.EditTripActivity
 import com.nelsito.travelplan.trips.list.formatDate
-import kotlinx.android.synthetic.main.activity_trip_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -58,18 +59,21 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityTripDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_trip_detail)
-        setSupportActionBar(toolbar)
+        binding = ActivityTripDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_edit -> {
                     presenter.editTrip()
@@ -92,7 +96,7 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
         listAdapter = PointsOfInterestAdapter(placesClient, addPoiClickListener = {
             presenter.addPointOfInterest()
         })
-        poi_list.adapter = listAdapter
+        binding.poiList.adapter = listAdapter
 
         val placeId = intent.getStringExtra("PlaceId")
         if (placeId.isNullOrEmpty()) return
@@ -129,12 +133,12 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
     }
 
     override fun showTripInfo(trip: Trip) {
-        txt_date.text = trip.formatDate()
-        txt_description.text = trip.description
+        binding.txtDate.text = trip.formatDate()
+        binding.txtDescription.text = trip.description
     }
 
     override fun showPlaceInfo(place: Place) {
-        txt_destination_title.text = getString(R.string.trip_to_detail_title, place.name)
+        binding.txtDestinationTitle.text = getString(R.string.trip_to_detail_title, place.name)
 
         val marker = place.latLng ?: LatLng(0.0, 0.0)
         mMap.addMarker(MarkerOptions().position(marker).title("${place.name}"))
@@ -142,7 +146,7 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
     }
 
     override fun showPlacePhotos(bitmap: Bitmap) {
-        img_header.setImageBitmap(bitmap)
+        binding.imgHeader.setImageBitmap(bitmap)
     }
 
     override fun tripRemoved() {
@@ -157,7 +161,7 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
     }
 
     override fun showError(message: String) {
-        Snackbar.make(toolbar, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.toolbar, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
@@ -217,6 +221,7 @@ class TripDetailActivity : AppCompatActivity(), CoroutineScope, OnMapReadyCallba
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {

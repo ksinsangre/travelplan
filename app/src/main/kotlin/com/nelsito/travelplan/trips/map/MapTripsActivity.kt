@@ -16,11 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityMapsBinding
+import com.nelsito.travelplan.databinding.ActivityTripsBinding
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.detail.TripDetailActivity
 import com.nelsito.travelplan.ui.SnapOnScrollListener
 import com.nelsito.travelplan.ui.attachSnapHelperWithListener
-import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,10 +38,13 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityMapsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
-        setSupportActionBar(toolbar)
+        binding = ActivityMapsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
@@ -57,7 +61,7 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
         presenter = MapTripsPresenter(this, InfraProvider.provideTripRepository())
 
         val snapHelper = LinearSnapHelper()
-        trip_list.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, presenter)
+        binding.tripList.attachSnapHelperWithListener(snapHelper, SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE, presenter)
 
         listAdapter =
             MapTripsListAdapter(initializePlaces(), clickListener = {
@@ -65,7 +69,7 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
                 intent.putExtra("PlaceId", it.placeId)
                 startActivity(intent)
             })
-        trip_list.adapter = listAdapter
+        binding.tripList.adapter = listAdapter
 
         launch {
             presenter.loadTrips()
@@ -126,9 +130,9 @@ class MapTripsActivity : AppCompatActivity(), OnMapReadyCallback, MapTripsView, 
             val padding = (width * 0.12).toInt() // offset from edges of the map 12% of screen
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), width, height, padding))
-            trip_list.visibility = View.VISIBLE
+            binding.tripList.visibility = View.VISIBLE
         } else {
-            trip_list.visibility = View.GONE
+            binding.tripList.visibility = View.GONE
         }
     }
 

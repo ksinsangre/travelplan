@@ -8,4 +8,5 @@
     <string name="email_hint"><![CDATA[E-mail & Password]]></string>
     <string name="facebook_app_id">215196392908033</string>
     <string name="fb_login_protocol_scheme">fb215196392908033</string>
+    <string name="api_key">AIzaSyBe5CVrJw_HcIGOtv1UDgMgDAX6yJx-4V0</string>
 </resources>

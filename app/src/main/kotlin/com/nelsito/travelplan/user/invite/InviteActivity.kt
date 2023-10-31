@@ -1,16 +1,14 @@
 package com.nelsito.travelplan.user.invite
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
-import com.nelsito.travelplan.domain.users.InviteUser
-import com.nelsito.travelplan.infra.SendGridEmailSender
-import kotlinx.android.synthetic.main.activity_invite.*
+import com.nelsito.travelplan.databinding.ActivityInviteBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,24 +22,27 @@ class InviteActivity : AppCompatActivity(), InviteView, CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityInviteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_invite)
+        binding = ActivityInviteBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         job = Job()
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_send -> {
-                    progress.visibility = View.VISIBLE
+                    binding.progress.visibility = View.VISIBLE
                     launch {
-                        presenter.sendInvitation(txt_email.text.toString())
+                        presenter.sendInvitation(binding.txtEmail.text.toString())
                     }
                     true
                 }
@@ -49,9 +50,8 @@ class InviteActivity : AppCompatActivity(), InviteView, CoroutineScope {
             }
         }
 
-        val inviteUser = InviteUser(com.nelsito.travelplan.infra.InviteDynamicLink(),
-            SendGridEmailSender(getString(R.string.send_grid_api_key)))
-        presenter = InvitePresenter(this, inviteUser)
+        //val inviteUser = InviteUser(com.nelsito.travelplan.infra.InviteDynamicLink(),SendGridEmailSender(getString(R.string.send_grid_api_key)))
+        //presenter = InvitePresenter(this, inviteUser)
     }
 
     override fun onDestroy() {
@@ -76,7 +76,7 @@ class InviteActivity : AppCompatActivity(), InviteView, CoroutineScope {
     }
 
     override fun emailFailed(message: String) {
-        progress.visibility = View.GONE
-        Snackbar.make(toolbar, message, Snackbar.LENGTH_LONG).show()
+        binding.progress.visibility = View.GONE
+        Snackbar.make(binding.toolbar, message, Snackbar.LENGTH_LONG).show()
     }
 }

@@ -10,10 +10,11 @@ import androidx.core.util.Pair
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityEditTripBinding
+import com.nelsito.travelplan.databinding.ActivityTripDetailBinding
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.formatDate
-import kotlinx.android.synthetic.main.activity_edit_trip.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,11 +29,14 @@ class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityEditTripBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_trip)
+        binding = ActivityEditTripBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
@@ -40,11 +44,11 @@ class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
             setDisplayShowHomeEnabled(true)
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_save -> {
                     launch {
-                        presenter.save(txt_description.text.toString())
+                        presenter.save(binding.txtDescription.text.toString())
                     }
                     true
                 }
@@ -53,7 +57,7 @@ class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
         }
 
         picker = buildDatePicker()
-        txt_date.setOnClickListener {
+        binding.txtDate.setOnClickListener {
             pickDate()
         }
         job = Job()
@@ -103,8 +107,8 @@ class EditTripActivity : AppCompatActivity(), EditTripView, CoroutineScope {
     }
 
     override fun showTripInfo(trip: Trip) {
-        txt_date.text = trip.formatDate()
-        txt_description.setText(trip.description, TextView.BufferType.EDITABLE)
+        binding.txtDate.text = trip.formatDate()
+        binding.txtDescription.setText(trip.description, TextView.BufferType.EDITABLE)
     }
 
     override fun tripSaved() {

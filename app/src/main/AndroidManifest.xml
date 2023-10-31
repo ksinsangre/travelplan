@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.nelsito.travelplan">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:name=".TravelPlanApp"
@@ -82,20 +81,19 @@
             android:screenOrientation="portrait" /> <!-- Your Splash Activity theme -->
         <activity
             android:name=".SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Splash">
+            android:screenOrientation="fullSensor"
+            android:theme="@style/AppTheme.Splash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="travelplan.page.link"
-                    android:scheme="https"/>
-                <data
-                    android:host="travelplan.page.link"
-                    android:scheme="intent"/>
+                <data android:scheme="https"/>
+                <data android:host="travelplan.page.link"/>
+                <data android:scheme="intent"/>
+                <data android:host="travelplan.page.link"/>
             </intent-filter>
         </activity>
 

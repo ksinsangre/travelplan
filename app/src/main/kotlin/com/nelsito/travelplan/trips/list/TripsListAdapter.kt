@@ -16,22 +16,16 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
-import kotlinx.android.synthetic.main.trip_list_item.view.*
+import com.nelsito.travelplan.databinding.PoiListItemBinding
+import com.nelsito.travelplan.databinding.TripListItemBinding
 
 class TripsListAdapter(private var placesClient: PlacesClient, private val clickListener: (TripListItem) -> Unit) : ListAdapter<TripListItem, RecyclerView.ViewHolder>(TripDiffCallback()) {
     private var recentlyDeletedItemPosition: Int = -1
     private lateinit var recentlyDeletedItem: TripListItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return TripViewHolder(
-            inflater.inflate(
-                R.layout.trip_list_item,
-                parent,
-                false
-            ),
-            placesClient
-        )
+        val bindingList = TripListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return TripViewHolder(bindingList, placesClient)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -47,27 +41,27 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
         notifyItemRemoved(position)
     }
 
-    class TripViewHolder(itemView: View, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(itemView) {
+    class TripViewHolder(private val binding: TripListItemBinding, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tripListItem: TripListItem, clickListener: (TripListItem) -> Unit) {
-            itemView.txt_destination_title.text = tripListItem.destination
+            binding.txtDestinationTitle.text = tripListItem.destination
             if (tripListItem.description.isEmpty()) {
-                itemView.txt_description.visibility = View.GONE
+                binding.txtDescription.visibility = View.GONE
             }
             else {
-                itemView.txt_description.visibility = View.VISIBLE
-                itemView.txt_description.text = tripListItem.description
+                binding.txtDescription.visibility = View.VISIBLE
+                binding.txtDescription.text = tripListItem.description
             }
-            itemView.txt_period.text = tripListItem.date
+            binding.txtPeriod.text = tripListItem.date
             loadPlacePhotos(tripListItem.trip.placeId)
-            itemView.setOnClickListener { clickListener(tripListItem) }
+            binding.root.setOnClickListener { clickListener(tripListItem) }
             
             if (tripListItem.daysToGo >= 0) {
-                itemView.past_overlay.visibility = View.GONE
-                itemView.txt_days_to_go.visibility = View.VISIBLE
-                itemView.txt_days_to_go.text = itemView.context.resources.getQuantityString(R.plurals.days_to_go, tripListItem.daysToGo, tripListItem.daysToGo)
+                binding.pastOverlay.visibility = View.GONE
+                binding.txtDaysToGo.visibility = View.VISIBLE
+                binding.txtDaysToGo.text = binding.root.context.resources.getQuantityString(R.plurals.days_to_go, tripListItem.daysToGo, tripListItem.daysToGo)
             } else {
-                itemView.past_overlay.visibility = View.VISIBLE
-                itemView.txt_days_to_go.visibility = View.GONE
+                binding.pastOverlay.visibility = View.VISIBLE
+                binding.txtDaysToGo.visibility = View.GONE
             }
         }
 
@@ -87,14 +81,14 @@ class TripsListAdapter(private var placesClient: PlacesClient, private val click
                     if(place.photoMetadatas != null) {
                         Log.i("Places", "Place photos: " + place.photoMetadatas!!.size)
                         if (place.photoMetadatas!!.size > 0) {
-                            displayPhotoMetadata(place.photoMetadatas!![0], itemView.img_1)
+                            displayPhotoMetadata(place.photoMetadatas!![0], binding.img1)
                         } else {
-                            itemView.img_1.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_image_black_24dp))
+                            binding.img1.setImageDrawable(binding.root.context.getDrawable(R.drawable.ic_image_black_24dp))
                         }
-                        if (place.photoMetadatas!!.size > 1) displayPhotoMetadata(place.photoMetadatas!![1], itemView.img_2)
-                        if (place.photoMetadatas!!.size > 2) displayPhotoMetadata(place.photoMetadatas!![2], itemView.img_3)
-                        if (place.photoMetadatas!!.size > 3) displayPhotoMetadata(place.photoMetadatas!![3], itemView.img_4)
-                        if (place.photoMetadatas!!.size > 4) displayPhotoMetadata(place.photoMetadatas!![4], itemView.img_5)
+                        if (place.photoMetadatas!!.size > 1) displayPhotoMetadata(place.photoMetadatas!![1], binding.img2)
+                        if (place.photoMetadatas!!.size > 2) displayPhotoMetadata(place.photoMetadatas!![2], binding.img3)
+                        if (place.photoMetadatas!!.size > 3) displayPhotoMetadata(place.photoMetadatas!![3], binding.img4)
+                        if (place.photoMetadatas!!.size > 4) displayPhotoMetadata(place.photoMetadatas!![4], binding.img5)
                     }
                 }.addOnFailureListener { exception: Exception ->
                     if (exception is ApiException) {

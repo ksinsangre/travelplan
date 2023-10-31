@@ -60,6 +60,7 @@ class BuiltInLoginActivity : AppCompatActivity(), UserNavigationView, CoroutineS
         )
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SplashActivity.RC_SIGN_IN && resultCode == Activity.RESULT_OK) {

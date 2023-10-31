@@ -1,20 +1,16 @@
 package com.nelsito.travelplan.user.login
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityEmailPasswordBinding
 import com.nelsito.travelplan.infra.InfraProvider
-import kotlinx.android.synthetic.main.activity_email_password.*
-import kotlinx.android.synthetic.main.activity_email_password.progress
-import kotlinx.android.synthetic.main.activity_trip_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -30,19 +26,22 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
         get() = job + Dispatchers.Main
 
 
+    private lateinit var binding: ActivityEmailPasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_email_password)
+        binding = ActivityEmailPasswordBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         job = Job()
         auth = FirebaseAuth.getInstance()
 
-        btn_sign_in.setOnClickListener {
-            signIn(txt_email.text.toString(), txt_password.text.toString())
+        binding.btnSignIn.setOnClickListener {
+            signIn(binding.txtEmail.text.toString(), binding.txtPassword.text.toString())
         }
-        
-        btn_sign_up.setOnClickListener {
-            createAccount(txt_email.text.toString(), txt_password.text.toString())
+
+        binding.btnSignUp.setOnClickListener {
+            createAccount(binding.txtEmail.text.toString(), binding.txtPassword.text.toString())
         }
     }
 
@@ -57,7 +56,7 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
             return
         }
 
-        progress.visibility = View.VISIBLE
+        binding.progress.visibility = View.VISIBLE
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -76,7 +75,7 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
                         Toast.LENGTH_SHORT).show()
                 }
 
-                progress.visibility = View.GONE
+                binding.progress.visibility = View.GONE
             }
     }
 
@@ -86,7 +85,7 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
             return
         }
 
-        progress.visibility = View.VISIBLE
+        binding.progress.visibility = View.VISIBLE
 
         // [START sign_in_with_email]
         auth.signInWithEmailAndPassword(email, password)
@@ -96,7 +95,7 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
                 if (failedAttempts == 3) {
                     launch {
                         InfraProvider.provideUserRepository().blockUser(email)
-                        Snackbar.make(txt_email, "Too many attempts. User is disabled", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(binding.txtEmail, "Too many attempts. User is disabled", Snackbar.LENGTH_LONG).show()
                     }
                 }
             }
@@ -112,7 +111,7 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
                     Toast.makeText(baseContext, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
 
-                progress.visibility = View.GONE
+                binding.progress.visibility = View.GONE
             }
         // [END sign_in_with_email]
     }
@@ -120,20 +119,20 @@ class EmailPasswordActivity : AppCompatActivity(), CoroutineScope {
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = txt_email.text.toString()
+        val email = binding.txtEmail.text.toString()
         if (TextUtils.isEmpty(email)) {
-            txt_email.error = "Required."
+            binding.txtEmail.error = "Required."
             valid = false
         } else {
-            txt_email.error = null
+            binding.txtEmail.error = null
         }
 
-        val password = txt_password.text.toString()
+        val password = binding.txtPassword.text.toString()
         if (TextUtils.isEmpty(password)) {
-            txt_password.error = "Required."
+            binding.txtPassword.error = "Required."
             valid = false
         } else {
-            txt_password.error = null
+            binding.txtPassword.error = null
         }
 
         return valid

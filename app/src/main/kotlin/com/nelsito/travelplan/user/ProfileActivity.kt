@@ -16,7 +16,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.nelsito.travelplan.R
-import kotlinx.android.synthetic.main.activity_profile.*
+import com.nelsito.travelplan.databinding.ActivityProfileBinding
+import com.nelsito.travelplan.databinding.ActivityUserListBinding
 import java.io.IOException
 
 
@@ -28,11 +29,14 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var storage: FirebaseStorage
 
+    private lateinit var binding: ActivityProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        binding = ActivityProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
@@ -45,7 +49,7 @@ class ProfileActivity : AppCompatActivity() {
         showUserData(user)
 
 
-        img_avatar.setOnClickListener {
+        binding.imgAvatar.setOnClickListener {
             val profileIntent = Intent()
             profileIntent.type = "image/*"
             profileIntent.action = Intent.ACTION_GET_CONTENT
@@ -54,12 +58,12 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showUserData(user: FirebaseUser) {
-        txt_username.text = user.displayName
-        txt_email.text = user.email
+        binding.txtUsername.text = user.displayName
+        binding.txtEmail.text = user.email
 
         if (user.photoUrl != null) {
             Glide.with(this).load(user.photoUrl).centerCrop()
-                .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
+                .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(binding.imgAvatar)
         }
     }
 
@@ -68,8 +72,8 @@ class ProfileActivity : AppCompatActivity() {
         return true
     }
 
-    private fun     saveProfilePicture(imagePath: Uri) {
-        progress.visibility = View.VISIBLE
+    private fun saveProfilePicture(imagePath: Uri) {
+        binding.progress.visibility = View.VISIBLE
         val imageReference =
             storage.reference.child(FirebaseAuth.getInstance().uid!!).child("images")
                 .child("profile")
@@ -91,26 +95,24 @@ class ProfileActivity : AppCompatActivity() {
                         .build()
                     user?.updateProfile(profileUpdates)
                         ?.addOnCompleteListener { task ->
-                            progress.visibility = View.GONE
+                            binding.progress.visibility = View.GONE
                             if (task.isSuccessful) {
                                 Log.d("Profile", "User profile updated.")
                             }
                         }
                 } else {
-                    progress.visibility = View.GONE
+                    binding.progress.visibility = View.GONE
                 }
             }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data?.data != null) {
             try {
-                val imageUri = data?.data!!
-
-
-
+                val imageUri = data.data!!
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-                img_avatar.setImageBitmap(bitmap)
+                binding.imgAvatar.setImageBitmap(bitmap)
                 saveProfilePicture(imageUri)
             } catch (e: IOException) {
                 e.printStackTrace()

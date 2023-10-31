@@ -5,11 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityLoginBinding
+import com.nelsito.travelplan.databinding.ActivityWaitForVerificationBinding
 import com.nelsito.travelplan.domain.users.LoggedInUser
 import com.nelsito.travelplan.infra.FirebaseUserRepository
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
-import kotlinx.android.synthetic.main.activity_wait_for_verification.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,16 +26,20 @@ class WaitForVerificationActivity : AppCompatActivity(), CoroutineScope, WaitFor
         get() = job + Dispatchers.Main
 
 
+    private lateinit var binding: ActivityWaitForVerificationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wait_for_verification)
+        binding = ActivityWaitForVerificationBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         job = Job()
         presenter = WaitForVerificationPresenter(this, InfraProvider.provideUserRepository())
 
-        lnk_sign_in.setOnClickListener {
+        binding.lnkSignIn.setOnClickListener {
             openLogin()
         }
-        lnk_verify_email.setOnClickListener {
+        binding.lnkVerifyEmail.setOnClickListener {
             presenter.sendVerificationMail()
         }
     }
@@ -59,8 +64,8 @@ class WaitForVerificationActivity : AppCompatActivity(), CoroutineScope, WaitFor
     }
 
     override fun showUserData(currentUser: LoggedInUser) {
-        txt_username.text = currentUser.firebaseUser.displayName
-        txt_email.text = currentUser.firebaseUser.email
+        binding.txtUsername.text = currentUser.firebaseUser.displayName
+        binding.txtEmail.text = currentUser.firebaseUser.email
     }
 
     override fun openTripList() {
@@ -70,10 +75,10 @@ class WaitForVerificationActivity : AppCompatActivity(), CoroutineScope, WaitFor
     }
 
     override fun showEmailSent() {
-        Snackbar.make(lnk_verify_email, "Email sent...", Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.lnkVerifyEmail, "Email sent...", Snackbar.LENGTH_SHORT).show()
     }
 
     override fun showErrorMessage(message: String) {
-        Snackbar.make(lnk_verify_email, message, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.lnkVerifyEmail, message, Snackbar.LENGTH_SHORT).show()
     }
 }

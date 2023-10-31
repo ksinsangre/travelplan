@@ -9,9 +9,9 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityAddUserBinding
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.user.list.UserListItem
-import kotlinx.android.synthetic.main.activity_add_user.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,6 +20,7 @@ import kotlin.coroutines.CoroutineContext
 
 class AddUserActivity : AppCompatActivity(), EditUserView, CoroutineScope, AddUserView {
     private lateinit var presenter: AddUserPresenter
+    private lateinit var binding: ActivityAddUserBinding
 
     private lateinit var job: Job
     override val coroutineContext: CoroutineContext
@@ -27,9 +28,11 @@ class AddUserActivity : AppCompatActivity(), EditUserView, CoroutineScope, AddUs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_user)
+        binding = ActivityAddUserBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
@@ -37,11 +40,11 @@ class AddUserActivity : AppCompatActivity(), EditUserView, CoroutineScope, AddUs
             setDisplayShowHomeEnabled(true)
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_save -> {
                     launch {
-                        presenter.add(txt_username.text.toString(), txt_email.text.toString(), txt_password.text.toString())
+                        presenter.add(binding.txtUsername.text.toString(), binding.txtEmail.text.toString(), binding.txtPassword.text.toString())
                     }
                     true
                 }
@@ -101,12 +104,12 @@ class AddUserActivity : AppCompatActivity(), EditUserView, CoroutineScope, AddUs
     }
 
     override fun showUserInfo(user: UserListItem) {
-        txt_username.setText(user.username, TextView.BufferType.EDITABLE)
-        txt_email.setText(user.email, TextView.BufferType.EDITABLE)
+        binding.txtUsername.setText(user.username, TextView.BufferType.EDITABLE)
+        binding.txtEmail.setText(user.email, TextView.BufferType.EDITABLE)
         when(user.role) {
-            "admin" -> role_admin.isChecked = true
-            "manager" -> role_manager.isChecked = true
-            else -> role_regular.isChecked = true
+            "admin" -> binding.roleAdmin.isChecked = true
+            "manager" -> binding.roleManager.isChecked = true
+            else -> binding.roleRegular.isChecked = true
         }
     }
 
@@ -117,6 +120,6 @@ class AddUserActivity : AppCompatActivity(), EditUserView, CoroutineScope, AddUs
     }
 
     override fun showAdminWidgets() {
-        roles_group.visibility = View.VISIBLE
+        binding.rolesGroup.visibility = View.VISIBLE
     }
 }

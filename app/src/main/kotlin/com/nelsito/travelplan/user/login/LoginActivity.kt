@@ -25,9 +25,10 @@ import com.nelsito.travelplan.R
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.UserNavigationPresenter
+import com.nelsito.travelplan.databinding.ActivityEmailPasswordBinding
+import com.nelsito.travelplan.databinding.ActivityLoginBinding
 import com.nelsito.travelplan.user.UserNavigationView
 import com.nelsito.travelplan.user.list.UserListActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -50,9 +51,12 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         const val FACEBOOK_SIGN_IN = 4347
     }
 
+    private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         job = Job()
 
         presenter = UserNavigationPresenter(
@@ -60,23 +64,24 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
             InfraProvider.provideUserRepository()
         )
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
-        btn_email.setOnClickListener {
+        binding.btnEmail.setOnClickListener {
             val intent = Intent(this, EmailPasswordActivity::class.java)
             startActivityForResult(intent, EMAIL_SIGN_IN)
         }
-        btn_google.setOnClickListener {
+        binding.btnGoogle.setOnClickListener {
             googleSignIn()
         }
         facebookSignIn()
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         // Pass the activity result back to the Facebook SDK
@@ -104,7 +109,7 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         Log.d("LoginGoogle", "firebaseAuthWithGoogle:" + acct.id!!)
-        progress.visibility = View.VISIBLE
+        binding.progress.visibility = View.VISIBLE
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
@@ -118,16 +123,18 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("LoginGoogle", "signInWithCredential:failure", task.exception)
-                    Snackbar.make(progress, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.progress, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
                 }
 
-                progress.visibility = View.GONE
+                binding.progress.visibility = View.GONE
             }
     }
 
     private fun googleSignIn() {
         val signInIntent = googleSignInClient?.signInIntent
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+        if (signInIntent != null) {
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
+        }
     }
 
     override fun onDestroy() {
@@ -162,8 +169,8 @@ class LoginActivity : AppCompatActivity(), UserNavigationView, CoroutineScope {
         // Initialize Facebook Login button
         callbackManager = CallbackManager.Factory.create()
 
-        buttonFacebookLogin.setReadPermissions("email", "public_profile")
-        buttonFacebookLogin.registerCallback(callbackManager, object :
+        binding.buttonFacebookLogin.setReadPermissions("email", "public_profile")
+        binding.buttonFacebookLogin.registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                 Log.d("LoginFacebook", "facebook:onSuccess:$loginResult")

@@ -8,10 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityEditTripBinding
+import com.nelsito.travelplan.databinding.ActivityFilterBinding
 import com.nelsito.travelplan.domain.Search
-import kotlinx.android.synthetic.main.activity_filter.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,11 +27,14 @@ class FilterActivity : AppCompatActivity(), CoroutineScope, FilterView {
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityFilterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_filter)
+        binding = ActivityFilterBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
@@ -39,11 +42,11 @@ class FilterActivity : AppCompatActivity(), CoroutineScope, FilterView {
             setDisplayShowHomeEnabled(true)
         }
 
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_serch -> {
-                    val title = txt_destination_title.text.toString()
-                    val description = txt_description.text.toString()
+                    val title = binding.txtDestinationTitle.text.toString()
+                    val description = binding.txtDescription.text.toString()
                     presenter.search(title, description)
                     true
                 }
@@ -53,11 +56,11 @@ class FilterActivity : AppCompatActivity(), CoroutineScope, FilterView {
 
         pickerFrom = buildDatePicker()
         pickerTo = buildDatePicker()
-        txt_date_from.setOnClickListener {
+        binding.txtDateFrom.setOnClickListener {
             pickerFrom.addOnPositiveButtonClickListener { presenter.setDateFrom(it) }
             pickerFrom.show(supportFragmentManager, pickerFrom.toString())
         }
-        txt_date_to.setOnClickListener {
+        binding.txtDateTo.setOnClickListener {
             pickerTo.addOnPositiveButtonClickListener { presenter.setDateTo(it) }
             pickerTo.show(supportFragmentManager, pickerTo.toString())
         }
@@ -95,18 +98,18 @@ class FilterActivity : AppCompatActivity(), CoroutineScope, FilterView {
     }
 
     override fun showDateFrom(dateFrom: String) {
-        txt_date_from.text = dateFrom
+        binding.txtDateFrom.text = dateFrom
     }
 
     override fun showDateTo(dateTo: String) {
-        txt_date_to.text = dateTo
+        binding.txtDateTo.text = dateTo
     }
 
     override fun showTitle(title: String) {
-        txt_destination_title.setText(title, TextView.BufferType.EDITABLE)
+        binding.txtDestinationTitle.setText(title, TextView.BufferType.EDITABLE)
     }
 
     override fun showDescription(description: String) {
-        txt_description.setText(description, TextView.BufferType.EDITABLE)
+        binding.txtDescription.setText(description, TextView.BufferType.EDITABLE)
     }
 }

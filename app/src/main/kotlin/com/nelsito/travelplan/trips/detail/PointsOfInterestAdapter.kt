@@ -11,8 +11,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
-import kotlinx.android.synthetic.main.poi_add_item.view.*
-import kotlinx.android.synthetic.main.poi_list_item.view.*
+import com.nelsito.travelplan.databinding.PoiAddItemBinding
+import com.nelsito.travelplan.databinding.PoiListItemBinding
 
 class PointsOfInterestAdapter(private var placesClient: PlacesClient, private val addPoiClickListener: () -> Unit) : ListAdapter<PointOfInterestListItem, RecyclerView.ViewHolder>(
     POIDiffCallback()
@@ -26,33 +26,22 @@ class PointsOfInterestAdapter(private var placesClient: PlacesClient, private va
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        if (viewType == 1 ) {
-            return PoiViewHolder(
-                inflater.inflate(
-                    R.layout.poi_list_item,
-                    parent,
-                    false
-                ), placesClient
-            )
+        val bindingList = PoiListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val bindingAddItemBinding = PoiAddItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return if (viewType == 1 ) {
+            PoiViewHolder(bindingList, placesClient)
         } else {
-            return FooterHolder(
-                inflater.inflate(
-                    R.layout.poi_add_item,
-                    parent,
-                    false
-                )
-            )
+            FooterHolder(bindingAddItemBinding)
         }
     }
 
     class PoiViewHolder(
-        itemView: View,
+        private val binding: PoiListItemBinding,
         private val placesClient: PlacesClient
-    ) : RecyclerView.ViewHolder(itemView) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PointOfInterestListItem.PlacePointOfInterestListItem) {
 
-            itemView.txt_poi_name.text = item.place.name
+            binding.txtPoiName.text = item.place.name
             val photoMetadata = item.place.photoMetadatas!![0]
 
             // Get the attribution text.
@@ -62,7 +51,7 @@ class PointsOfInterestAdapter(private var placesClient: PlacesClient, private va
             val photoRequest = FetchPhotoRequest.builder(photoMetadata).build()
             placesClient.fetchPhoto(photoRequest).addOnSuccessListener { fetchPhotoResponse ->
                 val bitmap: Bitmap = fetchPhotoResponse.bitmap
-                itemView.imageView1.setImageBitmap(bitmap)
+                binding.imageView1.setImageBitmap(bitmap)
             }.addOnFailureListener { exception ->
                 if (exception is ApiException) {
                     val statusCode = exception.statusCode
@@ -73,9 +62,9 @@ class PointsOfInterestAdapter(private var placesClient: PlacesClient, private va
         }
     }
 
-    class FooterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class FooterHolder(private val binding: PoiAddItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(addPoiClickListener: () -> Unit) {
-            itemView.fab.setOnClickListener { addPoiClickListener() }
+            binding.fab.setOnClickListener { addPoiClickListener() }
         }
     }
 

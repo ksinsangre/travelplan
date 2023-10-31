@@ -20,8 +20,8 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityAddTripBinding
 import com.nelsito.travelplan.infra.InfraProvider
-import kotlinx.android.synthetic.main.activity_add_trip.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,10 +44,13 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
 
+    private lateinit var binding: ActivityAddTripBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_trip)
-        setSupportActionBar(toolbar)
+        binding = ActivityAddTripBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
@@ -59,11 +62,11 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
         job = Job()
 
         picker = buildDatePicker()
-        txt_date.setOnClickListener {
+        binding.txtDate.setOnClickListener {
             setDelay(it) { pickDate() }
         }
 
-        txt_destination_title.setOnClickListener {
+        binding.txtDestinationTitle.setOnClickListener {
             // Set the fields to specify which types of place data to return after the user has made a selection.
             val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.PHOTO_METADATAS, Place.Field.LAT_LNG)
 
@@ -78,18 +81,18 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
             )
         }
 
-        btn_save.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             if (!destinationSelected) {
-                txt_destination_title.background = getDrawable(R.drawable.red_rounded_textview)
+                binding.txtDestinationTitle.background = getDrawable(R.drawable.red_rounded_textview)
             }
             if (!dateSelected) {
-                txt_date.background = getDrawable(R.drawable.red_rounded_textview)
+                binding.txtDate.background = getDrawable(R.drawable.red_rounded_textview)
             }
 
             if (dateSelected && destinationSelected) {
-                progress.visibility = View.VISIBLE
+                binding.progress.visibility = View.VISIBLE
                 launch {
-                    presenter.save(input_description.text.toString())
+                    presenter.save(binding.inputDescription.text.toString())
                 }
             }
         }
@@ -107,6 +110,7 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
         job.cancel()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
@@ -114,8 +118,8 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
                 if (data != null) {
                     val placeSelected = Autocomplete.getPlaceFromIntent(data)
                     presenter.destinationSelected(placeSelected)
-                    txt_destination_title.text = placeSelected.name
-                    txt_destination_title.background = getDrawable(R.drawable.rounded_textview)
+                    binding.txtDestinationTitle.text = placeSelected.name
+                    binding.txtDestinationTitle.background = getDrawable(R.drawable.rounded_textview)
                     destinationSelected = true
                     Log.i("Places", "Place: " + placeSelected.name + ", " + placeSelected.id)
                 }
@@ -150,9 +154,9 @@ class AddTripActivity : AppCompatActivity(), CoroutineScope,
         val builder = datePickerBuilder()
         val picker = builder.build()
         picker.addOnPositiveButtonClickListener {
-            txt_date.text = picker.headerText
+            binding.txtDate.text = picker.headerText
             dateSelected = true
-            txt_date.background = getDrawable(R.drawable.rounded_textview)
+            binding.txtDate.background = getDrawable(R.drawable.rounded_textview)
             presenter.dateSelected(it)
         }
         return picker

@@ -16,39 +16,33 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.nelsito.travelplan.R
-import kotlinx.android.synthetic.main.map_trip_list_item.view.*
+import com.nelsito.travelplan.databinding.MapTripListItemBinding
+import com.nelsito.travelplan.databinding.PoiListItemBinding
 
 class MapTripsListAdapter(private var placesClient: PlacesClient, private val clickListener: (MapTripListItem) -> Unit) : ListAdapter<MapTripListItem, RecyclerView.ViewHolder>(MapTripDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return TripViewHolder(
-            inflater.inflate(
-                R.layout.map_trip_list_item,
-                parent,
-                false
-            ),
-            placesClient
-        )
+        val bindingList = MapTripListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return TripViewHolder(bindingList, placesClient)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as TripViewHolder).bind(getItem(position) as MapTripListItem, clickListener)
     }
 
-    class TripViewHolder(itemView: View, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(itemView) {
+    class TripViewHolder(private val binding: MapTripListItemBinding, private val placesClient: PlacesClient) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tripListItem: MapTripListItem, clickListener: (MapTripListItem) -> Unit) {
-            itemView.txt_destination_title.text = tripListItem.destination
-            itemView.txt_period.text = tripListItem.date
+            binding.txtDestinationTitle.text = tripListItem.destination
+            binding.txtPeriod.text = tripListItem.date
             loadPlacePhotos(tripListItem.placeId)
-            itemView.setOnClickListener { clickListener(tripListItem) }
+            binding.root.setOnClickListener { clickListener(tripListItem) }
             
             if (tripListItem.daysToGo >= 0) {
-                itemView.past_overlay.visibility = View.GONE
-                itemView.txt_days_to_go.visibility = View.VISIBLE
-                itemView.txt_days_to_go.text = itemView.context.resources.getQuantityString(R.plurals.days_to_go, tripListItem.daysToGo, tripListItem.daysToGo)
+                binding.pastOverlay.visibility = View.GONE
+                binding.txtDaysToGo.visibility = View.VISIBLE
+                binding.txtDaysToGo.text = binding.root.context.resources.getQuantityString(R.plurals.days_to_go, tripListItem.daysToGo, tripListItem.daysToGo)
             } else {
-                itemView.past_overlay.visibility = View.VISIBLE
-                itemView.txt_days_to_go.visibility = View.GONE
+                binding.pastOverlay.visibility = View.VISIBLE
+                binding.txtDaysToGo.visibility = View.GONE
             }
         }
 
@@ -68,9 +62,9 @@ class MapTripsListAdapter(private var placesClient: PlacesClient, private val cl
                     if(place.photoMetadatas != null) {
                         Log.i("Places", "Place photos: " + place.photoMetadatas!!.size)
                         if (place.photoMetadatas!!.size > 0) {
-                            displayPhotoMetadata(place.photoMetadatas!![0], itemView.img_1)
+                            displayPhotoMetadata(place.photoMetadatas!![0], binding.img1)
                         } else {
-                            itemView.img_1.setImageDrawable(itemView.context.getDrawable(R.drawable.ic_image_black_24dp))
+                            binding.img1.setImageDrawable(binding.root.context.getDrawable(R.drawable.ic_image_black_24dp))
                         }
                     }
                 }.addOnFailureListener { exception: Exception ->

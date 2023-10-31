@@ -12,10 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityAddUserBinding
+import com.nelsito.travelplan.databinding.ActivityAdminProfileBinding
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.user.list.UserListActivity
 import com.nelsito.travelplan.user.list.UserListItem
-import kotlinx.android.synthetic.main.activity_admin_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,19 +32,21 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
     private lateinit var listAdapter: AdminTripsListAdapter
-
+    private lateinit var binding: ActivityAdminProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_admin_profile)
+        binding = ActivityAdminProfileBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         title = ""
         with(supportActionBar!!) {
             setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-        toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
+        binding.toolbar.setOnMenuItemClickListener { menuItem: MenuItem ->
             when(menuItem.itemId) {
                 R.id.menu_edit -> {
                     presenter.editUser()
@@ -69,14 +72,14 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
 
         listAdapter =
             AdminTripsListAdapter(deleteClickListener = {
-                progress.visibility = View.VISIBLE
+                binding.progress.visibility = View.VISIBLE
                 launch {
                     presenter.deleteTrip(it)
                 }
             })
-        trip_list.adapter = listAdapter
-        if (user!!.disabled) btn_disable.text = "Enable User" else "Disable User"
-        btn_disable.setOnClickListener {
+        binding.tripList.adapter = listAdapter
+        if (user!!.disabled) binding.btnDisable.text = "Enable User" else "Disable User"
+        binding.btnDisable.setOnClickListener {
             launch {
                 presenter.toggleDisable()
             }
@@ -107,7 +110,7 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
             .setMessage("Are you sure you want to delete this user?")
             .setPositiveButton("Delete") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
-                progress.visibility = View.VISIBLE
+                binding.progress.visibility = View.VISIBLE
                 launch {
                     presenter.deleteUser()
                 }
@@ -119,17 +122,17 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
     }
 
     private fun showUserData(user: UserListItem) {
-        txt_username.text = user.username
-        txt_email.text = user.email
+        binding.txtUsername.text = user.username
+        binding.txtEmail.text = user.email
 
         if (user.photoUrl.isNotEmpty()) {
             Glide.with(this).load(user.photoUrl).centerCrop()
-                .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(img_avatar)
+                .placeholder(getDrawable(R.drawable.ic_person_white_24dp)).into(binding.imgAvatar)
         }
 
         when(user.role) {
-            "admin" -> lbl_admin.visibility = View.VISIBLE
-            "manger" -> lbl_manager.visibility = View.VISIBLE
+            "admin" -> binding.lblAdmin.visibility = View.VISIBLE
+            "manger" -> binding.lblManager.visibility = View.VISIBLE
         }
     }
 
@@ -150,25 +153,26 @@ class AdminProfileActivity : AppCompatActivity(), AdminProfileView, CoroutineSco
     }
 
     override fun showTrips(trips: List<AdminTripListItem>) {
-        progress.visibility = View.GONE
+        binding.progress.visibility = View.GONE
         listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
-            trip_list.visibility = View.VISIBLE
-            empty_placeholder.visibility = View.GONE
+            binding.tripList.visibility = View.VISIBLE
+            binding.emptyPlaceholder.visibility = View.GONE
         } else {
-            trip_list.visibility = View.GONE
-            empty_placeholder.visibility = View.VISIBLE
+            binding.tripList.visibility = View.GONE
+            binding.emptyPlaceholder.visibility = View.VISIBLE
         }
     }
 
     override fun userEnabled() {
-        btn_disable.text = "Disable User"
+        binding.btnDisable.text = "Disable User"
     }
 
     override fun userDisabled() {
-        btn_disable.text = "Enable User"
+        binding.btnDisable.text = "Enable User"
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == UserListActivity.EDIT_REQ_CODE) {

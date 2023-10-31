@@ -1,32 +1,34 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'embrace-swazzler'
+
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
     def keys = rootProject.extensions.getByName("ext")
 
-    apply from: rootProject.file('app/release.gradle')
+    //apply from: rootProject.file('app/release.gradle')
 
     defaultConfig {
         applicationId "com.nelsito.travelplan"
         minSdkVersion 25
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        resValue "string", "api_key", keys["api_key"]
-        resValue "string", "send_grid_api_key", keys["send_grid"]
+        //resValue "string", "api_key", keys["api_key"]
+        //resValue "string", "send_grid_api_key", keys["send_grid"]
 //(project.findProperty("PLACES_API_KEY") ?: "")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -35,26 +37,32 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
-    lintOptions {
-        checkReleaseBuilds false
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
+    namespace 'com.nelsito.travelplan'
+    lint {
         abortOnError false
+        checkReleaseBuilds false
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility = 1.17
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.google.android.material:material:1.5.0-alpha01'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.activity:activity-ktx:1.2.3'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    def lifecycle_version = "2.3.1"
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    def lifecycle_version = "2.6.1"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -68,17 +76,19 @@ dependencies {
 
     // alternately - if using Java8, use the following instead of lifecycle-compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.3'
-    implementation 'com.google.firebase:firebase-functions-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-dynamic-links:20.1.1'
-    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
-    implementation 'com.google.android.libraries.places:places:2.4.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-functions-ktx'
+    implementation 'com.google.firebase:firebase-dynamic-links'
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
+    implementation 'com.google.android.libraries.places:places:3.2.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
     //implementation 'com.twitter.sdk.android:twitter-core:3.x'
     testImplementation 'junit:junit:4.13.2'

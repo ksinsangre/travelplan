@@ -81,10 +81,10 @@ class CreateTrip {
 
         val appCompatEditText = onView(
             allOf(
-                withId(R.id.places_autocomplete_search_bar),
+                withId(com.google.android.libraries.places.R.id.places_autocomplete_search_bar),
                 childAtPosition(
                     allOf(
-                        withId(R.id.places_autocomplete_search_bar_container),
+                        withId(com.google.android.libraries.places.R.id.places_autocomplete_search_bar_container),
                         childAtPosition(
                             withClassName(`is`("android.widget.LinearLayout")),
                             0
@@ -106,7 +106,7 @@ class CreateTrip {
             allOf(
                 childAtPosition(
                     allOf(
-                        withId(R.id.places_autocomplete_list),
+                        withId(com.google.android.libraries.places.R.id.places_autocomplete_list),
                         childAtPosition(
                             withClassName(`is`("android.widget.LinearLayout")),
                             2
@@ -146,7 +146,7 @@ class CreateTrip {
 
         val checkableImageButton = onView(
             allOf(
-                withId(R.id.mtrl_picker_header_toggle),
+                withId(com.google.android.material.R.id.mtrl_picker_header_toggle),
                 withContentDescription("Switch to text input mode"),
                 childAtPosition(
                     childAtPosition(
@@ -164,7 +164,7 @@ class CreateTrip {
             allOf(
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.mtrl_picker_text_input_range_start),
+                        withId(com.google.android.material.R.id.mtrl_picker_text_input_range_start),
                         0
                     ),
                     0
@@ -178,7 +178,7 @@ class CreateTrip {
             allOf(
                 childAtPosition(
                     childAtPosition(
-                        withId(R.id.mtrl_picker_text_input_range_end),
+                        withId(com.google.android.material.R.id.mtrl_picker_text_input_range_end),
                         0
                     ),
                     0
@@ -190,7 +190,7 @@ class CreateTrip {
 
         val materialButton2 = onView(
             allOf(
-                withId(R.id.confirm_button), withText("Save"), withContentDescription("Save"),
+                withId(com.google.android.material.R.id.confirm_button), withText("Save"), withContentDescription("Save"),
                 childAtPosition(
                     childAtPosition(
                         withClassName(`is`("android.widget.LinearLayout")),

@@ -16,6 +16,8 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityFilterBinding
+import com.nelsito.travelplan.databinding.ActivityTripsBinding
 import com.nelsito.travelplan.domain.LoadTrips
 import com.nelsito.travelplan.domain.LocalDateService
 import com.nelsito.travelplan.domain.Search
@@ -24,7 +26,6 @@ import com.nelsito.travelplan.trips.detail.TripDetailActivity
 import com.nelsito.travelplan.domain.Trip
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.map.MapTripsActivity
-import kotlinx.android.synthetic.main.activity_trips.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,13 +46,16 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
     }
     private lateinit var listAdapter: TripsListAdapter
 
+    private lateinit var binding: ActivityTripsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_trips)
+        binding = ActivityTripsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         setupBottomBar()
 
-        fab.setOnClickListener { view ->
+        binding.fab.setOnClickListener { view ->
             startActivityForResult(Intent(this, AddTripActivity::class.java), NEW_REQ_CODE)
         }
 
@@ -59,18 +63,18 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
         listAdapter = TripsListAdapter(initializePlaces(), viewModel::onTripClicked)
         val icon: Drawable? = AppCompatResources.getDrawable(this, R.drawable.ic_delete_white_24dp)
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(icon, listAdapter, this))
-        itemTouchHelper.attachToRecyclerView(trip_list)
-        trip_list.adapter = listAdapter
+        itemTouchHelper.attachToRecyclerView(binding.tripList)
+        binding.tripList.adapter = listAdapter
 
         viewModel.trips.observe(this, this::showTrips)
 
-        viewModel.progress.observe(this, {
+        viewModel.progress.observe(this) {
             if (it) {
-                progress.visibility = View.VISIBLE
+                binding.progress.visibility = View.VISIBLE
             } else {
-                progress.visibility = View.GONE
+                binding.progress.visibility = View.GONE
             }
-        })
+        }
 
         viewModel.selectedTrip.observe(this, this::onTripSelected)
 
@@ -84,8 +88,8 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
     }
 
     private fun setupBottomBar() {
-        bottomAppBar.replaceMenu(R.menu.menu)
-        bottomAppBar.setOnMenuItemClickListener { item ->
+        binding.bottomAppBar.replaceMenu(R.menu.menu)
+        binding.bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_logout -> {
                     // Do something for menu item 1
@@ -105,7 +109,7 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
                     true
                 }
                 R.id.menu_clear_filter -> {
-                    bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = false
+                    binding.bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = false
                     viewModel.clearFilter()
                     viewModel.loadTrips()
                     true
@@ -144,6 +148,7 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
         finish()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == NEW_REQ_CODE) {
@@ -152,7 +157,7 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
             }
         } else if (requestCode == SEARCH_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = true
+                binding.bottomAppBar.menu.findItem(R.id.menu_clear_filter).isVisible = true
                 val search = data?.getParcelableExtra<Search>("SEARCH")
                 if (search != null) {
                     viewModel.searchTrips(search)
@@ -164,13 +169,13 @@ class TripsListActivity : AppCompatActivity(), TripsView, SwipeToDeleteCallback.
     override fun showTrips(trips: List<TripListItem>) {
         listAdapter.submitList(trips)
         if(trips.isNotEmpty()) {
-            bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = true
-            trip_list.visibility = View.VISIBLE
-            empty_placeholder.visibility = View.GONE
+            binding.bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = true
+            binding.tripList.visibility = View.VISIBLE
+            binding.emptyPlaceholder.visibility = View.GONE
         } else {
-            bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = false
-            trip_list.visibility = View.GONE
-            empty_placeholder.visibility = View.VISIBLE
+            binding.bottomAppBar.menu.findItem(R.id.menu_map_trips).isVisible = false
+            binding.tripList.visibility = View.GONE
+            binding.emptyPlaceholder.visibility = View.VISIBLE
         }
     }
 

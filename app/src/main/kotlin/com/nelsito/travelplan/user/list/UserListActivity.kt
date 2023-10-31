@@ -9,13 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nelsito.travelplan.R
+import com.nelsito.travelplan.databinding.ActivityInviteBinding
+import com.nelsito.travelplan.databinding.ActivityUserListBinding
 import com.nelsito.travelplan.infra.InfraProvider
 import com.nelsito.travelplan.trips.list.TripsListActivity
 import com.nelsito.travelplan.user.admin.AddUserActivity
 import com.nelsito.travelplan.user.admin.AdminProfileActivity
 import com.nelsito.travelplan.user.invite.InviteActivity
 import com.nelsito.travelplan.user.login.LoginActivity
-import kotlinx.android.synthetic.main.activity_user_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -35,13 +36,17 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
         get() = job + Dispatchers.Main
 
 
+    private lateinit var binding: ActivityUserListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityUserListBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         job = Job()
-        setContentView(R.layout.activity_user_list)
 
         setupBottomBar()
-        fab.setOnClickListener { view ->
+        binding.fab.setOnClickListener { view ->
             startActivityForResult(Intent(this, AddUserActivity::class.java),
                 NEW_REQ_CODE
             )
@@ -51,7 +56,7 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
             intent.putExtra("USER", it)
             startActivityForResult(intent, EDIT_REQ_CODE)
         }
-        user_list.adapter = listAdapter
+        binding.userList.adapter = listAdapter
 
         presenter = UserListPresenter(this, InfraProvider.provideUserRepository())
     }
@@ -75,8 +80,8 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
     }
 
     private fun setupBottomBar() {
-        bottomAppBar.replaceMenu(R.menu.menu_user_list)
-        bottomAppBar.setOnMenuItemClickListener { item ->
+        binding.bottomAppBar.replaceMenu(R.menu.menu_user_list)
+        binding.bottomAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.menu_logout -> {
                     // Do something for menu item 1
@@ -121,16 +126,17 @@ class UserListActivity : AppCompatActivity(), UserListView, CoroutineScope {
 
     override fun showUsers(list: List<UserListItem>) {
         listAdapter.submitList(list)
-        progress.visibility = View.GONE
-        user_list.visibility = View.VISIBLE
+        binding.progress.visibility = View.GONE
+        binding.userList.visibility = View.VISIBLE
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == EDIT_REQ_CODE || requestCode == NEW_REQ_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 launch {
-                    progress.visibility = View.VISIBLE
+                    binding.progress.visibility = View.VISIBLE
                     presenter.loadUsers()
                 }
             }
