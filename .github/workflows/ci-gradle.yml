@@ -32,11 +32,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle
 
-      - name: Install JDK ${{ matrix.jdk-version }}
+      - name: Install JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: ${{ matrix.jdk-version }}
+          distribution: 'temurin'
+          java-version: 17
 
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
